@@ -20,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.reps.app.core.theme.RepsNearBlack
+import com.reps.app.feature.home.HomeScreen
 
 @Composable
 fun RepsApp(navController: NavHostController = rememberNavController()) {
@@ -71,7 +72,16 @@ private fun NavGraphBuilder.repsGraph(navController: NavHostController) {
     composable(Routes.LOGIN) { Placeholder("Login") }
     composable(Routes.SIGN_UP) { Placeholder("Sign Up") }
 
-    composable(Routes.HOME) { Placeholder("Home") }
+    composable(Routes.HOME) {
+        HomeScreen(
+            onStartWorkout = { navController.navigate(Routes.workoutSession(it)) },
+            onOpenWeight = { navController.navigate(Routes.PROGRESS) },
+            onOpenMeal = { navController.navigate(Routes.NUTRITION) },
+            onOpenTimer = { navController.navigate(Routes.TIMER) },
+            onOpenNotifications = { navController.navigate(Routes.NOTIFICATIONS) },
+            onOpenProfile = { navController.navigate(Routes.PROFILE) },
+        )
+    }
     composable(Routes.PROGRESS) { Placeholder("Progress") }
     composable(Routes.WORKOUTS) { Placeholder("Workouts") }
     composable(Routes.NUTRITION) { Placeholder("Nutrition") }

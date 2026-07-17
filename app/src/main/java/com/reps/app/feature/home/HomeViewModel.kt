@@ -1,0 +1,118 @@
+package com.reps.app.feature.home
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.reps.app.data.fake.SampleData
+import com.reps.app.domain.model.MuscleGroup
+import com.reps.app.domain.model.Streak
+import com.reps.app.domain.model.UnitSystem
+import com.reps.app.domain.model.WeightEntry
+import com.reps.app.domain.model.Workout
+import com.reps.app.domain.repository.ExerciseRepository
+import com.reps.app.domain.repository.UserRepository
+import com.reps.app.domain.repository.WeightRepository
+import com.reps.app.domain.repository.WorkoutRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.stateIn
+import java.time.LocalDate
+import javax.inject.Inject
+import kotlin.math.abs
+
+data class HomeUiState(
+    val userName: String = "",
+    val streak: Streak = Streak(),
+    val todayWorkout: Workout? = null,
+    /** Resolved to localised labels by the screen, not stringified here. */
+    val todayMuscleGroups: List<MuscleGroup> = emptyList(),
+    val currentWeightKg: Double? = null,
+    val weeklyDeltaKg: Double? = null,
+    val units: UnitSystem = UnitSystem.METRIC,
+    val quote: String = "",
+    val loading: Boolean = true,
+)
+
+@OptIn(ExperimentalCoroutinesApi::class)
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    userRepository: UserRepository,
+    weightRepository: WeightRepository,
+    private val workoutRepository: WorkoutRepository,
+    private val exerciseRepository: ExerciseRepository,
+) : ViewModel() {
+
+    private val today = LocalDate.now()
+
+    private val todayWorkoutFlow: Flow<Pair<Workout?, List<MuscleGroup>>> =
+        workoutRepository.observeWorkoutFor(today).flatMapLatest { workout ->
+            if (workout == null) {
+                flowOf(null to emptyList())
+            } else {
+                flow {
+                    val exercises = exerciseRepository.getByIds(
+                        workout.exercises.sortedBy { it.position }.map { it.exerciseId },
+                    )
+                    // Distinct, in workout order: "Chest & Shoulders", not a set.
+                    emit(workout to exercises.map { it.muscleGroup }.distinct())
+                }
+            }
+        }
+
+    val uiState = combine(
+        userRepository.observeUser(),
+        weightRepository.observeEntries(),
+        todayWorkoutFlow,
+    ) { user, weights, (workout, muscles) ->
+        HomeUiState(
+            userName = user?.name.orEmpty(),
+            streak = Streak(
+                count = user?.streakCount ?: 0,
+                lastWorkoutDate = user?.lastWorkoutDate,
+            ),
+            todayWorkout = workout,
+            todayMuscleGroups = muscles,
+            currentWeightKg = weights.maxByOrNull { it.date }?.weightKg,
+            weeklyDeltaKg = weeklyDelta(weights),
+            units = user?.units ?: UnitSystem.METRIC,
+            quote = quoteForToday(),
+            loading = false,
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = HomeUiState(),
+    )
+
+    /**
+     * Change against the reading closest to seven days ago. Falling back to the
+     * oldest entry would call a brand-new user's first week a "weekly" change,
+     * so anything without a reading at least 3 days old reports nothing.
+     */
+    private fun weeklyDelta(entries: List<WeightEntry>): Double? {
+        val latest = entries.maxByOrNull { it.date } ?: return null
+        val target = latest.date.minusDays(7)
+        val reference = entries
+            .filter { it.date < latest.date }
+            .minByOrNull { abs(java.time.temporal.ChronoUnit.DAYS.between(it.date, target)) }
+            ?: return null
+        val gap = java.time.temporal.ChronoUnit.DAYS.between(reference.date, latest.date)
+        if (gap < 3) return null
+        return latest.weightKg - reference.weightKg
+    }
+
+    /**
+     * Rotates once per day and is stable within a day, so the card does not
+     * change under the user on recomposition.
+     */
+    private fun quoteForToday(): String {
+        val quotes = SampleData.motivationQuotes
+        val index = (today.toEpochDay() % quotes.size).toInt()
+        return quotes[index]
+    }
+}
