@@ -48,7 +48,10 @@ fun RepsApp(navController: NavHostController = rememberNavController()) {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Routes.SPLASH,
+            // TODO: restore Routes.SPLASH once splash/onboarding/auth are built.
+            // They are still placeholders with no way forward, so starting there
+            // would strand the app on a dead screen.
+            startDestination = Routes.HOME,
             modifier = Modifier.fillMaxSize().padding(innerPadding),
         ) {
             repsGraph(navController)

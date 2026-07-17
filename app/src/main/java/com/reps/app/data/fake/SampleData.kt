@@ -302,21 +302,25 @@ object SampleData {
         List(3) { ExerciseSet(id = "set-$it", weightKg = weightKg, reps = reps) }
 
     /**
-     * ~90 days of weight trending gently down from 80 kg, with the small
-     * day-to-day noise real scales produce, so the chart has something
-     * believable to render. Seeded, so it is stable across launches.
+     * ~90 days of weight ending at 78.4 kg today, cutting at a realistic
+     * ~0.6 kg/week. Seeded, so it is stable across launches.
+     *
+     * The day-to-day wobble is deliberately kept well under the weekly trend:
+     * noise larger than the signal would make the Home widget report a gain
+     * during a cut, which is a misleading thing to show a user.
      */
     val weightEntries: List<WeightEntry> = run {
         val random = Random(seed = 42)
         val today = LocalDate.now()
+        val kgLostPerDay = 0.6 / 7.0
         (0..89).map { daysAgo ->
             val date = today.minusDays(daysAgo.toLong())
-            val trend = 78.4 + (daysAgo * 0.018)
-            val wobble = sin(daysAgo * 0.7) * 0.25 + random.nextDouble(-0.2, 0.2)
+            val trend = 78.4 + (daysAgo * kgLostPerDay)
+            val wobble = sin(daysAgo * 0.7) * 0.12 + random.nextDouble(-0.06, 0.06)
             WeightEntry(
                 id = "w-$daysAgo",
                 date = date,
-                weightKg = ((trend + wobble) * 10).toInt() / 10.0,
+                weightKg = Math.round((trend + wobble) * 10) / 10.0,
             )
         }.sortedBy { it.date }
     }
