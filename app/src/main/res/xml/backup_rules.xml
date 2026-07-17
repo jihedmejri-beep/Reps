@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!--
+      Firestore's offline cache is a replica of server state and can be large,
+      so it is excluded from backup. User preferences are small and worth keeping.
+    -->
+    <exclude domain="database" path="firestore" />
+    <exclude domain="sharedpref" path="com.google.android.gms.appid.xml" />
+</full-backup-content>

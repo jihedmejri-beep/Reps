@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dumbbell: squared plates, no rounded ends. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M1.5,9.4H3.6V14.6H1.5Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M4.8,6.2H7.9V17.8H4.8Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M7.9,10.4H16.1V13.6H7.9Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M16.1,6.2H19.2V17.8H16.1Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M20.4,9.4H22.5V14.6H20.4Z" />
+</vector>

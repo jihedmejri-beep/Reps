@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fork and knife, drawn with straight edges to stay in the athletic register. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Fork: three tines collapsing into a stem. -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M3.4,2.5H4.9V8.4H6.15V2.5H7.65V8.4H8.9V2.5H10.4V9.8L8.2,11.3V21.5H5.6V11.3L3.4,9.8Z" />
+    <!-- Knife: angled blade over a straight handle. -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M20.6,2.5V13.1H18.9V21.5H16.5V13.1H15.4V7.2Z" />
+</vector>

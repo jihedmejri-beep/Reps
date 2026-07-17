@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">REPS</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_progress">Progress</string>
+    <string name="nav_workouts">Workouts</string>
+    <string name="nav_nutrition">Nutrition</string>
+    <string name="nav_profile">Profile</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_headline">Train like you mean it.</string>
+    <string name="onboarding_subtext">Your training, nutrition and progress — engineered into one disciplined system.</string>
+    <string name="onboarding_get_started">Get Started</string>
+    <string name="onboarding_have_account">I already have an account</string>
+
+    <!-- Auth: shared -->
+    <string name="auth_email">Email</string>
+    <string name="auth_password">Password</string>
+    <string name="auth_continue_google">Continue with Google</string>
+    <string name="auth_or">OR</string>
+    <string name="auth_show_password">Show password</string>
+    <string name="auth_hide_password">Hide password</string>
+    <string name="auth_back">Back</string>
+
+    <!-- Auth: login -->
+    <string name="login_headline">Welcome back</string>
+    <string name="login_subtext">Sign in to pick up where you left off.</string>
+    <string name="login_forgot_password">Forgot password?</string>
+    <string name="login_sign_in">Sign In</string>
+    <string name="login_new_here">New to REPS?</string>
+    <string name="login_create_account">Create account</string>
+
+    <!-- Auth: sign up -->
+    <string name="signup_headline">Create account</string>
+    <string name="signup_subtext">Start building your streak today.</string>
+    <string name="signup_name">Name</string>
+    <string name="signup_create_account">Create Account</string>
+    <string name="signup_have_account">Already have an account?</string>
+    <string name="signup_sign_in">Sign in</string>
+    <string name="signup_terms_prefix">I agree to the</string>
+    <string name="signup_terms">Terms of Service</string>
+    <string name="signup_terms_and">and</string>
+    <string name="signup_privacy">Privacy Policy</string>
+
+    <!-- Auth: validation -->
+    <string name="error_email_invalid">Enter a valid email address.</string>
+    <string name="error_email_empty">Email is required.</string>
+    <string name="error_password_empty">Password is required.</string>
+    <string name="error_password_short">Password must be at least 8 characters.</string>
+    <string name="error_name_empty">Name is required.</string>
+    <string name="error_generic">Something went wrong. Try again.</string>
+
+    <!-- Home -->
+    <string name="home_greeting_morning">Good morning</string>
+    <string name="home_greeting_afternoon">Good afternoon</string>
+    <string name="home_greeting_evening">Good evening</string>
+    <string name="home_notifications">Notifications</string>
+    <string name="home_open_profile">Open profile</string>
+    <string name="home_streak_count">%1$d day streak</string>
+    <string name="home_streak_nudge">Keep it alive — train today to hit %1$d.</string>
+    <string name="home_today_workout">Today · Workout</string>
+    <string name="home_start_workout">Start Workout</string>
+    <string name="home_exercise_count">%1$d exercises</string>
+    <string name="home_duration_min">%1$d min</string>
+    <string name="home_quick_actions">Quick Actions</string>
+    <string name="home_action_start">Start</string>
+    <string name="home_action_weight">Weight</string>
+    <string name="home_action_meal">Meal</string>
+    <string name="home_action_timer">Timer</string>
+    <string name="home_rest_day">Rest day</string>
+    <string name="home_rest_day_subtext">Nothing scheduled. Recovery is part of the plan.</string>
+    <string name="home_daily_motivation">Daily Motivation</string>
+
+    <!-- Weight widget -->
+    <string name="weight_label">Weight</string>
+    <string name="weight_delta_up">%1$s this week</string>
+    <string name="weight_delta_down">%1$s this week</string>
+    <string name="weight_no_data">No entries yet</string>
+
+    <!-- Progress -->
+    <string name="progress_eyebrow">Your Numbers</string>
+    <string name="progress_title">Progress</string>
+    <string name="progress_this_month">This month</string>
+    <string name="progress_last_month">Last month</string>
+    <string name="progress_add_weight">Add weight</string>
+    <string name="progress_save">Save</string>
+    <string name="progress_cancel">Cancel</string>
+    <string name="progress_bmr">BMR</string>
+    <string name="progress_bmi">BMI</string>
+    <string name="progress_bmr_caption">Calories burned at rest per day</string>
+    <string name="progress_bmi_underweight">Underweight</string>
+    <string name="progress_bmi_healthy">Healthy</string>
+    <string name="progress_bmi_overweight">Overweight</string>
+    <string name="progress_bmi_obese">Obese</string>
+    <string name="progress_chart_empty">Log your weight to see it here.</string>
+    <string name="progress_bmi_needs_profile">Add your height, age and sex in Profile to see this.</string>
+
+    <!-- Workouts -->
+    <string name="workouts_eyebrow">Workout Library</string>
+    <string name="workouts_title">Exercises</string>
+    <string name="workouts_filter_all">All</string>
+    <string name="workouts_search">Search exercises</string>
+    <string name="workouts_common_mistakes">Common mistakes</string>
+    <string name="workouts_description">Description</string>
+    <string name="workouts_builder_eyebrow">Build</string>
+    <string name="workouts_builder_title">New Workout</string>
+    <string name="workouts_builder_name_hint">Workout name</string>
+    <string name="workouts_builder_add">Add exercises</string>
+    <string name="workouts_builder_save">Save workout</string>
+    <string name="workouts_warn_over_ten">That is a lot for one session. Most people train better with 10 or fewer.</string>
+    <string name="workouts_cap_reached">20 exercises is the hard cap for a single workout.</string>
+    <string name="workouts_session_finish">Finish workout</string>
+    <string name="workouts_add_set">Add set</string>
+    <string name="workouts_set">Set</string>
+    <string name="workouts_kg">kg</string>
+    <string name="workouts_lb">lb</string>
+    <string name="workouts_reps">Reps</string>
+    <string name="workouts_new_pr">New PR</string>
+    <string name="workouts_pr_message">%1$s — %2$s beat your previous best.</string>
+
+    <!-- Muscle groups -->
+    <string name="muscle_chest">Chest</string>
+    <string name="muscle_back">Back</string>
+    <string name="muscle_legs">Legs</string>
+    <string name="muscle_shoulders">Shoulders</string>
+    <string name="muscle_arms">Arms</string>
+    <string name="muscle_abs">Abs</string>
+    <string name="muscle_glutes">Glutes</string>
+    <string name="muscle_cardio">Cardio</string>
+
+    <!-- Difficulty -->
+    <string name="difficulty_beginner">Beginner</string>
+    <string name="difficulty_intermediate">Intermediate</string>
+    <string name="difficulty_advanced">Advanced</string>
+
+    <!-- Timer -->
+    <string name="timer_eyebrow">Fitness Timer</string>
+    <string name="timer_title">Timer</string>
+    <string name="timer_start">Start</string>
+    <string name="timer_pause">Pause</string>
+    <string name="timer_resume">Resume</string>
+    <string name="timer_cancel">Cancel</string>
+    <string name="timer_hours">hours</string>
+    <string name="timer_minutes">min</string>
+    <string name="timer_seconds">sec</string>
+    <string name="timer_running">Timer running</string>
+    <string name="timer_done">Time is up</string>
+    <string name="timer_notification_channel">Workout timer</string>
+    <string name="timer_notification_channel_desc">Shows the countdown while a timer is running.</string>
+
+    <!-- Nutrition -->
+    <string name="nutrition_eyebrow">Fuel</string>
+    <string name="nutrition_title">Nutrition</string>
+    <string name="nutrition_add_meal">Add meal</string>
+    <string name="nutrition_add_food">Add ingredient</string>
+    <string name="nutrition_food_name">Ingredient</string>
+    <string name="nutrition_grams">Grams</string>
+    <string name="nutrition_calories">Calories</string>
+    <string name="nutrition_protein">Protein</string>
+    <string name="nutrition_carbs">Carbs</string>
+    <string name="nutrition_fat">Fat</string>
+    <string name="nutrition_kcal">kcal</string>
+    <string name="nutrition_today">Today</string>
+    <string name="nutrition_target">Target</string>
+    <string name="nutrition_advice">Guidance</string>
+    <string name="nutrition_empty">No meals logged today.</string>
+
+    <!-- Profile -->
+    <string name="profile_eyebrow">Account</string>
+    <string name="profile_title">Profile</string>
+    <string name="profile_details">Your details</string>
+    <string name="profile_name">Name</string>
+    <string name="profile_height">Height</string>
+    <string name="profile_weight">Weight</string>
+    <string name="profile_age">Age</string>
+    <string name="profile_sex">Sex</string>
+    <string name="profile_sex_male">Male</string>
+    <string name="profile_sex_female">Female</string>
+    <string name="profile_goal">Goal</string>
+    <string name="profile_goal_bulk">Bulking</string>
+    <string name="profile_goal_cut">Cutting</string>
+    <string name="profile_goal_maintain">Maintain</string>
+    <string name="profile_language">Language</string>
+    <string name="profile_units">Units</string>
+    <string name="profile_units_metric">Metric (kg, cm)</string>
+    <string name="profile_units_imperial">Imperial (lb, in)</string>
+    <string name="profile_settings">Account settings</string>
+    <string name="profile_sign_out">Sign out</string>
+    <string name="profile_save">Save changes</string>
+    <string name="language_english">English</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_french">Français</string>
+
+    <!-- Notifications -->
+    <string name="notifications_eyebrow">Activity</string>
+    <string name="notifications_title">Notifications</string>
+    <string name="notifications_empty">Nothing new.</string>
+    <string name="notification_channel_reminders">Workout reminders</string>
+    <string name="notification_channel_reminders_desc">Reminds you when a workout is scheduled.</string>
+    <string name="notification_workout_today">%1$s today</string>
+    <string name="notification_workout_today_body">Your session is scheduled. Keep the streak alive.</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_logo">REPS logo</string>
+    <string name="cd_back">Navigate back</string>
+    <string name="cd_close">Close</string>
+</resources>

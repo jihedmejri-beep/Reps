@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Head and shoulders. The torso is a trapezoid rather than a soft dome. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M12,2.6a3.9,3.9 0,1 0,0 7.8a3.9,3.9 0,1 0,0 -7.8Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M12,12.2c-4.3,0 -7.8,2.6 -7.8,5.8v3.5h15.6v-3.5c0,-3.2 -3.5,-5.8 -7.8,-5.8Z" />
+</vector>

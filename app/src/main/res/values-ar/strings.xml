@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- REPS is the brand name and stays in Latin script across all locales. -->
+
+    <!-- Navigation -->
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_progress">التقدم</string>
+    <string name="nav_workouts">التمارين</string>
+    <string name="nav_nutrition">التغذية</string>
+    <string name="nav_profile">الملف الشخصي</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_headline">تدرّب بكل جدية.</string>
+    <string name="onboarding_subtext">تدريبك وتغذيتك وتقدمك — في نظام واحد منضبط.</string>
+    <string name="onboarding_get_started">ابدأ الآن</string>
+    <string name="onboarding_have_account">لدي حساب بالفعل</string>
+
+    <!-- Auth: shared -->
+    <string name="auth_email">البريد الإلكتروني</string>
+    <string name="auth_password">كلمة المرور</string>
+    <string name="auth_continue_google">المتابعة باستخدام Google</string>
+    <string name="auth_or">أو</string>
+    <string name="auth_show_password">إظهار كلمة المرور</string>
+    <string name="auth_hide_password">إخفاء كلمة المرور</string>
+    <string name="auth_back">رجوع</string>
+
+    <!-- Auth: login -->
+    <string name="login_headline">مرحباً بعودتك</string>
+    <string name="login_subtext">سجّل الدخول لتكمل من حيث توقفت.</string>
+    <string name="login_forgot_password">نسيت كلمة المرور؟</string>
+    <string name="login_sign_in">تسجيل الدخول</string>
+    <string name="login_new_here">جديد في REPS؟</string>
+    <string name="login_create_account">إنشاء حساب</string>
+
+    <!-- Auth: sign up -->
+    <string name="signup_headline">إنشاء حساب</string>
+    <string name="signup_subtext">ابدأ ببناء سلسلتك اليوم.</string>
+    <string name="signup_name">الاسم</string>
+    <string name="signup_create_account">إنشاء حساب</string>
+    <string name="signup_have_account">لديك حساب بالفعل؟</string>
+    <string name="signup_sign_in">تسجيل الدخول</string>
+    <string name="signup_terms_prefix">أوافق على</string>
+    <string name="signup_terms">شروط الخدمة</string>
+    <string name="signup_terms_and">و</string>
+    <string name="signup_privacy">سياسة الخصوصية</string>
+
+    <!-- Auth: validation -->
+    <string name="error_email_invalid">أدخل بريداً إلكترونياً صالحاً.</string>
+    <string name="error_email_empty">البريد الإلكتروني مطلوب.</string>
+    <string name="error_password_empty">كلمة المرور مطلوبة.</string>
+    <string name="error_password_short">يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.</string>
+    <string name="error_name_empty">الاسم مطلوب.</string>
+    <string name="error_generic">حدث خطأ ما. حاول مرة أخرى.</string>
+
+    <!-- Home -->
+    <string name="home_greeting_morning">صباح الخير</string>
+    <string name="home_greeting_afternoon">طاب يومك</string>
+    <string name="home_greeting_evening">مساء الخير</string>
+    <string name="home_notifications">الإشعارات</string>
+    <string name="home_open_profile">فتح الملف الشخصي</string>
+    <string name="home_streak_count">سلسلة %1$d يوم</string>
+    <string name="home_streak_nudge">حافظ عليها — تدرّب اليوم لتصل إلى %1$d.</string>
+    <string name="home_today_workout">اليوم · تمرين</string>
+    <string name="home_start_workout">ابدأ التمرين</string>
+    <string name="home_exercise_count">%1$d تمارين</string>
+    <string name="home_duration_min">%1$d دقيقة</string>
+    <string name="home_quick_actions">إجراءات سريعة</string>
+    <string name="home_action_start">ابدأ</string>
+    <string name="home_action_weight">الوزن</string>
+    <string name="home_action_meal">وجبة</string>
+    <string name="home_action_timer">مؤقت</string>
+    <string name="home_rest_day">يوم راحة</string>
+    <string name="home_rest_day_subtext">لا يوجد تمرين مجدول. الراحة جزء من الخطة.</string>
+    <string name="home_daily_motivation">تحفيز يومي</string>
+
+    <!-- Weight widget -->
+    <string name="weight_label">الوزن</string>
+    <string name="weight_delta_up">%1$s هذا الأسبوع</string>
+    <string name="weight_delta_down">%1$s هذا الأسبوع</string>
+    <string name="weight_no_data">لا توجد إدخالات بعد</string>
+
+    <!-- Progress -->
+    <string name="progress_eyebrow">أرقامك</string>
+    <string name="progress_title">التقدم</string>
+    <string name="progress_this_month">هذا الشهر</string>
+    <string name="progress_last_month">الشهر الماضي</string>
+    <string name="progress_add_weight">إضافة وزن</string>
+    <string name="progress_save">حفظ</string>
+    <string name="progress_cancel">إلغاء</string>
+    <string name="progress_bmr">معدل الأيض الأساسي</string>
+    <string name="progress_bmi">مؤشر كتلة الجسم</string>
+    <string name="progress_bmr_caption">السعرات المحروقة أثناء الراحة يومياً</string>
+    <string name="progress_bmi_underweight">نقص الوزن</string>
+    <string name="progress_bmi_healthy">وزن صحي</string>
+    <string name="progress_bmi_overweight">زيادة الوزن</string>
+    <string name="progress_bmi_obese">سمنة</string>
+    <string name="progress_chart_empty">سجّل وزنك لتراه هنا.</string>
+    <string name="progress_bmi_needs_profile">أضف طولك وعمرك وجنسك في الملف الشخصي لرؤية هذا.</string>
+
+    <!-- Workouts -->
+    <string name="workouts_eyebrow">مكتبة التمارين</string>
+    <string name="workouts_title">التمارين</string>
+    <string name="workouts_filter_all">الكل</string>
+    <string name="workouts_search">ابحث عن تمرين</string>
+    <string name="workouts_common_mistakes">أخطاء شائعة</string>
+    <string name="workouts_description">الوصف</string>
+    <string name="workouts_builder_eyebrow">إنشاء</string>
+    <string name="workouts_builder_title">تمرين جديد</string>
+    <string name="workouts_builder_name_hint">اسم التمرين</string>
+    <string name="workouts_builder_add">إضافة تمارين</string>
+    <string name="workouts_builder_save">حفظ التمرين</string>
+    <string name="workouts_warn_over_ten">هذا كثير على جلسة واحدة. معظم الناس يتدربون بشكل أفضل بعشرة تمارين أو أقل.</string>
+    <string name="workouts_cap_reached">20 تمريناً هو الحد الأقصى الصارم للتمرين الواحد.</string>
+    <string name="workouts_session_finish">إنهاء التمرين</string>
+    <string name="workouts_add_set">إضافة مجموعة</string>
+    <string name="workouts_set">مجموعة</string>
+    <string name="workouts_kg">كجم</string>
+    <string name="workouts_lb">رطل</string>
+    <string name="workouts_reps">تكرارات</string>
+    <string name="workouts_new_pr">رقم قياسي جديد</string>
+    <string name="workouts_pr_message">%1$s — %2$s تجاوز أفضل رقم سابق لك.</string>
+
+    <!-- Muscle groups -->
+    <string name="muscle_chest">الصدر</string>
+    <string name="muscle_back">الظهر</string>
+    <string name="muscle_legs">الأرجل</string>
+    <string name="muscle_shoulders">الأكتاف</string>
+    <string name="muscle_arms">الذراعان</string>
+    <string name="muscle_abs">البطن</string>
+    <string name="muscle_glutes">المؤخرة</string>
+    <string name="muscle_cardio">الكارديو</string>
+
+    <!-- Difficulty -->
+    <string name="difficulty_beginner">مبتدئ</string>
+    <string name="difficulty_intermediate">متوسط</string>
+    <string name="difficulty_advanced">متقدم</string>
+
+    <!-- Timer -->
+    <string name="timer_eyebrow">مؤقت اللياقة</string>
+    <string name="timer_title">المؤقت</string>
+    <string name="timer_start">ابدأ</string>
+    <string name="timer_pause">إيقاف مؤقت</string>
+    <string name="timer_resume">استئناف</string>
+    <string name="timer_cancel">إلغاء</string>
+    <string name="timer_hours">ساعات</string>
+    <string name="timer_minutes">دقيقة</string>
+    <string name="timer_seconds">ثانية</string>
+    <string name="timer_running">المؤقت قيد التشغيل</string>
+    <string name="timer_done">انتهى الوقت</string>
+    <string name="timer_notification_channel">مؤقت التمرين</string>
+    <string name="timer_notification_channel_desc">يعرض العد التنازلي أثناء تشغيل المؤقت.</string>
+
+    <!-- Nutrition -->
+    <string name="nutrition_eyebrow">الوقود</string>
+    <string name="nutrition_title">التغذية</string>
+    <string name="nutrition_add_meal">إضافة وجبة</string>
+    <string name="nutrition_add_food">إضافة مكوّن</string>
+    <string name="nutrition_food_name">المكوّن</string>
+    <string name="nutrition_grams">غرام</string>
+    <string name="nutrition_calories">السعرات</string>
+    <string name="nutrition_protein">البروتين</string>
+    <string name="nutrition_carbs">الكربوهيدرات</string>
+    <string name="nutrition_fat">الدهون</string>
+    <string name="nutrition_kcal">سعرة</string>
+    <string name="nutrition_today">اليوم</string>
+    <string name="nutrition_target">الهدف</string>
+    <string name="nutrition_advice">إرشادات</string>
+    <string name="nutrition_empty">لم تسجّل أي وجبة اليوم.</string>
+
+    <!-- Profile -->
+    <string name="profile_eyebrow">الحساب</string>
+    <string name="profile_title">الملف الشخصي</string>
+    <string name="profile_details">بياناتك</string>
+    <string name="profile_name">الاسم</string>
+    <string name="profile_height">الطول</string>
+    <string name="profile_weight">الوزن</string>
+    <string name="profile_age">العمر</string>
+    <string name="profile_sex">الجنس</string>
+    <string name="profile_sex_male">ذكر</string>
+    <string name="profile_sex_female">أنثى</string>
+    <string name="profile_goal">الهدف</string>
+    <string name="profile_goal_bulk">زيادة الكتلة</string>
+    <string name="profile_goal_cut">التنشيف</string>
+    <string name="profile_goal_maintain">المحافظة</string>
+    <string name="profile_language">اللغة</string>
+    <string name="profile_units">الوحدات</string>
+    <string name="profile_units_metric">متري (كجم، سم)</string>
+    <string name="profile_units_imperial">إمبراطوري (رطل، بوصة)</string>
+    <string name="profile_settings">إعدادات الحساب</string>
+    <string name="profile_sign_out">تسجيل الخروج</string>
+    <string name="profile_save">حفظ التغييرات</string>
+
+    <!-- Notifications -->
+    <string name="notifications_eyebrow">النشاط</string>
+    <string name="notifications_title">الإشعارات</string>
+    <string name="notifications_empty">لا يوجد جديد.</string>
+    <string name="notification_channel_reminders">تذكيرات التمرين</string>
+    <string name="notification_channel_reminders_desc">يذكّرك عند وجود تمرين مجدول.</string>
+    <string name="notification_workout_today">%1$s اليوم</string>
+    <string name="notification_workout_today_body">جلستك مجدولة. حافظ على السلسلة.</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_logo">شعار REPS</string>
+    <string name="cd_back">الرجوع للخلف</string>
+    <string name="cd_close">إغلاق</string>
+</resources>

@@ -9,6 +9,8 @@
 /.idea/assetWizardSettings.xml
 .DS_Store
 /build
+# Unanchored, so module outputs such as app/build are covered too.
+build/
 /captures
 .externalNativeBuild
 .cxx

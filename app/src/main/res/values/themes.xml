@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      The app is dark-only by design, so this theme does not vary by night mode.
+      Compose owns all in-app colour; this exists for the window background, which
+      keeps cold start from flashing white before the first frame renders.
+    -->
+    <style name="Theme.Reps" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/reps_near_black</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+</resources>
