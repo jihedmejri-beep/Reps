@@ -9,6 +9,10 @@
     <string name="nav_nutrition">التغذية</string>
     <string name="nav_profile">الملف الشخصي</string>
 
+    <!-- Splash -->
+    <string name="splash_tagline">ادفع · تابع · كرّر</string>
+    <string name="splash_tap_to_continue">اضغط للمتابعة</string>
+
     <!-- Onboarding -->
     <string name="onboarding_headline">تدرّب بكل جدية.</string>
     <string name="onboarding_subtext">تدريبك وتغذيتك وتقدمك — في نظام واحد منضبط.</string>

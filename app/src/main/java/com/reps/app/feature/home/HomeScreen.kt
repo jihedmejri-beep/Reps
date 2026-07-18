@@ -81,14 +81,16 @@ private fun HomeContent(
     onOpenNotifications: () -> Unit,
     onOpenProfile: () -> Unit,
 ) {
+    val dimens = RepsTheme.dimens
+
     LazyColumn(
         modifier = Modifier.fillMaxSize().background(RepsNearBlack),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(
-            start = 16.dp,
-            end = 16.dp,
+            start = dimens.screenPadding,
+            end = dimens.screenPadding,
             bottom = 24.dp,
         ),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
+        verticalArrangement = Arrangement.spacedBy(dimens.sectionGap),
     ) {
         item {
             HomeHeader(
@@ -183,7 +185,7 @@ private fun HomeHeader(
         }
         Box(
             Modifier
-                .size(40.dp)
+                .size(RepsTheme.dimens.avatarSize)
                 .clip(CircleShape)
                 .background(RepsGreen)
                 .clickable(onClick = onOpenProfile),

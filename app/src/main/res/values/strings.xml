@@ -9,6 +9,10 @@
     <string name="nav_nutrition">Nutrition</string>
     <string name="nav_profile">Profile</string>
 
+    <!-- Splash -->
+    <string name="splash_tagline">PUSH · TRACK · REPEAT</string>
+    <string name="splash_tap_to_continue">TAP TO CONTINUE</string>
+
     <!-- Onboarding -->
     <string name="onboarding_headline">Train like you mean it.</string>
     <string name="onboarding_subtext">Your training, nutrition and progress — engineered into one disciplined system.</string>

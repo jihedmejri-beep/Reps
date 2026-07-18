@@ -50,7 +50,7 @@ fun WeightWidget(
         modifier = modifier
             .background(RepsSurface, MaterialTheme.shapes.medium)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
-            .padding(14.dp),
+            .padding(RepsTheme.dimens.cardPadding),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

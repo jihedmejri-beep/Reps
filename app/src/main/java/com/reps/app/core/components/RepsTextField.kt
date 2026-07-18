@@ -2,8 +2,10 @@ package com.reps.app.core.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Visibility
@@ -39,7 +41,7 @@ import com.reps.app.core.theme.RepsTheme
 
 /**
  * Text input with an optional uppercase label above it, matching the EMAIL /
- * PASSWORD treatment in the auth mockups.
+ * PASSWORD treatment in the auth designs.
  */
 @Composable
 fun RepsTextField(
@@ -54,16 +56,10 @@ fun RepsTextField(
     singleLine: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Next,
+    onImeAction: (() -> Unit)? = null,
 ) {
     Column(modifier) {
-        label?.let {
-            Text(
-                text = it.uppercase(),
-                style = RepsTheme.textStyles.eyebrow,
-                color = RepsTextSecondary,
-                modifier = Modifier.padding(bottom = 6.dp),
-            )
-        }
+        FieldLabel(label)
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
@@ -73,34 +69,24 @@ fun RepsTextField(
             placeholder = placeholder?.let {
                 { Text(it, style = MaterialTheme.typography.bodyLarge, color = RepsTextTertiary) }
             },
-            leadingIcon = leadingIcon?.let {
-                {
-                    Icon(
-                        painter = it,
-                        contentDescription = null,
-                        tint = RepsTextTertiary,
-                        modifier = Modifier.size(18.dp),
-                    )
-                }
-            },
+            leadingIcon = leadingIcon?.let { { FieldIcon(it) } },
             textStyle = MaterialTheme.typography.bodyLarge,
             shape = MaterialTheme.shapes.medium,
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
+            keyboardActions = KeyboardActions(
+                onDone = { onImeAction?.invoke() },
+                onGo = { onImeAction?.invoke() },
+            ),
             colors = repsFieldColors(),
-            modifier = Modifier.fillMaxWidth(),
+            // heightIn, not a fixed height: the field must be able to grow when
+            // the user has a large system font scale.
+            modifier = Modifier.fillMaxWidth().heightIn(min = RepsTheme.dimens.fieldHeight),
         )
-        error?.let {
-            Text(
-                text = it,
-                style = MaterialTheme.typography.bodySmall,
-                color = RepsError,
-                modifier = Modifier.padding(top = 6.dp),
-            )
-        }
+        FieldError(error)
     }
 }
 
-/** Password variant with the visibility toggle the mockups call for. */
+/** Password variant with the visibility toggle the designs call for. */
 @Composable
 fun RepsPasswordField(
     value: String,
@@ -108,21 +94,16 @@ fun RepsPasswordField(
     modifier: Modifier = Modifier,
     label: String? = null,
     placeholder: String? = null,
+    leadingIcon: Painter? = null,
     error: String? = null,
     enabled: Boolean = true,
     imeAction: ImeAction = ImeAction.Done,
+    onImeAction: (() -> Unit)? = null,
 ) {
     var visible by remember { mutableStateOf(false) }
 
     Column(modifier) {
-        label?.let {
-            Text(
-                text = it.uppercase(),
-                style = RepsTheme.textStyles.eyebrow,
-                color = RepsTextSecondary,
-                modifier = Modifier.padding(bottom = 6.dp),
-            )
-        }
+        FieldLabel(label)
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
@@ -132,6 +113,7 @@ fun RepsPasswordField(
             placeholder = placeholder?.let {
                 { Text(it, style = MaterialTheme.typography.bodyLarge, color = RepsTextTertiary) }
             },
+            leadingIcon = leadingIcon?.let { { FieldIcon(it) } },
             visualTransformation = if (visible) {
                 VisualTransformation.None
             } else {
@@ -140,7 +122,11 @@ fun RepsPasswordField(
             trailingIcon = {
                 IconButton(onClick = { visible = !visible }) {
                     Icon(
-                        imageVector = if (visible) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
+                        imageVector = if (visible) {
+                            Icons.Outlined.VisibilityOff
+                        } else {
+                            Icons.Outlined.Visibility
+                        },
                         contentDescription = stringResource(
                             if (visible) R.string.auth_hide_password else R.string.auth_show_password,
                         ),
@@ -155,18 +141,44 @@ fun RepsPasswordField(
                 keyboardType = KeyboardType.Password,
                 imeAction = imeAction,
             ),
+            keyboardActions = KeyboardActions(onDone = { onImeAction?.invoke() }),
             colors = repsFieldColors(),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().heightIn(min = RepsTheme.dimens.fieldHeight),
         )
-        error?.let {
-            Text(
-                text = it,
-                style = MaterialTheme.typography.bodySmall,
-                color = RepsError,
-                modifier = Modifier.padding(top = 6.dp),
-            )
-        }
+        FieldError(error)
     }
+}
+
+@Composable
+private fun FieldLabel(label: String?) {
+    label ?: return
+    Text(
+        text = label.uppercase(),
+        style = RepsTheme.textStyles.eyebrow,
+        color = RepsTextSecondary,
+        modifier = Modifier.padding(bottom = 6.dp),
+    )
+}
+
+@Composable
+private fun FieldError(error: String?) {
+    error ?: return
+    Text(
+        text = error,
+        style = MaterialTheme.typography.bodySmall,
+        color = RepsError,
+        modifier = Modifier.padding(top = 6.dp),
+    )
+}
+
+@Composable
+private fun FieldIcon(painter: Painter) {
+    Icon(
+        painter = painter,
+        contentDescription = null,
+        tint = RepsTextTertiary,
+        modifier = Modifier.size(18.dp),
+    )
 }
 
 @Composable

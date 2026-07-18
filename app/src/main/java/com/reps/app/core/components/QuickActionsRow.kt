@@ -30,6 +30,7 @@ import com.reps.app.core.theme.RepsSurface
 import com.reps.app.core.theme.RepsSurfaceElevated
 import com.reps.app.core.theme.RepsTextPrimary
 import com.reps.app.core.theme.RepsTextSecondary
+import com.reps.app.core.theme.RepsTheme
 
 /**
  * Start / Weight / Meal / Timer. Each is a shortcut into a destination the user
@@ -48,7 +49,7 @@ fun QuickActionsRow(
         modifier
             .fillMaxWidth()
             .background(RepsSurface, MaterialTheme.shapes.large)
-            .padding(14.dp),
+            .padding(RepsTheme.dimens.cardPadding),
     ) {
         Text(
             text = stringResource(R.string.home_quick_actions),

@@ -58,7 +58,7 @@ fun TodayWorkoutCard(
                 shape = MaterialTheme.shapes.large,
             ),
     ) {
-        Column(Modifier.padding(16.dp)) {
+        Column(Modifier.padding(RepsTheme.dimens.cardPadding)) {
             Row(
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,

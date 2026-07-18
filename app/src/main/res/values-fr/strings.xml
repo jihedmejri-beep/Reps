@@ -9,6 +9,10 @@
     <string name="nav_nutrition">Nutrition</string>
     <string name="nav_profile">Profil</string>
 
+    <!-- Splash -->
+    <string name="splash_tagline">POUSSE · SUIS · RÉPÈTE</string>
+    <string name="splash_tap_to_continue">APPUYEZ POUR CONTINUER</string>
+
     <!-- Onboarding -->
     <string name="onboarding_headline">Entraîne-toi sérieusement.</string>
     <string name="onboarding_subtext">Ton entraînement, ta nutrition et tes progrès — réunis en un seul système rigoureux.</string>

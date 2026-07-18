@@ -5,6 +5,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.reps.app.R
 
@@ -28,126 +29,152 @@ val PoppinsFamily = FontFamily(
  */
 data class RepsTextStyles(
     /** Small green uppercase label sitting above a section title. */
-    val eyebrow: TextStyle = TextStyle(
-        fontFamily = PoppinsFamily,
-        fontWeight = FontWeight.ExtraBold,
-        fontSize = 11.sp,
-        lineHeight = 14.sp,
-        letterSpacing = 1.6.sp,
-    ),
+    val eyebrow: TextStyle,
     /** The large condensed title directly under an eyebrow. */
-    val sectionTitle: TextStyle = TextStyle(
-        fontFamily = AntonFamily,
-        fontSize = 34.sp,
-        lineHeight = 36.sp,
-        letterSpacing = 0.5.sp,
-    ),
+    val sectionTitle: TextStyle,
     /** Numerals that need to dominate their card: weight, timer, BMR. */
-    val statValue: TextStyle = TextStyle(
-        fontFamily = ArchivoBlackFamily,
-        fontWeight = FontWeight.Black,
-        fontSize = 32.sp,
-        lineHeight = 34.sp,
-    ),
-    val buttonLabel: TextStyle = TextStyle(
-        fontFamily = PoppinsFamily,
-        fontWeight = FontWeight.ExtraBold,
-        fontSize = 15.sp,
-        lineHeight = 18.sp,
-        letterSpacing = 0.2.sp,
-    ),
+    val statValue: TextStyle,
+    val buttonLabel: TextStyle,
 )
 
-val RepsTypography = Typography(
-    displayLarge = TextStyle(
-        fontFamily = AntonFamily,
-        fontSize = 48.sp,
-        lineHeight = 50.sp,
-        letterSpacing = 0.sp,
-    ),
-    displayMedium = TextStyle(
-        fontFamily = AntonFamily,
-        fontSize = 40.sp,
-        lineHeight = 42.sp,
-    ),
-    displaySmall = TextStyle(
-        fontFamily = AntonFamily,
-        fontSize = 34.sp,
-        lineHeight = 36.sp,
-    ),
-    headlineLarge = TextStyle(
-        fontFamily = ArchivoBlackFamily,
-        fontWeight = FontWeight.Black,
-        fontSize = 30.sp,
-        lineHeight = 34.sp,
-    ),
-    headlineMedium = TextStyle(
-        fontFamily = ArchivoBlackFamily,
-        fontWeight = FontWeight.Black,
-        fontSize = 24.sp,
-        lineHeight = 28.sp,
-    ),
-    headlineSmall = TextStyle(
-        fontFamily = ArchivoBlackFamily,
-        fontWeight = FontWeight.Black,
-        fontSize = 20.sp,
-        lineHeight = 24.sp,
-    ),
-    titleLarge = TextStyle(
-        fontFamily = PoppinsFamily,
-        fontWeight = FontWeight.ExtraBold,
-        fontSize = 18.sp,
-        lineHeight = 22.sp,
-    ),
-    titleMedium = TextStyle(
-        fontFamily = PoppinsFamily,
-        fontWeight = FontWeight.ExtraBold,
-        fontSize = 16.sp,
-        lineHeight = 20.sp,
-    ),
-    titleSmall = TextStyle(
-        fontFamily = PoppinsFamily,
-        fontWeight = FontWeight.ExtraBold,
-        fontSize = 14.sp,
-        lineHeight = 18.sp,
-    ),
-    bodyLarge = TextStyle(
-        fontFamily = PoppinsFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 15.sp,
-        lineHeight = 22.sp,
-    ),
-    bodyMedium = TextStyle(
-        fontFamily = PoppinsFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 13.sp,
-        lineHeight = 19.sp,
-    ),
-    bodySmall = TextStyle(
-        fontFamily = PoppinsFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp,
-        lineHeight = 16.sp,
-    ),
-    labelLarge = TextStyle(
-        fontFamily = PoppinsFamily,
-        fontWeight = FontWeight.ExtraBold,
-        fontSize = 14.sp,
-        lineHeight = 18.sp,
-        letterSpacing = 0.2.sp,
-    ),
-    labelMedium = TextStyle(
-        fontFamily = PoppinsFamily,
-        fontWeight = FontWeight.ExtraBold,
-        fontSize = 12.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.4.sp,
-    ),
-    labelSmall = TextStyle(
-        fontFamily = PoppinsFamily,
-        fontWeight = FontWeight.ExtraBold,
-        fontSize = 10.sp,
-        lineHeight = 14.sp,
-        letterSpacing = 0.6.sp,
-    ),
-)
+/**
+ * Display type scales with the screen; body copy deliberately does not scale
+ * as hard. Shrinking a 48sp headline by 14% on a small phone keeps it from
+ * wrapping badly, but shrinking 15sp body text by the same amount would just
+ * make it hard to read.
+ */
+private fun bodyScaleFrom(displayScale: Float) = 1f + (displayScale - 1f) * 0.4f
+
+fun repsTypography(displayScale: Float = 1f): Typography {
+    val d = displayScale
+    val b = bodyScaleFrom(displayScale)
+
+    fun sp(value: Number, scale: Float): TextUnit = (value.toFloat() * scale).sp
+
+    return Typography(
+        displayLarge = TextStyle(
+            fontFamily = AntonFamily,
+            fontSize = sp(48, d),
+            lineHeight = sp(50, d),
+            letterSpacing = 0.sp,
+        ),
+        displayMedium = TextStyle(
+            fontFamily = AntonFamily,
+            fontSize = sp(40, d),
+            lineHeight = sp(42, d),
+        ),
+        displaySmall = TextStyle(
+            fontFamily = AntonFamily,
+            fontSize = sp(34, d),
+            lineHeight = sp(36, d),
+        ),
+        headlineLarge = TextStyle(
+            fontFamily = ArchivoBlackFamily,
+            fontWeight = FontWeight.Black,
+            fontSize = sp(30, d),
+            lineHeight = sp(34, d),
+        ),
+        headlineMedium = TextStyle(
+            fontFamily = ArchivoBlackFamily,
+            fontWeight = FontWeight.Black,
+            fontSize = sp(24, d),
+            lineHeight = sp(28, d),
+        ),
+        headlineSmall = TextStyle(
+            fontFamily = ArchivoBlackFamily,
+            fontWeight = FontWeight.Black,
+            fontSize = sp(20, d),
+            lineHeight = sp(24, d),
+        ),
+        titleLarge = TextStyle(
+            fontFamily = PoppinsFamily,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = sp(18, b),
+            lineHeight = sp(22, b),
+        ),
+        titleMedium = TextStyle(
+            fontFamily = PoppinsFamily,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = sp(16, b),
+            lineHeight = sp(20, b),
+        ),
+        titleSmall = TextStyle(
+            fontFamily = PoppinsFamily,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = sp(14, b),
+            lineHeight = sp(18, b),
+        ),
+        bodyLarge = TextStyle(
+            fontFamily = PoppinsFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = sp(15, b),
+            lineHeight = sp(22, b),
+        ),
+        bodyMedium = TextStyle(
+            fontFamily = PoppinsFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = sp(13, b),
+            lineHeight = sp(19, b),
+        ),
+        bodySmall = TextStyle(
+            fontFamily = PoppinsFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = sp(12, b),
+            lineHeight = sp(16, b),
+        ),
+        labelLarge = TextStyle(
+            fontFamily = PoppinsFamily,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = sp(14, b),
+            lineHeight = sp(18, b),
+            letterSpacing = 0.2.sp,
+        ),
+        labelMedium = TextStyle(
+            fontFamily = PoppinsFamily,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = sp(12, b),
+            lineHeight = sp(16, b),
+            letterSpacing = 0.4.sp,
+        ),
+        labelSmall = TextStyle(
+            fontFamily = PoppinsFamily,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = sp(10, b),
+            lineHeight = sp(14, b),
+            letterSpacing = 0.6.sp,
+        ),
+    )
+}
+
+fun repsTextStyles(displayScale: Float = 1f): RepsTextStyles {
+    val d = displayScale
+    val b = bodyScaleFrom(displayScale)
+    return RepsTextStyles(
+        eyebrow = TextStyle(
+            fontFamily = PoppinsFamily,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = (11 * b).sp,
+            lineHeight = (14 * b).sp,
+            letterSpacing = 1.6.sp,
+        ),
+        sectionTitle = TextStyle(
+            fontFamily = AntonFamily,
+            fontSize = (34 * d).sp,
+            lineHeight = (36 * d).sp,
+            letterSpacing = 0.5.sp,
+        ),
+        statValue = TextStyle(
+            fontFamily = ArchivoBlackFamily,
+            fontWeight = FontWeight.Black,
+            fontSize = (32 * d).sp,
+            lineHeight = (34 * d).sp,
+        ),
+        buttonLabel = TextStyle(
+            fontFamily = PoppinsFamily,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = (15 * b).sp,
+            lineHeight = (18 * b).sp,
+            letterSpacing = 0.2.sp,
+        ),
+    )
+}

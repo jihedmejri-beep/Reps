@@ -3,6 +3,7 @@ package com.reps.app.navigation
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -20,7 +21,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.reps.app.core.theme.RepsNearBlack
+import com.reps.app.feature.auth.login.LoginScreen
+import com.reps.app.feature.auth.signup.SignUpScreen
 import com.reps.app.feature.home.HomeScreen
+import com.reps.app.feature.splash.SplashDestination
+import com.reps.app.feature.splash.SplashScreen
 
 @Composable
 fun RepsApp(navController: NavHostController = rememberNavController()) {
@@ -48,10 +53,7 @@ fun RepsApp(navController: NavHostController = rememberNavController()) {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            // TODO: restore Routes.SPLASH once splash/onboarding/auth are built.
-            // They are still placeholders with no way forward, so starting there
-            // would strand the app on a dead screen.
-            startDestination = Routes.HOME,
+            startDestination = Routes.SPLASH,
             modifier = Modifier.fillMaxSize().padding(innerPadding),
         ) {
             repsGraph(navController)
@@ -69,11 +71,51 @@ private fun NavHostController.navigateToTab(tab: TopLevelTab) {
     }
 }
 
+/** Replaces the whole back stack, so back never returns to splash or auth. */
+private fun NavHostController.replaceWith(route: String) {
+    navigate(route) {
+        popUpTo(graph.id) { inclusive = true }
+        launchSingleTop = true
+    }
+}
+
 private fun NavGraphBuilder.repsGraph(navController: NavHostController) {
-    composable(Routes.SPLASH) { Placeholder("Splash") }
-    composable(Routes.ONBOARDING) { Placeholder("Onboarding") }
-    composable(Routes.LOGIN) { Placeholder("Login") }
-    composable(Routes.SIGN_UP) { Placeholder("Sign Up") }
+    composable(Routes.SPLASH) {
+        SplashScreen(
+            onFinished = { destination ->
+                navController.replaceWith(
+                    when (destination) {
+                        SplashDestination.ONBOARDING -> Routes.ONBOARDING
+                        SplashDestination.LOGIN -> Routes.LOGIN
+                        SplashDestination.HOME -> Routes.HOME
+                    },
+                )
+            },
+        )
+    }
+
+    // TODO: still a placeholder. The supplied video shows a three-page carousel
+    // ("TRAIN WITH INTENT") which differs from the single screen in the written
+    // brief - see the note raised with the client before building it. It is
+    // tappable so a first install is never stranded on a dead screen.
+    composable(Routes.ONBOARDING) {
+        Placeholder("Onboarding", onClick = { navController.replaceWith(Routes.LOGIN) })
+    }
+
+    composable(Routes.LOGIN) {
+        LoginScreen(
+            onSignedIn = { navController.replaceWith(Routes.HOME) },
+            onCreateAccount = { navController.navigate(Routes.SIGN_UP) },
+            onBack = { navController.popBackStack() },
+        )
+    }
+    composable(Routes.SIGN_UP) {
+        SignUpScreen(
+            onSignedUp = { navController.replaceWith(Routes.HOME) },
+            onSignIn = { navController.popBackStack() },
+            onBack = { navController.popBackStack() },
+        )
+    }
 
     composable(Routes.HOME) {
         HomeScreen(
@@ -99,8 +141,13 @@ private fun NavGraphBuilder.repsGraph(navController: NavHostController) {
 
 // Temporary: each of these is replaced by its real screen as it lands.
 @Composable
-private fun Placeholder(name: String) {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(name, color = Color.White)
+private fun Placeholder(name: String, onClick: (() -> Unit)? = null) {
+    Box(
+        Modifier
+            .fillMaxSize()
+            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(if (onClick == null) name else "$name\n(tap to continue)", color = Color.White)
     }
 }
