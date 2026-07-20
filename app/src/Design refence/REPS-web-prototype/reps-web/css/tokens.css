@@ -1,0 +1,220 @@
+/* ==========================================================================
+   REPS — Design Tokens
+   Ported 1:1 from the Jetpack Compose source of truth:
+   core/theme/Color.kt, Typography.kt, Dimens.kt, Shape.kt, Theme.kt
+   These values are FINAL. Do not edit for cosmetic reasons — if it looks
+   wrong, the bug is in how a token is being *used*, not the token itself.
+   ========================================================================== */
+
+/* ---- Fonts (local files, exact weights the app ships) ------------------- */
+@font-face {
+  font-family: "Anton";
+  src: url("../assets/fonts/anton_regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Archivo Black";
+  src: url("../assets/fonts/archivo_black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("../assets/fonts/poppins_regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("../assets/fonts/poppins_medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("../assets/fonts/poppins_semibold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("../assets/fonts/poppins_extrabold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* ---- Brand colours (Color.kt) ------------------------------------- */
+  --reps-green: #77EC04;
+  --reps-off-white: #F4F2EA;
+  --reps-dark-gray: #3D3C37;
+  --reps-near-black: #0B0B0A;
+
+  --reps-surface: #141413;
+  --reps-surface-elevated: #1C1C1A;
+  --reps-outline: #2A2A27;
+
+  --reps-text-primary: var(--reps-off-white);
+  --reps-text-secondary: #8A8880;
+  --reps-text-tertiary: #5C5A54;
+
+  --reps-green-pressed: #63C503;
+  --reps-on-green: var(--reps-near-black);
+
+  --reps-weight-down: var(--reps-green);
+  --reps-weight-up: #E8B33A;
+  --reps-error: #E5484D;
+
+  /* Convenience alpha ramps of green, derived from the one brand token   */
+  --reps-green-08: rgba(119, 236, 4, 0.08);
+  --reps-green-10: rgba(119, 236, 4, 0.10);
+  --reps-green-14: rgba(119, 236, 4, 0.14);
+  --reps-green-18: rgba(119, 236, 4, 0.18);
+  --reps-green-35: rgba(119, 236, 4, 0.35);
+
+  /* ---- Font families (Typography.kt) --------------------------------- */
+  --font-display: "Anton", "Archivo Narrow", sans-serif;         /* AntonFamily */
+  --font-headline: "Archivo Black", "Arial Black", sans-serif;   /* ArchivoBlackFamily */
+  --font-body: "Poppins", "Segoe UI", sans-serif;                /* PoppinsFamily */
+
+  /* ---- Shape (Shape.kt) ----------------------------------------------- */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* ---- Letter spacing: flat constants, never scaled by breakpoint ----- */
+  --ls-eyebrow: 1.6px;
+  --ls-section-title: 0.5px;
+  --ls-label-lg: 0.2px;
+  --ls-label-md: 0.4px;
+  --ls-label-sm: 0.6px;
+  --ls-button: 0.2px;
+
+  /* =====================================================================
+     Dimens — MEDIUM tier (360–599dp). This is the reference/default and
+     applies unless a breakpoint below overrides it.
+     ===================================================================== */
+  --space-screen: 16px;
+  --space-card: 16px;
+  --space-section: 14px;
+  --space-item: 8px;
+  --size-button: 54px;
+  --size-field: 56px;
+  --size-icon: 20px;
+  --size-nav-icon: 21px;
+  --size-avatar: 40px;
+  --content-max-width: none;
+
+  --fs-display-lg: 48px;   --lh-display-lg: 50px;
+  --fs-display-md: 40px;   --lh-display-md: 42px;
+  --fs-display-sm: 34px;   --lh-display-sm: 36px;
+  --fs-headline-lg: 30px;  --lh-headline-lg: 34px;
+  --fs-headline-md: 24px;  --lh-headline-md: 28px;
+  --fs-headline-sm: 20px;  --lh-headline-sm: 24px;
+  --fs-title-lg: 18px;     --lh-title-lg: 22px;
+  --fs-title-md: 16px;     --lh-title-md: 20px;
+  --fs-title-sm: 14px;     --lh-title-sm: 18px;
+  --fs-body-lg: 15px;      --lh-body-lg: 22px;
+  --fs-body-md: 13px;      --lh-body-md: 19px;
+  --fs-body-sm: 12px;      --lh-body-sm: 16px;
+  --fs-label-lg: 14px;     --lh-label-lg: 18px;
+  --fs-label-md: 12px;     --lh-label-md: 16px;
+  --fs-label-sm: 10px;     --lh-label-sm: 14px;
+  --fs-eyebrow: 11px;      --lh-eyebrow: 14px;
+  --fs-section-title: 34px; --lh-section-title: 36px;
+  --fs-stat-value: 32px;   --lh-stat-value: 34px;
+  --fs-button-label: 15px; --lh-button-label: 18px;
+
+  /* Safe-area shorthands (viewport-fit=cover required in the HTML head) */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  /* Floating nav geometry, referenced by screens to pad their scroll area */
+  --nav-height: 64px;
+  --nav-margin-bottom: 18px;
+  --nav-clearance: calc(var(--nav-height) + var(--nav-margin-bottom) + var(--safe-bottom) + 22px);
+}
+
+/* ---- COMPACT tier (<360dp) --------------------------------------------- */
+@media (max-width: 359.98px) {
+  :root {
+    --space-screen: 12px;
+    --space-card: 12px;
+    --space-section: 10px;
+    --space-item: 6px;
+    --size-button: 48px;
+    --size-field: 52px;
+    --size-icon: 18px;
+    --size-nav-icon: 19px;
+    --size-avatar: 36px;
+    --content-max-width: none;
+
+    --fs-display-lg: 41.28px;  --lh-display-lg: 43px;
+    --fs-display-md: 34.4px;   --lh-display-md: 36.12px;
+    --fs-display-sm: 29.24px;  --lh-display-sm: 30.96px;
+    --fs-headline-lg: 25.8px;  --lh-headline-lg: 29.24px;
+    --fs-headline-md: 20.64px; --lh-headline-md: 24.08px;
+    --fs-headline-sm: 17.2px;  --lh-headline-sm: 20.64px;
+    --fs-title-lg: 16.99px;    --lh-title-lg: 20.77px;
+    --fs-title-md: 15.1px;     --lh-title-md: 18.88px;
+    --fs-title-sm: 13.22px;    --lh-title-sm: 16.99px;
+    --fs-body-lg: 14.16px;     --lh-body-lg: 20.77px;
+    --fs-body-md: 12.27px;     --lh-body-md: 17.94px;
+    --fs-body-sm: 11.33px;     --lh-body-sm: 15.1px;
+    --fs-label-lg: 13.22px;    --lh-label-lg: 16.99px;
+    --fs-label-md: 11.33px;    --lh-label-md: 15.1px;
+    --fs-label-sm: 9.44px;     --lh-label-sm: 13.22px;
+    --fs-eyebrow: 10.38px;     --lh-eyebrow: 13.22px;
+    --fs-section-title: 29.24px; --lh-section-title: 30.96px;
+    --fs-stat-value: 27.52px;  --lh-stat-value: 29.24px;
+    --fs-button-label: 14.16px; --lh-button-label: 16.99px;
+  }
+}
+
+/* ---- EXPANDED tier (>=600dp: large phones, unfolded, tablets) ---------- */
+@media (min-width: 600px) {
+  :root {
+    --space-screen: 24px;
+    --space-card: 20px;
+    --space-section: 18px;
+    --space-item: 10px;
+    --size-button: 58px;
+    --size-field: 60px;
+    --size-icon: 22px;
+    --size-nav-icon: 23px;
+    --size-avatar: 44px;
+    --content-max-width: 460px;
+
+    --fs-display-lg: 52.8px;   --lh-display-lg: 55px;
+    --fs-display-md: 44px;     --lh-display-md: 46.2px;
+    --fs-display-sm: 37.4px;   --lh-display-sm: 39.6px;
+    --fs-headline-lg: 33px;    --lh-headline-lg: 37.4px;
+    --fs-headline-md: 26.4px;  --lh-headline-md: 30.8px;
+    --fs-headline-sm: 22px;    --lh-headline-sm: 26.4px;
+    --fs-title-lg: 18.72px;    --lh-title-lg: 22.88px;
+    --fs-title-md: 16.64px;    --lh-title-md: 20.8px;
+    --fs-title-sm: 14.56px;    --lh-title-sm: 18.72px;
+    --fs-body-lg: 15.6px;      --lh-body-lg: 22.88px;
+    --fs-body-md: 13.52px;     --lh-body-md: 19.76px;
+    --fs-body-sm: 12.48px;     --lh-body-sm: 16.64px;
+    --fs-label-lg: 14.56px;    --lh-label-lg: 18.72px;
+    --fs-label-md: 12.48px;    --lh-label-md: 16.64px;
+    --fs-label-sm: 10.4px;     --lh-label-sm: 14.56px;
+    --fs-eyebrow: 11.44px;     --lh-eyebrow: 14.56px;
+    --fs-section-title: 37.4px; --lh-section-title: 39.6px;
+    --fs-stat-value: 35.2px;   --lh-stat-value: 37.4px;
+    --fs-button-label: 15.6px; --lh-button-label: 18.72px;
+  }
+}

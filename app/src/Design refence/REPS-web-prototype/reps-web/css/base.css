@@ -1,0 +1,195 @@
+/* ==========================================================================
+   REPS — Base / Reset / Shell
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  min-height: 100dvh;
+  background: #000;
+  color: var(--reps-text-primary);
+  font-family: var(--font-body);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+}
+
+h1, h2, h3, h4, h5, h6, p, figure { margin: 0; }
+
+button, input, textarea, select {
+  font-family: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+a { color: inherit; text-decoration: none; }
+
+img { display: block; max-width: 100%; }
+
+svg { display: block; }
+
+::selection { background: var(--reps-green); color: var(--reps-on-green); }
+
+/* Hide scrollbars everywhere but keep native scroll physics + a11y */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Every scroll surface in the app should feel like native momentum scroll */
+.scroll-y {
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  scroll-behavior: smooth;
+}
+.scroll-x {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+:focus-visible {
+  outline: 2px solid var(--reps-green);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Device shell
+   The whole app lives inside #device, a fixed-aspect column that IS the
+   viewport on a real phone, and becomes a framed phone mockup once the
+   browser window is wide enough that a full-bleed layout would look
+   stretched rather than native (this only ever triggers on desktop/tablet
+   *browser chrome* previewing the prototype — real phones never see it).
+   ========================================================================== */
+
+#device-stage {
+  min-height: 100dvh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--reps-near-black);
+}
+
+#device {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  max-width: 100%;
+  background: var(--reps-near-black);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Above the "real phone" breakpoint, present a framed device so the
+   prototype reads as an app rather than a stretched website. */
+@media (min-width: 900px) and (min-height: 640px) {
+  #device-stage {
+    padding: 48px;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(119,236,4,0.05), transparent 55%),
+      radial-gradient(circle at 80% 85%, rgba(119,236,4,0.04), transparent 50%),
+      var(--reps-near-black);
+  }
+
+  #device {
+    width: 412px;
+    height: min(890px, calc(100dvh - 96px));
+    border-radius: 54px;
+    border: 10px solid #050504;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.05),
+      0 40px 90px rgba(0,0,0,0.65),
+      0 10px 30px rgba(0,0,0,0.55);
+  }
+
+  #device::before {
+    /* Dynamic-island style notch, decorative only */
+    content: "";
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    translate: -50% 0;
+    width: 90px;
+    height: 26px;
+    background: #050504;
+    border-radius: 20px;
+    z-index: 900;
+  }
+
+  .device-framed-hint {
+    position: fixed;
+    left: 50%;
+    bottom: 18px;
+    translate: -50% 0;
+    color: var(--reps-text-tertiary);
+    font: 500 11px/1 var(--font-body);
+    letter-spacing: 0.4px;
+    text-align: center;
+    pointer-events: none;
+  }
+}
+
+@media not all and (min-width: 900px) and (min-height: 640px) {
+  .device-framed-hint { display: none; }
+}
+
+/* ==========================================================================
+   Screens
+   Each top-level screen is a full-bleed layer inside #device. Only one is
+   "active" at a time; navigation.js toggles state + drives the transition.
+   ========================================================================== */
+
+.screen {
+  position: absolute;
+  inset: 0;
+  background: var(--reps-near-black);
+  display: flex;
+  flex-direction: column;
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 1;
+}
+
+.screen.is-active {
+  visibility: visible;
+  pointer-events: auto;
+  opacity: 1;
+  z-index: 5;
+}
+
+.screen.is-transitioning { z-index: 6; }
+
+.screen__scroll {
+  flex: 1;
+  min-height: 0;
+}
+
+.screen__scroll.with-nav-clearance {
+  padding-bottom: var(--nav-clearance);
+}
+
+/* Status-bar spacer used at the top of full-bleed screens */
+.status-spacer { height: var(--safe-top); flex-shrink: 0; }
+
+.safe-top-pad { padding-top: var(--safe-top); }
+.safe-bottom-pad { padding-bottom: var(--safe-bottom); }
