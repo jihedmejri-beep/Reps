@@ -24,6 +24,7 @@ import com.reps.app.core.theme.RepsNearBlack
 import com.reps.app.feature.auth.login.LoginScreen
 import com.reps.app.feature.auth.signup.SignUpScreen
 import com.reps.app.feature.home.HomeScreen
+import com.reps.app.feature.onboarding.OnboardingScreen
 import com.reps.app.feature.splash.SplashDestination
 import com.reps.app.feature.splash.SplashScreen
 
@@ -94,12 +95,13 @@ private fun NavGraphBuilder.repsGraph(navController: NavHostController) {
         )
     }
 
-    // TODO: still a placeholder. The supplied video shows a three-page carousel
-    // ("TRAIN WITH INTENT") which differs from the single screen in the written
-    // brief - see the note raised with the client before building it. It is
-    // tappable so a first install is never stranded on a dead screen.
+    // Built to the written brief's single screen, not the three-page carousel
+    // the start-animation video happens to show; the blueprint is authoritative.
     composable(Routes.ONBOARDING) {
-        Placeholder("Onboarding", onClick = { navController.replaceWith(Routes.LOGIN) })
+        OnboardingScreen(
+            onGetStarted = { navController.replaceWith(Routes.SIGN_UP) },
+            onHaveAccount = { navController.replaceWith(Routes.LOGIN) },
+        )
     }
 
     composable(Routes.LOGIN) {

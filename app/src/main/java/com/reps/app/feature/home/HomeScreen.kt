@@ -110,9 +110,14 @@ private fun HomeContent(
             if (workout != null) {
                 // map is inline, so stringResource is legal inside it;
                 // joinToString's transform is not.
-                val muscles = state.todayMuscleGroups
-                    .map { stringResource(it.labelRes) }
-                    .joinToString(" & ")
+                val names = state.todayMuscleGroups.map { stringResource(it.labelRes) }
+                // "Chest, Shoulders & Arms" rather than chaining every group
+                // with "&", which reads badly past two.
+                val muscles = when (names.size) {
+                    0 -> ""
+                    1 -> names.first()
+                    else -> names.dropLast(1).joinToString(", ") + " & " + names.last()
+                }
                 TodayWorkoutCard(
                     workoutName = workout.name,
                     muscleGroups = muscles,
