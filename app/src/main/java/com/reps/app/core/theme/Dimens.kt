@@ -56,7 +56,28 @@ data class RepsDimens(
     val maxContentWidth: Dp,
     /** Multiplier applied to the display/headline type scale. */
     val typeScale: Float,
-)
+
+    // ---- Floating bottom navigation -------------------------------------
+    /** Height of the nav pill itself, excluding its margins. */
+    val navHeight: Dp,
+    /** Gap between the pill and the left/right screen edges. */
+    val navSideMargin: Dp,
+    /** Gap between the pill and the bottom inset. */
+    val navBottomMargin: Dp,
+    /** Inset between the pill edge and the tabs, which the indicator sits in. */
+    val navPillPadding: Dp,
+    /** Horizontal padding inside one tab. */
+    val navTabPadding: Dp,
+    /** Cap on how far an active tab's label is allowed to expand. */
+    val navLabelMaxWidth: Dp,
+) {
+    /**
+     * Bottom padding a scrolling tab screen needs so its last item can clear the
+     * floating pill. Excludes the system navigation inset, which the screen adds
+     * itself - see `navBarClearance()`.
+     */
+    val navClearance: Dp get() = navHeight + navBottomMargin + 22.dp
+}
 
 private val CompactDimens = RepsDimens(
     screenPadding = 12.dp,
@@ -70,6 +91,14 @@ private val CompactDimens = RepsDimens(
     avatarSize = 36.dp,
     maxContentWidth = Dp.Infinity,
     typeScale = 0.86f,
+    navHeight = 64.dp,
+    navSideMargin = 14.dp,
+    navBottomMargin = 18.dp,
+    navPillPadding = 6.dp,
+    // Five tabs plus an expanded label do not fit a sub-360dp screen at the
+    // reference padding, so the tabs tighten and the label is capped shorter.
+    navTabPadding = 11.dp,
+    navLabelMaxWidth = 74.dp,
 )
 
 private val MediumDimens = RepsDimens(
@@ -84,6 +113,12 @@ private val MediumDimens = RepsDimens(
     avatarSize = 40.dp,
     maxContentWidth = Dp.Infinity,
     typeScale = 1.0f,
+    navHeight = 64.dp,
+    navSideMargin = 14.dp,
+    navBottomMargin = 18.dp,
+    navPillPadding = 6.dp,
+    navTabPadding = 14.dp,
+    navLabelMaxWidth = 90.dp,
 )
 
 private val ExpandedDimens = RepsDimens(
@@ -100,6 +135,15 @@ private val ExpandedDimens = RepsDimens(
     // stretched, which is how a phone layout looks broken on a foldable.
     maxContentWidth = 460.dp,
     typeScale = 1.1f,
+    // The pill keeps its phone geometry on a tablet. Stretching it to a 600dp+
+    // width would put the tabs beyond a thumb's reach, which is the one thing a
+    // bottom bar exists to avoid.
+    navHeight = 64.dp,
+    navSideMargin = 14.dp,
+    navBottomMargin = 18.dp,
+    navPillPadding = 6.dp,
+    navTabPadding = 14.dp,
+    navLabelMaxWidth = 90.dp,
 )
 
 fun dimensFor(widthClass: WindowWidthClass): RepsDimens = when (widthClass) {

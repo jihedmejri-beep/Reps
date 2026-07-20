@@ -35,6 +35,8 @@ data class RepsTextStyles(
     /** Numerals that need to dominate their card: weight, timer, BMR. */
     val statValue: TextStyle,
     val buttonLabel: TextStyle,
+    /** Label beside the icon on the selected bottom-nav tab. */
+    val navLabel: TextStyle,
 )
 
 /**
@@ -174,6 +176,16 @@ fun repsTextStyles(displayScale: Float = 1f): RepsTextStyles {
             fontWeight = FontWeight.ExtraBold,
             fontSize = (15 * b).sp,
             lineHeight = (18 * b).sp,
+            letterSpacing = 0.2.sp,
+        ),
+        // Deliberately not scaled by the width class. The nav pill keeps one
+        // fixed geometry on every device, so a label that grew with the tier
+        // would be the only thing in it that moved. Line height is left to the
+        // font's own metrics: at 11sp an explicit 1.0 ratio clips descenders.
+        navLabel = TextStyle(
+            fontFamily = PoppinsFamily,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = 11.sp,
             letterSpacing = 0.2.sp,
         ),
     )

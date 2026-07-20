@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Notifications
@@ -48,6 +49,9 @@ import com.reps.app.core.util.DateUtils
 import com.reps.app.domain.model.Difficulty
 import com.reps.app.domain.model.Streak
 import com.reps.app.domain.model.UnitSystem
+import com.reps.app.navigation.OnTabReselected
+import com.reps.app.navigation.Routes
+import com.reps.app.navigation.navBarClearance
 
 @Composable
 fun HomeScreen(
@@ -82,13 +86,23 @@ private fun HomeContent(
     onOpenProfile: () -> Unit,
 ) {
     val dimens = RepsTheme.dimens
+    val listState = rememberLazyListState()
+
+    OnTabReselected(Routes.HOME) { listState.animateScrollToItem(0) }
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize().background(RepsNearBlack),
+        state = listState,
+        // The status bar inset sits on the viewport, not on the header inside
+        // it, so content scrolls up to the status bar and stops rather than
+        // sliding underneath the clock. Mirrors the prototype's status-spacer,
+        // which is a sibling of the scroll area rather than part of it.
+        modifier = Modifier.fillMaxSize().background(RepsNearBlack).statusBarsPadding(),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(
             start = dimens.screenPadding,
             end = dimens.screenPadding,
-            bottom = 24.dp,
+            // The nav pill floats over the content rather than sitting below it,
+            // so the last card has to reserve its own room to scroll clear.
+            bottom = navBarClearance(),
         ),
         verticalArrangement = Arrangement.spacedBy(dimens.sectionGap),
     ) {
@@ -165,7 +179,7 @@ private fun HomeHeader(
     onOpenProfile: () -> Unit,
 ) {
     Row(
-        Modifier.fillMaxWidth().statusBarsPadding().padding(top = 8.dp, bottom = 2.dp),
+        Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(Modifier.weight(1f)) {
