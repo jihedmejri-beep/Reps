@@ -49,6 +49,8 @@ internal fun NavTab(
     @DrawableRes iconRes: Int,
     isSelected: Boolean,
     labelMaxWidth: Dp,
+    tabPadding: Dp,
+    iconGap: Dp,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -91,7 +93,7 @@ internal fun NavTab(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = RepsGreen),
             )
-            .padding(horizontal = dimens.navTabPadding),
+            .padding(horizontal = tabPadding),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
@@ -105,7 +107,7 @@ internal fun NavTab(
 
         // Present even at zero label width, matching the flex `gap` that stays
         // between the icon and a collapsed label in the prototype.
-        Spacer(Modifier.width(IconLabelGap))
+        Spacer(Modifier.width(iconGap))
 
         Text(
             text = label,

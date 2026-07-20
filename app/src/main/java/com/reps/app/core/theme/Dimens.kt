@@ -66,10 +66,11 @@ data class RepsDimens(
     val navBottomMargin: Dp,
     /** Inset between the pill edge and the tabs, which the indicator sits in. */
     val navPillPadding: Dp,
-    /** Horizontal padding inside one tab. */
+    /**
+     * Preferred horizontal padding inside one tab. A narrow screen tightens
+     * this before it will clip a label - see [NavBarLayout].
+     */
     val navTabPadding: Dp,
-    /** Cap on how far an active tab's label is allowed to expand. */
-    val navLabelMaxWidth: Dp,
 ) {
     /**
      * Bottom padding a scrolling tab screen needs so its last item can clear the
@@ -95,10 +96,7 @@ private val CompactDimens = RepsDimens(
     navSideMargin = 14.dp,
     navBottomMargin = 18.dp,
     navPillPadding = 6.dp,
-    // Five tabs plus an expanded label do not fit a sub-360dp screen at the
-    // reference padding, so the tabs tighten and the label is capped shorter.
     navTabPadding = 11.dp,
-    navLabelMaxWidth = 74.dp,
 )
 
 private val MediumDimens = RepsDimens(
@@ -118,7 +116,6 @@ private val MediumDimens = RepsDimens(
     navBottomMargin = 18.dp,
     navPillPadding = 6.dp,
     navTabPadding = 14.dp,
-    navLabelMaxWidth = 90.dp,
 )
 
 private val ExpandedDimens = RepsDimens(
@@ -143,7 +140,6 @@ private val ExpandedDimens = RepsDimens(
     navBottomMargin = 18.dp,
     navPillPadding = 6.dp,
     navTabPadding = 14.dp,
-    navLabelMaxWidth = 90.dp,
 )
 
 fun dimensFor(widthClass: WindowWidthClass): RepsDimens = when (widthClass) {

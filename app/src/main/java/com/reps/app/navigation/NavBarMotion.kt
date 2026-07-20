@@ -18,6 +18,14 @@ internal val TabGap = 2.dp
 /** `.reps-nav__tab { gap: 7px }` between the icon and its label. */
 internal val IconLabelGap = 7.dp
 
+/**
+ * Floors for the two things a narrow screen is allowed to eat into before the
+ * label itself gets clipped. Below these the pill stops reading as a row of
+ * separate tabs and starts looking like one crowded strip of icons.
+ */
+internal val MinTabPadding = 6.dp
+internal val MinIconLabelGap = 3.dp
+
 /** How far the label starts translated before it slides into place. */
 internal val LabelSlide = 4.dp
 

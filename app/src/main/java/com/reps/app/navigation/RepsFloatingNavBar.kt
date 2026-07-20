@@ -104,6 +104,12 @@ fun RepsFloatingNavBar(
         labels.map { with(density) { measurer.measure(it, labelStyle).size.width.toDp() } }
     }
 
+    // Measured off a string with an ascender and a descender so the height does
+    // not depend on which labels happen to have tall glyphs.
+    val labelHeight = remember(labelStyle, density, measurer) {
+        with(density) { measurer.measure("Ay", labelStyle).size.height.toDp() }
+    }
+
     BoxWithConstraints(
         modifier = modifier
             .fillMaxWidth()
@@ -119,15 +125,27 @@ fun RepsFloatingNavBar(
             ),
         contentAlignment = Alignment.Center,
     ) {
-        val inactiveTabWidth = dimens.navTabPadding * 2 + dimens.navIconSize + IconLabelGap
         val gapTotal = TabGap * (tabs.size - 1)
+        val available = maxWidth - dimens.navPillPadding * 2 - gapTotal
 
-        // Whatever is left once all five icon-only tabs are placed is what the
-        // active label may expand into. Without this a long label on a narrow
-        // phone would push the last tab past the pill's edge.
-        val roomForLabel = maxWidth - dimens.navPillPadding * 2 - gapTotal -
-            inactiveTabWidth * tabs.size
-        val labelCap = minOf(dimens.navLabelMaxWidth, roomForLabel.coerceAtLeast(0.dp))
+        // Solved rather than assumed: at the reference padding, five tabs leave
+        // roughly 32dp for the label on a 360dp screen, which renders "Workouts"
+        // as "Work". Padding gives way first, then the icon gap, then the label.
+        val geometry = NavBarLayout.solve(
+            availableWidth = available.value,
+            tabCount = tabs.size,
+            iconSize = dimens.navIconSize.value,
+            widestLabel = (naturalLabelWidths.maxOrNull() ?: 0.dp).value,
+            referencePadding = dimens.navTabPadding.value,
+            referenceGap = IconLabelGap.value,
+            minPadding = MinTabPadding.value,
+            minGap = MinIconLabelGap.value,
+        )
+        val tabPadding = geometry.tabPadding.dp
+        val iconGap = geometry.iconGap.dp
+        val labelCap = geometry.labelCap.dp
+
+        val inactiveTabWidth = geometry.inactiveTabWidth(dimens.navIconSize.value).dp
         val labelWidths = naturalLabelWidths.map { it.coerceAtMost(labelCap) }
 
         // Every tab before the selected one is collapsed, so the indicator's
@@ -146,9 +164,19 @@ fun RepsFloatingNavBar(
             label = "indicatorWidth",
         )
 
+        // A large system font scale grows the label past the fixed 64dp pill, so
+        // the height is the greater of the design value and what the content
+        // actually needs. Kept exact rather than heightIn(min = ) because the
+        // indicator fills this height and cannot resolve against a wrap.
+        val pillHeight = maxOf(
+            dimens.navHeight,
+            maxOf(dimens.navIconSize * ActiveIconScale, labelHeight) +
+                dimens.navPillPadding * 2 + 16.dp,
+        )
+
         Box(
             Modifier
-                .height(dimens.navHeight)
+                .height(pillHeight)
                 .pillShadow()
                 .backdropBlur(backdrop, BackdropBlurRadius, PillShape)
                 .background(PillFill, PillShape)
@@ -175,6 +203,8 @@ fun RepsFloatingNavBar(
                         iconRes = tab.iconRes,
                         isSelected = index == selectedIndex,
                         labelMaxWidth = labelCap,
+                        tabPadding = tabPadding,
+                        iconGap = iconGap,
                         onClick = { onSelect(tab) },
                     )
                 }
