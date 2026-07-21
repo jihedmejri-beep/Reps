@@ -107,7 +107,7 @@ class FakeExerciseRepository @Inject constructor() : ExerciseRepository {
 class FakeWorkoutRepository @Inject constructor() : WorkoutRepository {
 
     private val templates = MutableStateFlow(SampleData.workouts)
-    private val sessions = MutableStateFlow(emptyList<WorkoutSession>())
+    private val sessions = MutableStateFlow(SampleData.workoutSessions)
 
     override fun observeTemplates(): Flow<List<Workout>> = templates.asStateFlow()
 

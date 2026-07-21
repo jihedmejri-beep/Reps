@@ -42,7 +42,7 @@ import com.reps.app.core.components.RepsTextField
 import com.reps.app.core.theme.RepsError
 import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsTheme
-import com.reps.app.feature.auth.AuthBackButton
+import com.reps.app.core.components.RepsBackButton
 import com.reps.app.feature.auth.AuthFooterLink
 import com.reps.app.feature.auth.AuthHeader
 import com.reps.app.feature.auth.AuthOrDivider
@@ -105,7 +105,7 @@ private fun LoginContent(
                 .padding(horizontal = dimens.screenPadding),
         ) {
             Spacer(Modifier.height(8.dp))
-            AuthBackButton(onClick = onBack)
+            RepsBackButton(onClick = onBack)
 
             Spacer(Modifier.height(28.dp))
             AuthHeader(

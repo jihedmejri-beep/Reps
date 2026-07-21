@@ -100,6 +100,46 @@
     <string name="progress_bmi_obese">Obese</string>
     <string name="progress_chart_empty">Log your weight to see it here.</string>
     <string name="progress_bmi_needs_profile">Add your height, age and sex in Profile to see this.</string>
+    <string name="progress_weekly_completion">Weekly Completion</string>
+    <string name="progress_this_week">%1$d/%2$d this week</string>
+    <string name="progress_workouts">Workouts</string>
+    <string name="progress_duration">Duration</string>
+    <string name="progress_volume">Volume lifted</string>
+    <string name="progress_avg_per_workout">Avg / workout</string>
+    <string name="progress_delta_vs_last_month">%1$s%% vs last month</string>
+    <string name="progress_weight_progression">Weight Progression</string>
+    <string name="progress_strength_progression">Strength Progression</string>
+    <string name="progress_frequency">Workout Frequency</string>
+    <string name="progress_frequency_caption">Last 8 weeks</string>
+    <string name="progress_muscle_distribution">Muscle Group Distribution</string>
+    <string name="progress_muscle_distribution_caption">By training volume</string>
+    <string name="progress_personal_records">Personal Records</string>
+    <string name="progress_streak">Streak</string>
+    <string name="progress_streak_current">Current</string>
+    <string name="progress_achievements">Achievements</string>
+    <string name="progress_recent_activity">Recent Activity</string>
+    <string name="progress_per_week">Per week</string>
+    <string name="progress_avg_length">Avg length</string>
+    <string name="progress_prs_hit">PRs hit</string>
+    <string name="progress_no_history">No workouts logged yet. Finish one to see it here.</string>
+    <string name="progress_pr_beat">Beat your previous best by %1$s kg</string>
+    <string name="progress_pr_first">First recorded set</string>
+    <string name="progress_hero_rest_day_sub">Nothing scheduled. Recovery is part of the plan.</string>
+    <string name="progress_hero_planned">%1$s planned</string>
+    <string name="progress_hero_planned_sub">Not started yet — Home has the start button.</string>
+    <string name="progress_hero_logged">%1$s logged</string>
+    <string name="progress_hero_logged_sub">%1$d min · %2$s kg lifted</string>
+    <string name="progress_today">Today</string>
+    <string name="ach_first_workout_title">First Rep</string>
+    <string name="ach_first_workout_desc">Log your first workout.</string>
+    <string name="ach_streak7_title">On a Roll</string>
+    <string name="ach_streak7_desc">Hit a 7-day streak.</string>
+    <string name="ach_ten_workouts_title">Regular</string>
+    <string name="ach_ten_workouts_desc">Log 10 workouts.</string>
+    <string name="ach_first_pr_title">Record Breaker</string>
+    <string name="ach_first_pr_desc">Hit your first PR.</string>
+    <string name="ach_locked_progress">%1$d%% of the way there</string>
+    <string name="ach_unlocked">Unlocked</string>
 
     <!-- Workouts -->
     <string name="workouts_eyebrow">Workout Library</string>
@@ -123,6 +163,22 @@
     <string name="workouts_reps">Reps</string>
     <string name="workouts_new_pr">New PR</string>
     <string name="workouts_pr_message">%1$s — %2$s beat your previous best.</string>
+    <string name="workouts_my_workouts">My Workouts</string>
+    <string name="workouts_no_matches_title">No matches</string>
+    <string name="workouts_no_matches_subtitle">Try a different search or filter.</string>
+    <string name="exercise_media_cd">%1$s demonstration</string>
+    <string name="workouts_builder_selected">%1$d selected</string>
+    <string name="workouts_builder_remove_cd">Remove exercise</string>
+    <string name="workouts_builder_empty">No exercises added yet.</string>
+    <string name="workouts_session_finish_with_count">Finish workout · %1$d/%2$d sets</string>
+    <string name="workouts_session_volume_so_far">Volume so far</string>
+    <string name="workouts_session_no_sets_title">No sets logged yet</string>
+    <string name="workouts_session_no_sets_body">Check off at least one set before finishing, or cancel to keep training.</string>
+    <string name="workouts_session_keep_training">Keep training</string>
+    <string name="workouts_session_finish_anyway">Finish anyway</string>
+    <string name="workouts_session_complete_title">Workout complete</string>
+    <string name="workouts_session_complete_body">%1$s kg lifted across %2$d sets. Nice work — that’s logged in Progress.</string>
+    <string name="workouts_session_done">Done</string>
 
     <!-- Muscle groups -->
     <string name="muscle_chest">Chest</string>
@@ -154,6 +210,21 @@
     <string name="timer_notification_channel">Workout timer</string>
     <string name="timer_notification_channel_desc">Shows the countdown while a timer is running.</string>
 
+    <!-- Floating rest timer (shown during an active workout, between sets) -->
+    <string name="rest_timer_eyebrow">Rest</string>
+    <string name="rest_timer_ready">Ready</string>
+    <string name="rest_timer_resting">Resting</string>
+    <string name="rest_timer_paused">Paused</string>
+    <string name="rest_timer_complete">Rest complete</string>
+    <string name="rest_timer_minus15">−15</string>
+    <string name="rest_timer_plus15">+15</string>
+    <string name="rest_timer_restart_cd">Restart rest timer</string>
+    <string name="rest_timer_skip_cd">Skip rest</string>
+    <string name="rest_timer_subtract_cd">Subtract 15 seconds</string>
+    <string name="rest_timer_add_cd">Add 15 seconds</string>
+    <string name="rest_timer_pause_cd">Pause rest timer</string>
+    <string name="rest_timer_resume_cd">Resume rest timer</string>
+
     <!-- Nutrition -->
     <string name="nutrition_eyebrow">Fuel</string>
     <string name="nutrition_title">Nutrition</string>
@@ -170,6 +241,14 @@
     <string name="nutrition_target">Target</string>
     <string name="nutrition_advice">Guidance</string>
     <string name="nutrition_empty">No meals logged today.</string>
+    <string name="nutrition_water">Water</string>
+    <string name="nutrition_water_glasses">%1$d/%2$d glasses</string>
+    <string name="nutrition_of">of %1$s</string>
+    <string name="nutrition_save_meal">Save meal</string>
+    <string name="nutrition_meal_name_hint">Meal name (e.g. Dinner)</string>
+    <string name="nutrition_water_add_cd">Add a glass of water</string>
+    <string name="nutrition_water_remove_cd">Remove a glass of water</string>
+    <string name="nutrition_ingredient_required">Add a name and gram amount.</string>
 
     <!-- Profile -->
     <string name="profile_eyebrow">Account</string>
@@ -193,6 +272,16 @@
     <string name="profile_settings">Account settings</string>
     <string name="profile_sign_out">Sign out</string>
     <string name="profile_save">Save changes</string>
+    <string name="profile_notifications">Notifications</string>
+    <string name="profile_notifications_sub">Workout reminders</string>
+    <string name="profile_theme">Theme</string>
+    <string name="profile_theme_dark">Dark</string>
+    <string name="profile_account_settings_body">Password, email and connected sign-in methods will live here once accounts are backed by Firebase.</string>
+    <string name="profile_sign_out_confirm_title">Sign out?</string>
+    <string name="profile_sign_out_confirm_body">You can sign back in any time — your data stays on this device.</string>
+    <string name="profile_language_english_only">This build ships English only; other languages are saved as a preference for now.</string>
+    <string name="profile_preferences">Preferences</string>
+    <string name="profile_your_details">Your details</string>
     <string name="language_english">English</string>
     <string name="language_arabic">العربية</string>
     <string name="language_french">Français</string>

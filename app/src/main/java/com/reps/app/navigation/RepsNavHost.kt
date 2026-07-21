@@ -44,9 +44,17 @@ import com.reps.app.core.theme.RepsTheme
 import com.reps.app.feature.auth.login.LoginScreen
 import com.reps.app.feature.auth.signup.SignUpScreen
 import com.reps.app.feature.home.HomeScreen
+import com.reps.app.feature.notifications.NotificationsScreen
+import com.reps.app.feature.nutrition.NutritionScreen
 import com.reps.app.feature.onboarding.OnboardingScreen
+import com.reps.app.feature.profile.ProfileScreen
+import com.reps.app.feature.progress.ProgressScreen
 import com.reps.app.feature.splash.SplashDestination
 import com.reps.app.feature.splash.SplashScreen
+import com.reps.app.feature.workouts.ExerciseDetailScreen
+import com.reps.app.feature.workouts.WorkoutsScreen
+import com.reps.app.feature.workouts.builder.WorkoutBuilderScreen
+import com.reps.app.feature.workouts.session.WorkoutSessionScreen
 
 /** How far a tab screen offsets before sliding into place. */
 private val TabSlide = 28.dp
@@ -244,16 +252,38 @@ private fun NavGraphBuilder.repsGraph(navController: NavHostController) {
             onOpenProfile = { navController.navigate(Routes.PROFILE) },
         )
     }
-    composable(Routes.PROGRESS) { Placeholder("Progress") }
-    composable(Routes.WORKOUTS) { Placeholder("Workouts") }
-    composable(Routes.NUTRITION) { Placeholder("Nutrition") }
-    composable(Routes.PROFILE) { Placeholder("Profile") }
+    composable(Routes.PROGRESS) { ProgressScreen() }
+    composable(Routes.WORKOUTS) {
+        WorkoutsScreen(
+            onOpenExercise = { exerciseId -> navController.navigate(Routes.exerciseDetail(exerciseId)) },
+            onStartWorkout = { workoutId -> navController.navigate(Routes.workoutSession(workoutId)) },
+            onOpenBuilder = { navController.navigate(Routes.WORKOUT_BUILDER) },
+        )
+    }
+    composable(Routes.NUTRITION) { NutritionScreen() }
+    composable(Routes.PROFILE) {
+        ProfileScreen(onSignedOut = { navController.replaceWith(Routes.LOGIN) })
+    }
 
-    composable(Routes.EXERCISE_DETAIL) { Placeholder("Exercise Detail") }
-    composable(Routes.WORKOUT_BUILDER) { Placeholder("Workout Builder") }
-    composable(Routes.WORKOUT_SESSION) { Placeholder("Workout Session") }
+    composable(Routes.EXERCISE_DETAIL) {
+        ExerciseDetailScreen(onBack = { navController.popBackStack() })
+    }
+    composable(Routes.WORKOUT_BUILDER) {
+        WorkoutBuilderScreen(
+            onBack = { navController.popBackStack() },
+            onSaved = { navController.popBackStack() },
+        )
+    }
+    composable(Routes.WORKOUT_SESSION) {
+        WorkoutSessionScreen(
+            onFinished = { navController.popBackStack() },
+            onBack = { navController.popBackStack() },
+        )
+    }
     composable(Routes.TIMER) { Placeholder("Timer") }
-    composable(Routes.NOTIFICATIONS) { Placeholder("Notifications") }
+    composable(Routes.NOTIFICATIONS) {
+        NotificationsScreen(onBack = { navController.popBackStack() })
+    }
 }
 
 // Temporary: each of these is replaced by its real screen as it lands.

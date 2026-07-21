@@ -80,7 +80,7 @@ class HomeViewModel @Inject constructor(
             currentWeightKg = weights.maxByOrNull { it.date }?.weightKg,
             weeklyDeltaKg = weeklyDelta(weights),
             units = user?.units ?: UnitSystem.METRIC,
-            quote = quoteForToday(),
+            quote = SampleData.motivationQuoteForToday(today),
             loading = false,
         )
     }.stateIn(
@@ -104,15 +104,5 @@ class HomeViewModel @Inject constructor(
         val gap = java.time.temporal.ChronoUnit.DAYS.between(reference.date, latest.date)
         if (gap < 3) return null
         return latest.weightKg - reference.weightKg
-    }
-
-    /**
-     * Rotates once per day and is stable within a day, so the card does not
-     * change under the user on recomposition.
-     */
-    private fun quoteForToday(): String {
-        val quotes = SampleData.motivationQuotes
-        val index = (today.toEpochDay() % quotes.size).toInt()
-        return quotes[index]
     }
 }

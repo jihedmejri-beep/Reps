@@ -100,6 +100,46 @@
     <string name="progress_bmi_obese">Obésité</string>
     <string name="progress_chart_empty">Enregistre ton poids pour le voir ici.</string>
     <string name="progress_bmi_needs_profile">Ajoute ta taille, ton âge et ton sexe dans Profil pour voir ceci.</string>
+    <string name="progress_weekly_completion">Complétion hebdomadaire</string>
+    <string name="progress_this_week">%1$d/%2$d cette semaine</string>
+    <string name="progress_workouts">Séances</string>
+    <string name="progress_duration">Durée</string>
+    <string name="progress_volume">Volume soulevé</string>
+    <string name="progress_avg_per_workout">Moy. / séance</string>
+    <string name="progress_delta_vs_last_month">%1$s%% vs le mois dernier</string>
+    <string name="progress_weight_progression">Évolution du poids</string>
+    <string name="progress_strength_progression">Évolution de la force</string>
+    <string name="progress_frequency">Fréquence d\'entraînement</string>
+    <string name="progress_frequency_caption">8 dernières semaines</string>
+    <string name="progress_muscle_distribution">Répartition musculaire</string>
+    <string name="progress_muscle_distribution_caption">Par volume d\'entraînement</string>
+    <string name="progress_personal_records">Records personnels</string>
+    <string name="progress_streak">Série</string>
+    <string name="progress_streak_current">Actuelle</string>
+    <string name="progress_achievements">Succès</string>
+    <string name="progress_recent_activity">Activité récente</string>
+    <string name="progress_per_week">Par semaine</string>
+    <string name="progress_avg_length">Durée moy.</string>
+    <string name="progress_prs_hit">Records battus</string>
+    <string name="progress_no_history">Aucune séance enregistrée. Termine-en une pour la voir ici.</string>
+    <string name="progress_pr_beat">A dépassé ton record précédent de %1$s kg</string>
+    <string name="progress_pr_first">Première série enregistrée</string>
+    <string name="progress_hero_rest_day_sub">Rien de prévu. La récupération fait partie du plan.</string>
+    <string name="progress_hero_planned">%1$s prévue</string>
+    <string name="progress_hero_planned_sub">Pas encore commencée — le bouton de démarrage est sur l\'accueil.</string>
+    <string name="progress_hero_logged">%1$s enregistrée</string>
+    <string name="progress_hero_logged_sub">%1$d min · %2$s kg soulevés</string>
+    <string name="progress_today">Aujourd\'hui</string>
+    <string name="ach_first_workout_title">Première rep</string>
+    <string name="ach_first_workout_desc">Enregistre ta première séance.</string>
+    <string name="ach_streak7_title">En pleine lancée</string>
+    <string name="ach_streak7_desc">Atteins une série de 7 jours.</string>
+    <string name="ach_ten_workouts_title">Régulier</string>
+    <string name="ach_ten_workouts_desc">Enregistre 10 séances.</string>
+    <string name="ach_first_pr_title">Recordman</string>
+    <string name="ach_first_pr_desc">Bats ton premier record.</string>
+    <string name="ach_locked_progress">%1$d%% du chemin parcouru</string>
+    <string name="ach_unlocked">Débloqué</string>
 
     <!-- Workouts -->
     <string name="workouts_eyebrow">Bibliothèque</string>
@@ -123,6 +163,22 @@
     <string name="workouts_reps">Reps</string>
     <string name="workouts_new_pr">Nouveau record</string>
     <string name="workouts_pr_message">%1$s — %2$s dépasse ton ancien record.</string>
+    <string name="workouts_my_workouts">Mes séances</string>
+    <string name="workouts_no_matches_title">Aucun résultat</string>
+    <string name="workouts_no_matches_subtitle">Essaie une autre recherche ou un autre filtre.</string>
+    <string name="exercise_media_cd">Démonstration de %1$s</string>
+    <string name="workouts_builder_selected">%1$d sélectionné(s)</string>
+    <string name="workouts_builder_remove_cd">Retirer l\'exercice</string>
+    <string name="workouts_builder_empty">Aucun exercice ajouté pour l\'instant.</string>
+    <string name="workouts_session_finish_with_count">Terminer la séance · %1$d/%2$d séries</string>
+    <string name="workouts_session_volume_so_far">Volume jusqu\'ici</string>
+    <string name="workouts_session_no_sets_title">Aucune série enregistrée</string>
+    <string name="workouts_session_no_sets_body">Coche au moins une série avant de terminer, ou annule pour continuer à t\'entraîner.</string>
+    <string name="workouts_session_keep_training">Continuer</string>
+    <string name="workouts_session_finish_anyway">Terminer quand même</string>
+    <string name="workouts_session_complete_title">Séance terminée</string>
+    <string name="workouts_session_complete_body">%1$s kg soulevés sur %2$d séries. Bien joué — c\'est enregistré dans Progression.</string>
+    <string name="workouts_session_done">Terminé</string>
 
     <!-- Muscle groups -->
     <string name="muscle_chest">Pectoraux</string>
@@ -154,6 +210,21 @@
     <string name="timer_notification_channel">Minuteur de séance</string>
     <string name="timer_notification_channel_desc">Affiche le compte à rebours pendant que le minuteur tourne.</string>
 
+    <!-- Floating rest timer (shown during an active workout, between sets) -->
+    <string name="rest_timer_eyebrow">Repos</string>
+    <string name="rest_timer_ready">Prêt</string>
+    <string name="rest_timer_resting">Repos en cours</string>
+    <string name="rest_timer_paused">En pause</string>
+    <string name="rest_timer_complete">Repos terminé</string>
+    <string name="rest_timer_minus15">−15</string>
+    <string name="rest_timer_plus15">+15</string>
+    <string name="rest_timer_restart_cd">Redémarrer le minuteur de repos</string>
+    <string name="rest_timer_skip_cd">Passer le repos</string>
+    <string name="rest_timer_subtract_cd">Retirer 15 secondes</string>
+    <string name="rest_timer_add_cd">Ajouter 15 secondes</string>
+    <string name="rest_timer_pause_cd">Mettre en pause le minuteur de repos</string>
+    <string name="rest_timer_resume_cd">Reprendre le minuteur de repos</string>
+
     <!-- Nutrition -->
     <string name="nutrition_eyebrow">Carburant</string>
     <string name="nutrition_title">Nutrition</string>
@@ -170,6 +241,14 @@
     <string name="nutrition_target">Objectif</string>
     <string name="nutrition_advice">Conseils</string>
     <string name="nutrition_empty">Aucun repas enregistré aujourd\'hui.</string>
+    <string name="nutrition_water">Eau</string>
+    <string name="nutrition_water_glasses">%1$d/%2$d verres</string>
+    <string name="nutrition_of">sur %1$s</string>
+    <string name="nutrition_save_meal">Enregistrer le repas</string>
+    <string name="nutrition_meal_name_hint">Nom du repas (ex. Dîner)</string>
+    <string name="nutrition_water_add_cd">Ajouter un verre d\'eau</string>
+    <string name="nutrition_water_remove_cd">Retirer un verre d\'eau</string>
+    <string name="nutrition_ingredient_required">Ajoute un nom et une quantité en grammes.</string>
 
     <!-- Profile -->
     <string name="profile_eyebrow">Compte</string>
@@ -193,6 +272,16 @@
     <string name="profile_settings">Paramètres du compte</string>
     <string name="profile_sign_out">Se déconnecter</string>
     <string name="profile_save">Enregistrer</string>
+    <string name="profile_notifications">Notifications</string>
+    <string name="profile_notifications_sub">Rappels de séance</string>
+    <string name="profile_theme">Thème</string>
+    <string name="profile_theme_dark">Sombre</string>
+    <string name="profile_account_settings_body">Le mot de passe, l\'e-mail et les méthodes de connexion associées seront disponibles ici une fois les comptes gérés par Firebase.</string>
+    <string name="profile_sign_out_confirm_title">Se déconnecter ?</string>
+    <string name="profile_sign_out_confirm_body">Tu peux te reconnecter à tout moment — tes données restent sur cet appareil.</string>
+    <string name="profile_language_english_only">Cette version est en anglais uniquement ; les autres langues sont enregistrées comme préférence pour l\'instant.</string>
+    <string name="profile_preferences">Préférences</string>
+    <string name="profile_your_details">Tes informations</string>
 
     <!-- Notifications -->
     <string name="notifications_eyebrow">Activité</string>
