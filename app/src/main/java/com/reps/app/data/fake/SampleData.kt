@@ -13,6 +13,7 @@ import com.reps.app.domain.model.User
 import com.reps.app.domain.model.WeightEntry
 import com.reps.app.domain.model.Workout
 import com.reps.app.domain.model.WorkoutExercise
+import com.reps.app.domain.model.WorkoutSession
 import java.time.DayOfWeek
 import java.time.LocalDate
 import kotlin.math.sin
@@ -348,7 +349,57 @@ object SampleData {
         ),
     )
 
-    /** Rotates daily on the Home tab. */
+    /**
+     * ~9 weeks of completed sessions against [pushDay]/[pullDay]/[legDay]'s own
+     * schedule, so Progress has real history to chart on first launch instead of
+     * an empty state. Weight trends up toward today by a modest 12%, and
+     * [WorkoutSession.prsHit] is computed the same way
+     * [com.reps.app.domain.repository.WorkoutRepository.bestVolumeFor] would -
+     * whichever exercise's best completed-set volume this session beat.
+     */
+    val workoutSessions: List<WorkoutSession> = run {
+        val random = Random(seed = 7)
+        val today = LocalDate.now()
+        val templates = listOf(pushDay, pullDay, legDay)
+        val bestVolumeSoFar = mutableMapOf<String, Double>()
+        val sessions = mutableListOf<WorkoutSession>()
+
+        for (daysAgo in 63 downTo 1) {
+            val date = today.minusDays(daysAgo.toLong())
+            val template = templates.firstOrNull { date.dayOfWeek in it.scheduledDays } ?: continue
+            val strengthGain = 1f + (1f - daysAgo / 63f) * 0.12f
+
+            val prsThisSession = mutableListOf<String>()
+            val exercises = template.exercises.map { workoutExercise ->
+                val sets = workoutExercise.sets.map { set ->
+                    set.copy(
+                        weightKg = Math.round(set.weightKg * strengthGain * 2) / 2.0,
+                        completed = true,
+                    )
+                }
+                val bestThisSession = sets.maxOfOrNull { it.volume } ?: 0.0
+                val previousBest = bestVolumeSoFar[workoutExercise.exerciseId]
+                if (previousBest != null && bestThisSession > previousBest) {
+                    prsThisSession += workoutExercise.exerciseId
+                }
+                bestVolumeSoFar[workoutExercise.exerciseId] = maxOf(previousBest ?: 0.0, bestThisSession)
+                WorkoutExercise(workoutExercise.exerciseId, workoutExercise.position, sets)
+            }
+
+            sessions += WorkoutSession(
+                id = "sess-$daysAgo",
+                workoutId = template.id,
+                name = template.name,
+                date = date,
+                exercises = exercises,
+                durationMin = template.estimatedMinutes + random.nextInt(-6, 7),
+                prsHit = prsThisSession,
+            )
+        }
+        sessions.sortedBy { it.date }
+    }
+
+    /** Rotates daily, stable within a day: [motivationQuoteForToday]. */
     val motivationQuotes: List<String> = listOf(
         "Every rep counts.\nEvery set matters.",
         "Show up.\nGet stronger.",
@@ -358,4 +409,9 @@ object SampleData {
         "Trust the process.\nCount the reps.",
         "Make today count.\nNothing else does.",
     )
+
+    fun motivationQuoteForToday(today: LocalDate = LocalDate.now()): String {
+        val index = (today.toEpochDay() % motivationQuotes.size).toInt()
+        return motivationQuotes[index]
+    }
 }

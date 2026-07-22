@@ -5,6 +5,7 @@ import com.reps.app.R
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.YearMonth
+import java.util.Locale
 
 object DateUtils {
 
@@ -21,4 +22,10 @@ object DateUtils {
 
     fun isSameMonth(date: LocalDate, month: YearMonth): Boolean =
         YearMonth.from(date) == month
+
+    /** `m:ss`, e.g. 90 -> "1:30". Locale-fixed so digits never localise to non-Latin numerals. */
+    fun formatClock(totalSeconds: Int): String {
+        val clamped = totalSeconds.coerceAtLeast(0)
+        return String.format(Locale.US, "%d:%02d", clamped / 60, clamped % 60)
+    }
 }

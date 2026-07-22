@@ -53,7 +53,7 @@ import com.reps.app.core.theme.RepsOutline
 import com.reps.app.core.theme.RepsTextPrimary
 import com.reps.app.core.theme.RepsTextSecondary
 import com.reps.app.core.theme.RepsTheme
-import com.reps.app.feature.auth.AuthBackButton
+import com.reps.app.core.components.RepsBackButton
 import com.reps.app.feature.auth.AuthFooterLink
 import com.reps.app.feature.auth.AuthHeader
 import com.reps.app.feature.auth.authContentWidth
@@ -111,7 +111,7 @@ private fun SignUpContent(
                 .padding(horizontal = dimens.screenPadding),
         ) {
             Spacer(Modifier.height(8.dp))
-            AuthBackButton(onClick = onBack)
+            RepsBackButton(onClick = onBack)
 
             Spacer(Modifier.height(28.dp))
             AuthHeader(

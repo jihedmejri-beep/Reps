@@ -9,11 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,29 +25,9 @@ import androidx.compose.ui.unit.dp
 import com.reps.app.R
 import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsOutline
-import com.reps.app.core.theme.RepsSurface
 import com.reps.app.core.theme.RepsTextPrimary
 import com.reps.app.core.theme.RepsTextSecondary
 import com.reps.app.core.theme.RepsTheme
-
-/** Rounded-square back button used at the top of both auth screens. */
-@Composable
-fun AuthBackButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
-    Box(
-        modifier
-            .size(40.dp)
-            .background(RepsSurface, MaterialTheme.shapes.medium)
-            .clickable(role = Role.Button, onClick = onClick),
-        contentAlignment = Alignment.Center,
-    ) {
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-            contentDescription = stringResource(R.string.cd_back),
-            tint = RepsTextPrimary,
-            modifier = Modifier.size(20.dp),
-        )
-    }
-}
 
 /**
  * The big condensed headline plus its supporting line, shared by login and
