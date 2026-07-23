@@ -58,6 +58,15 @@ android {
     }
 }
 
+composeCompiler {
+    // Lets the compiler treat the domain models as stable, so composables taking
+    // one can skip recomposition. See the file itself for why this is not done
+    // with @Immutable on the classes.
+    stabilityConfigurationFiles.add(
+        rootProject.layout.projectDirectory.file("compose_stability.conf"),
+    )
+}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)

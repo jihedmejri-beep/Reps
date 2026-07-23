@@ -216,7 +216,7 @@ private fun ExercisePickerSheet(
                     onClick = { onFilterChange(null) },
                 )
             }
-            items(MuscleGroup.entries.toList()) { group ->
+            items(MuscleGroup.entries) { group ->
                 RepsChip(
                     label = stringResource(group.labelRes),
                     selected = state.pickerFilter == group,

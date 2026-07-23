@@ -8,7 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlurEffect
@@ -71,14 +71,20 @@ fun rememberBackdropState(): BackdropState {
  * Anything that reads the backdrop must be a *sibling* drawn after this node,
  * never a descendant - a descendant would be recorded into the source and blur
  * itself, frame over frame.
+ *
+ * @param enabled false skips the layer entirely and draws straight through.
+ *   Capturing the whole screen into a layer every frame is the price of a live
+ *   backdrop, so it is only worth paying while something is actually sampling
+ *   it - on splash, auth and full-screen pushes there is no pill and this is
+ *   pure cost.
  */
-fun Modifier.backdropSource(state: BackdropState): Modifier = this
+fun Modifier.backdropSource(state: BackdropState, enabled: Boolean = true): Modifier = this
     .onGloballyPositioned {
         state.sourceOrigin = it.positionInWindow()
         state.sourceSize = it.size
     }
     .drawWithContent {
-        if (!BackdropState.Supported) {
+        if (!enabled || !BackdropState.Supported) {
             drawContent()
             return@drawWithContent
         }
@@ -96,6 +102,10 @@ fun Modifier.backdropSource(state: BackdropState): Modifier = this
  *
  * [radius] is the Android blur sigma. CSS blur radii are roughly twice that, so
  * the prototype's `blur(22px)` maps to about 11dp here.
+ *
+ * The clip path and the blur effect are built in [drawWithCache], so they are
+ * rebuilt only when the size, shape or radius actually change rather than
+ * allocated on every frame of every scroll.
  */
 @Composable
 fun Modifier.backdropBlur(
@@ -109,32 +119,40 @@ fun Modifier.backdropBlur(
 
     return this
         .onGloballyPositioned { origin = it.positionInWindow() }
-        .drawBehind {
-            val sourceSize = state.sourceSize
-            if (sourceSize.width == 0 || sourceSize.height == 0) return@drawBehind
-
+        .drawWithCache {
             val sigma = radius.toPx()
             // Decal rather than Clamp: clamping smears the screen's edge pixels
             // outward, which reads as a bright halo along the pill's rim.
-            state.blurred.renderEffect = BlurEffect(sigma, sigma, TileMode.Decal)
-            state.blurred.record(this, layoutDirection, sourceSize) {
-                drawLayer(state.source)
-            }
+            val effect = BlurEffect(sigma, sigma, TileMode.Decal)
 
-            val path = Path().apply {
-                when (val outline = shape.createOutline(size, layoutDirection, this@drawBehind)) {
+            val clip = Path().apply {
+                when (val outline = shape.createOutline(size, layoutDirection, this@drawWithCache)) {
                     is Outline.Rectangle -> addRect(outline.rect)
                     is Outline.Rounded -> addRoundRect(outline.roundRect)
                     is Outline.Generic -> addPath(outline.path)
                 }
             }
 
-            // The recording is in the source's coordinate space, so shift it by
-            // this node's offset within that space before sampling.
-            val dx = origin.x - state.sourceOrigin.x
-            val dy = origin.y - state.sourceOrigin.y
-            clipPath(path) {
-                translate(-dx, -dy) { drawLayer(state.blurred) }
+            onDrawBehind {
+                val sourceSize = state.sourceSize
+                if (sourceSize.width == 0 || sourceSize.height == 0) return@onDrawBehind
+
+                // Assigning a render effect invalidates the layer, so only do it
+                // when it has actually changed.
+                if (state.blurred.renderEffect != effect) {
+                    state.blurred.renderEffect = effect
+                }
+                state.blurred.record(this, layoutDirection, sourceSize) {
+                    drawLayer(state.source)
+                }
+
+                // The recording is in the source's coordinate space, so shift it
+                // by this node's offset within that space before sampling.
+                val dx = origin.x - state.sourceOrigin.x
+                val dy = origin.y - state.sourceOrigin.y
+                clipPath(clip) {
+                    translate(-dx, -dy) { drawLayer(state.blurred) }
+                }
             }
         }
 }

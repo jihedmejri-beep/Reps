@@ -10,6 +10,15 @@ object Routes {
     const val LOGIN = "login"
     const val SIGN_UP = "signup"
 
+    /**
+     * The five tabs live behind a single destination, because they are pages of
+     * one pager rather than separate entries on the back stack - that is what
+     * lets a swipe carry between them. The per-tab constants below are still
+     * used as stable identifiers (pager keys, tab-reselect signals), just no
+     * longer as navigation routes.
+     */
+    const val TABS = "tabs"
+
     const val HOME = "home"
     const val PROGRESS = "progress"
     const val WORKOUTS = "workouts"

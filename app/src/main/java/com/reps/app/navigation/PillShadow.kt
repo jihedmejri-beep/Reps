@@ -1,7 +1,7 @@
 package com.reps.app.navigation
 
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -50,32 +50,39 @@ private val NavPillShadows = listOf(
  * from API 28. On 26 and 27 the pill simply renders without its shadow - it
  * still reads correctly against the near-black background, just flatter.
  */
-internal fun Modifier.pillShadow(): Modifier = drawBehind {
-    drawIntoCanvas { canvas ->
-        val paint = Paint().asFrameworkPaint()
-        NavPillShadows.forEach { layer ->
-            val inset = -layer.spread.toPx()
-            val left = inset
-            val top = inset
-            val right = size.width - inset
-            val bottom = size.height - inset
-            if (right <= left || bottom <= top) return@forEach
+internal fun Modifier.pillShadow(): Modifier = drawWithCache {
+    // The paint is built once per size rather than per frame: the nav pill
+    // redraws on every frame of every scroll, and a fresh Paint each time is
+    // avoidable garbage on the hottest path in the app.
+    val paint = Paint().asFrameworkPaint()
 
+    onDrawBehind {
+        drawIntoCanvas { canvas ->
+            NavPillShadows.forEach { layer ->
+                val inset = -layer.spread.toPx()
+                val left = inset
+                val top = inset
+                val right = size.width - inset
+                val bottom = size.height - inset
+                if (right <= left || bottom <= top) return@forEach
+
+                paint.reset()
+                paint.isAntiAlias = true
+                // Only the shadow should land on the canvas; the pill's own fill
+                // is drawn separately, on top, by the background modifier.
+                paint.color = android.graphics.Color.TRANSPARENT
+                paint.setShadowLayer(
+                    layer.blur.toPx(),
+                    0f,
+                    layer.offsetY.toPx(),
+                    layer.color.toArgb(),
+                )
+
+                val radius = (bottom - top) / 2f
+                canvas.nativeCanvas.drawRoundRect(left, top, right, bottom, radius, radius, paint)
+            }
+            // Leaves no shadow layer attached to the cached paint between frames.
             paint.reset()
-            paint.isAntiAlias = true
-            // Only the shadow should land on the canvas; the pill's own fill is
-            // drawn separately, on top, by the background modifier.
-            paint.color = android.graphics.Color.TRANSPARENT
-            paint.setShadowLayer(
-                layer.blur.toPx(),
-                0f,
-                layer.offsetY.toPx(),
-                layer.color.toArgb(),
-            )
-
-            val radius = (bottom - top) / 2f
-            canvas.nativeCanvas.drawRoundRect(left, top, right, bottom, radius, radius, paint)
         }
-        paint.reset()
     }
 }

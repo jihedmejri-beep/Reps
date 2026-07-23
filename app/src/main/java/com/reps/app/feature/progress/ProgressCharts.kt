@@ -109,7 +109,7 @@ internal fun StrengthChartCard(state: ProgressUiState, exerciseIds: List<String>
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(vertical = 10.dp),
         ) {
-            items(exerciseIds) { id ->
+            items(exerciseIds, key = { it }) { id ->
                 RepsChip(
                     label = state.exercisesById[id]?.name.orEmpty(),
                     selected = id == selected,
