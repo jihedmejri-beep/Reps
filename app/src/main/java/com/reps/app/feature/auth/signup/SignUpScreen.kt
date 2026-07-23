@@ -49,9 +49,6 @@ import com.reps.app.core.components.RepsTextField
 import com.reps.app.core.theme.RepsError
 import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsOnGreen
-import com.reps.app.core.theme.RepsOutline
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.components.RepsBackButton
 import com.reps.app.feature.auth.AuthFooterLink
@@ -190,12 +187,12 @@ private fun SignUpContent(
 @Composable
 private fun TermsRow(accepted: Boolean, onChange: (Boolean) -> Unit) {
     val label = buildAnnotatedString {
-        withStyle(SpanStyle(color = RepsTextSecondary)) {
+        withStyle(SpanStyle(color = RepsTheme.colors.textSecondary)) {
             append(stringResource(R.string.signup_terms_prefix))
             append(" ")
         }
         withStyle(SpanStyle(color = RepsGreen)) { append(stringResource(R.string.signup_terms)) }
-        withStyle(SpanStyle(color = RepsTextSecondary)) {
+        withStyle(SpanStyle(color = RepsTheme.colors.textSecondary)) {
             append(" ")
             append(stringResource(R.string.signup_terms_and))
             append(" ")
@@ -220,7 +217,7 @@ private fun TermsRow(accepted: Boolean, onChange: (Boolean) -> Unit) {
             colors = CheckboxDefaults.colors(
                 checkedColor = RepsGreen,
                 checkmarkColor = RepsOnGreen,
-                uncheckedColor = RepsOutline,
+                uncheckedColor = RepsTheme.colors.outline,
             ),
             modifier = Modifier.size(20.dp),
         )

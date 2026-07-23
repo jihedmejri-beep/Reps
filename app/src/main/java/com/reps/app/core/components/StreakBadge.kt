@@ -26,8 +26,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.reps.app.R
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
+import com.reps.app.core.theme.RepsTheme
 import com.reps.app.domain.model.Streak
 
 private const val METER_BARS = 7
@@ -66,12 +65,12 @@ fun StreakBadge(
             Text(
                 text = countText,
                 style = MaterialTheme.typography.titleMedium,
-                color = RepsTextPrimary,
+                color = RepsTheme.colors.textPrimary,
             )
             Text(
                 text = nudge,
                 style = MaterialTheme.typography.bodySmall,
-                color = RepsTextSecondary,
+                color = RepsTheme.colors.textSecondary,
                 modifier = Modifier.padding(top = 1.dp),
             )
         }

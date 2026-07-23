@@ -58,10 +58,6 @@ import com.reps.app.R
 import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsOffWhite
 import com.reps.app.core.theme.RepsOnGreen
-import com.reps.app.core.theme.RepsOutline
-import com.reps.app.core.theme.RepsSurfaceElevated
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.util.DateUtils
 import kotlinx.coroutines.isActive
@@ -200,7 +196,7 @@ fun RestTimer(
     }
 
     val arcColor by animateColorAsState(
-        targetValue = if (state.completed) RepsOutline else RepsGreen,
+        targetValue = if (state.completed) RepsTheme.colors.outline else RepsGreen,
         animationSpec = tween(220, easing = FastOutSlowInEasing),
         label = "restTimerArcColor",
     )
@@ -222,7 +218,7 @@ fun RestTimer(
                 ambientColor = RepsGreen,
                 spotColor = RepsGreen,
             )
-            .background(RepsSurfaceElevated, MaterialTheme.shapes.large)
+            .background(RepsTheme.colors.surfaceElevated, MaterialTheme.shapes.large)
             .border(1.dp, RepsOffWhite.copy(alpha = 0.07f), MaterialTheme.shapes.large)
             .padding(horizontal = RepsTheme.dimens.cardPadding, vertical = 18.dp)
             .width(ArcDiameter + ArcStrokeWidth + 32.dp),
@@ -320,13 +316,15 @@ private fun RestTimerArc(
     modifier: Modifier = Modifier,
 ) {
     val strokeWidthPx = with(androidx.compose.ui.platform.LocalDensity.current) { ArcStrokeWidth.toPx() }
+    // The draw scope below is not composable, so the track colour is read here.
+    val trackColor = RepsTheme.colors.outline
     Box(modifier.size(ArcDiameter + ArcStrokeWidth, ArcDiameter / 2 + ArcStrokeWidth)) {
         Canvas(Modifier.fillMaxWidth().height(ArcDiameter / 2 + ArcStrokeWidth)) {
             val diameter = size.width - strokeWidthPx
             val arcSize = Size(diameter, diameter)
             val topLeft = androidx.compose.ui.geometry.Offset(strokeWidthPx / 2f, strokeWidthPx / 2f)
             drawArc(
-                color = RepsOutline,
+                color = trackColor,
                 startAngle = 180f,
                 sweepAngle = 180f,
                 useCenter = false,
@@ -348,11 +346,11 @@ private fun RestTimerArc(
             modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 6.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(text = timeLabel, style = RepsTheme.textStyles.statValue, color = RepsTextPrimary)
+            Text(text = timeLabel, style = RepsTheme.textStyles.statValue, color = RepsTheme.colors.textPrimary)
             Text(
                 text = statusLabel,
                 style = RepsTheme.textStyles.eyebrow,
-                color = RepsTextSecondary,
+                color = RepsTheme.colors.textSecondary,
                 modifier = Modifier.padding(top = 2.dp),
             )
         }
@@ -375,8 +373,8 @@ private fun RestTimerIconChip(
                     Modifier.shadow(12.dp, CircleShape, ambientColor = RepsGreen, spotColor = RepsGreen)
                         .background(RepsGreen, CircleShape)
                 } else {
-                    Modifier.background(RepsSurfaceElevated, CircleShape)
-                        .border(1.dp, RepsOutline, CircleShape)
+                    Modifier.background(RepsTheme.colors.surfaceElevated, CircleShape)
+                        .border(1.dp, RepsTheme.colors.outline, CircleShape)
                 },
             )
             .clickable(role = Role.Button, onClickLabel = contentDescription, onClick = onClick),
@@ -385,7 +383,7 @@ private fun RestTimerIconChip(
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
-            tint = if (primary) RepsOnGreen else RepsTextPrimary,
+            tint = if (primary) RepsOnGreen else RepsTheme.colors.textPrimary,
             modifier = Modifier.size(if (primary) 28.dp else 18.dp),
         )
     }
@@ -401,12 +399,12 @@ private fun RestTimerTextChip(
     Box(
         modifier = Modifier
             .size(size)
-            .background(RepsSurfaceElevated, CircleShape)
-            .border(1.dp, RepsOutline, CircleShape)
+            .background(RepsTheme.colors.surfaceElevated, CircleShape)
+            .border(1.dp, RepsTheme.colors.outline, CircleShape)
             .clickable(role = Role.Button, onClickLabel = contentDescription, onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
-        Text(text = text, style = MaterialTheme.typography.labelSmall, color = RepsTextPrimary)
+        Text(text = text, style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textPrimary)
     }
 }
 

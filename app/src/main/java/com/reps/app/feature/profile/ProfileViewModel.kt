@@ -2,9 +2,11 @@ package com.reps.app.feature.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.reps.app.data.datastore.UserPreferencesDataStore
 import com.reps.app.domain.model.AppLanguage
 import com.reps.app.domain.model.Goal
 import com.reps.app.domain.model.Sex
+import com.reps.app.domain.model.ThemeMode
 import com.reps.app.domain.model.UnitSystem
 import com.reps.app.domain.model.User
 import com.reps.app.domain.model.WeightEntry
@@ -27,6 +29,7 @@ data class ProfileUiState(
     val user: User? = null,
     val currentWeightKg: Double? = null,
     val notificationsEnabled: Boolean = true,
+    val themeMode: ThemeMode = ThemeMode.SYSTEM,
     val loading: Boolean = true,
 )
 
@@ -35,6 +38,7 @@ class ProfileViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val weightRepository: WeightRepository,
     private val authRepository: AuthRepository,
+    private val preferences: UserPreferencesDataStore,
 ) : ViewModel() {
 
     private val notificationsEnabled = MutableStateFlow(true)
@@ -43,11 +47,13 @@ class ProfileViewModel @Inject constructor(
         userRepository.observeUser(),
         weightRepository.observeEntries(),
         notificationsEnabled,
-    ) { user, weights, notifsOn ->
+        preferences.themeMode,
+    ) { user, weights, notifsOn, themeMode ->
         ProfileUiState(
             user = user,
             currentWeightKg = weights.maxByOrNull { it.date }?.weightKg,
             notificationsEnabled = notifsOn,
+            themeMode = themeMode,
             loading = false,
         )
     }.stateIn(
@@ -65,6 +71,10 @@ class ProfileViewModel @Inject constructor(
 
     fun toggleNotifications() {
         notificationsEnabled.update { !it }
+    }
+
+    fun updateThemeMode(mode: ThemeMode) {
+        viewModelScope.launch { preferences.setThemeMode(mode) }
     }
 
     fun addWeight(kg: Double) {

@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.reps.app.domain.model.AppLanguage
+import com.reps.app.domain.model.ThemeMode
 import com.reps.app.domain.model.UnitSystem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -29,6 +30,7 @@ class UserPreferencesDataStore @Inject constructor(
         val ONBOARDING_SEEN = booleanPreferencesKey("onboarding_seen")
         val LANGUAGE = stringPreferencesKey("language")
         val UNITS = stringPreferencesKey("units")
+        val THEME_MODE = stringPreferencesKey("theme_mode")
     }
 
     val onboardingSeen: Flow<Boolean> =
@@ -42,6 +44,9 @@ class UserPreferencesDataStore @Inject constructor(
             .getOrDefault(UnitSystem.METRIC)
     }
 
+    val themeMode: Flow<ThemeMode> =
+        context.dataStore.data.map { ThemeMode.fromName(it[Keys.THEME_MODE]) }
+
     suspend fun setOnboardingSeen(seen: Boolean) {
         context.dataStore.edit { it[Keys.ONBOARDING_SEEN] = seen }
     }
@@ -52,5 +57,9 @@ class UserPreferencesDataStore @Inject constructor(
 
     suspend fun setUnits(units: UnitSystem) {
         context.dataStore.edit { it[Keys.UNITS] = units.name }
+    }
+
+    suspend fun setThemeMode(mode: ThemeMode) {
+        context.dataStore.edit { it[Keys.THEME_MODE] = mode.name }
     }
 }

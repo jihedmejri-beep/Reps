@@ -32,11 +32,6 @@ import com.reps.app.R
 import com.reps.app.core.components.RepsBackButton
 import com.reps.app.core.components.SectionHeader
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsNearBlack
-import com.reps.app.core.theme.RepsSurface
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
-import com.reps.app.core.theme.RepsTextTertiary
 import com.reps.app.core.theme.RepsTheme
 
 @Composable
@@ -48,7 +43,7 @@ fun NotificationsScreen(
     val dimens = RepsTheme.dimens
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize().background(RepsNearBlack).statusBarsPadding(),
+        modifier = Modifier.fillMaxSize().background(RepsTheme.colors.background).statusBarsPadding(),
         contentPadding = PaddingValues(
             start = dimens.screenPadding,
             end = dimens.screenPadding,
@@ -69,15 +64,15 @@ fun NotificationsScreen(
             item {
                 Column(Modifier.fillMaxWidth().padding(vertical = 48.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                     Box(
-                        Modifier.size(52.dp).background(RepsSurface, CircleShape),
+                        Modifier.size(52.dp).background(RepsTheme.colors.surface, CircleShape),
                         contentAlignment = Alignment.Center,
                     ) {
-                        Icon(Icons.Outlined.NotificationsNone, contentDescription = null, tint = RepsTextTertiary, modifier = Modifier.size(22.dp))
+                        Icon(Icons.Outlined.NotificationsNone, contentDescription = null, tint = RepsTheme.colors.textTertiary, modifier = Modifier.size(22.dp))
                     }
                     Text(
                         text = stringResource(R.string.notifications_empty),
                         style = MaterialTheme.typography.titleSmall,
-                        color = RepsTextPrimary,
+                        color = RepsTheme.colors.textPrimary,
                         modifier = Modifier.padding(top = 14.dp),
                     )
                 }
@@ -99,12 +94,12 @@ fun NotificationsScreen(
                         Text(
                             text = stringResource(R.string.notification_workout_today, item.workoutName),
                             style = MaterialTheme.typography.bodyLarge,
-                            color = RepsTextPrimary,
+                            color = RepsTheme.colors.textPrimary,
                         )
                         Text(
                             text = stringResource(R.string.notification_workout_today_body),
                             style = MaterialTheme.typography.bodySmall,
-                            color = RepsTextSecondary,
+                            color = RepsTheme.colors.textSecondary,
                             modifier = Modifier.padding(top = 2.dp),
                         )
                     }

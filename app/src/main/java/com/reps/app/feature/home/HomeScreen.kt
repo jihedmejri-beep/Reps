@@ -39,11 +39,7 @@ import com.reps.app.core.components.StreakBadge
 import com.reps.app.core.components.TodayWorkoutCard
 import com.reps.app.core.components.WeightWidget
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsNearBlack
 import com.reps.app.core.theme.RepsOnGreen
-import com.reps.app.core.theme.RepsSurface
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.util.DateUtils
 import com.reps.app.domain.model.Difficulty
@@ -96,7 +92,7 @@ private fun HomeContent(
         // it, so content scrolls up to the status bar and stops rather than
         // sliding underneath the clock. Mirrors the prototype's status-spacer,
         // which is a sibling of the scroll area rather than part of it.
-        modifier = Modifier.fillMaxSize().background(RepsNearBlack).statusBarsPadding(),
+        modifier = Modifier.fillMaxSize().background(RepsTheme.colors.background).statusBarsPadding(),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(
             start = dimens.screenPadding,
             end = dimens.screenPadding,
@@ -186,19 +182,19 @@ private fun HomeHeader(
             Text(
                 text = stringResource(DateUtils.greetingFor()),
                 style = MaterialTheme.typography.bodyMedium,
-                color = RepsTextSecondary,
+                color = RepsTheme.colors.textSecondary,
             )
             Text(
                 text = userName,
                 style = MaterialTheme.typography.headlineMedium,
-                color = RepsTextPrimary,
+                color = RepsTheme.colors.textPrimary,
             )
         }
         IconButton(onClick = onOpenNotifications) {
             Icon(
                 imageVector = Icons.Outlined.Notifications,
                 contentDescription = stringResource(R.string.home_notifications),
-                tint = RepsTextPrimary,
+                tint = RepsTheme.colors.textPrimary,
                 modifier = Modifier.size(22.dp),
             )
         }
@@ -224,7 +220,7 @@ private fun RestDayCard() {
     Column(
         Modifier
             .fillMaxWidth()
-            .background(RepsSurface, MaterialTheme.shapes.large)
+            .background(RepsTheme.colors.surface, MaterialTheme.shapes.large)
             .padding(16.dp),
     ) {
         Text(
@@ -235,13 +231,13 @@ private fun RestDayCard() {
         Text(
             text = stringResource(R.string.home_rest_day).uppercase(),
             style = RepsTheme.textStyles.sectionTitle,
-            color = RepsTextPrimary,
+            color = RepsTheme.colors.textPrimary,
             modifier = Modifier.padding(top = 4.dp),
         )
         Text(
             text = stringResource(R.string.home_rest_day_subtext),
             style = MaterialTheme.typography.bodyMedium,
-            color = RepsTextSecondary,
+            color = RepsTheme.colors.textSecondary,
             modifier = Modifier.padding(top = 4.dp),
         )
     }

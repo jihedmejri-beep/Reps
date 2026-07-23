@@ -54,14 +54,7 @@ import com.reps.app.core.components.RepsOutlinedButton
 import com.reps.app.core.components.RepsTextField
 import com.reps.app.core.components.SectionHeader
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsNearBlack
 import com.reps.app.core.theme.RepsOnGreen
-import com.reps.app.core.theme.RepsOutline
-import com.reps.app.core.theme.RepsSurface
-import com.reps.app.core.theme.RepsSurfaceElevated
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
-import com.reps.app.core.theme.RepsTextTertiary
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.domain.model.FoodItem
 import com.reps.app.domain.model.Meal
@@ -81,7 +74,7 @@ fun NutritionScreen(viewModel: NutritionViewModel = hiltViewModel()) {
     val dimens = RepsTheme.dimens
     LazyColumn(
         state = listState,
-        modifier = Modifier.fillMaxSize().background(RepsNearBlack).statusBarsPadding(),
+        modifier = Modifier.fillMaxSize().background(RepsTheme.colors.background).statusBarsPadding(),
         contentPadding = PaddingValues(
             start = dimens.screenPadding,
             end = dimens.screenPadding,
@@ -117,7 +110,7 @@ fun NutritionScreen(viewModel: NutritionViewModel = hiltViewModel()) {
         if (state.meals.isEmpty() && !state.loading) {
             item {
                 Column(Modifier.fillMaxWidth().padding(vertical = 32.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(stringResource(R.string.nutrition_empty), style = MaterialTheme.typography.bodyMedium, color = RepsTextTertiary)
+                    Text(stringResource(R.string.nutrition_empty), style = MaterialTheme.typography.bodyMedium, color = RepsTheme.colors.textTertiary)
                 }
             }
         } else {
@@ -139,7 +132,7 @@ fun NutritionScreen(viewModel: NutritionViewModel = hiltViewModel()) {
 @Composable
 private fun MacroSummaryCard(state: NutritionUiState) {
     val totals = state.totals
-    Column(Modifier.fillMaxWidth().background(RepsSurface, MaterialTheme.shapes.large).padding(RepsTheme.dimens.cardPadding)) {
+    Column(Modifier.fillMaxWidth().background(RepsTheme.colors.surface, MaterialTheme.shapes.large).padding(RepsTheme.dimens.cardPadding)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(20.dp)) {
             CalorieRing(consumed = totals.calories, target = state.target.calories)
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -155,20 +148,22 @@ private fun MacroSummaryCard(state: NutritionUiState) {
 private fun CalorieRing(consumed: Double, target: Double, modifier: Modifier = Modifier) {
     val fraction = if (target <= 0.0) 0f else (consumed / target).toFloat().coerceIn(0f, 1f)
     val animated by animateFloatAsState(fraction, tween(900, easing = FastOutSlowInEasing), label = "calRing")
+    // Hoisted out of the Canvas draw scope, which is not composable.
+    val trackColor = RepsTheme.colors.outline
     Box(modifier.size(92.dp), contentAlignment = Alignment.Center) {
         Canvas(Modifier.fillMaxSize()) {
             val strokeWidth = 9.dp.toPx()
             val arcSize = Size(size.width - strokeWidth, size.height - strokeWidth)
             val topLeft = Offset(strokeWidth / 2f, strokeWidth / 2f)
-            drawArc(RepsOutline, -90f, 360f, false, topLeft, arcSize, style = Stroke(strokeWidth, cap = StrokeCap.Round))
+            drawArc(trackColor, -90f, 360f, false, topLeft, arcSize, style = Stroke(strokeWidth, cap = StrokeCap.Round))
             drawArc(RepsGreen, -90f, 360f * animated, false, topLeft, arcSize, style = Stroke(strokeWidth, cap = StrokeCap.Round))
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(consumed.roundToInt().toString(), style = MaterialTheme.typography.titleMedium, color = RepsTextPrimary)
+            Text(consumed.roundToInt().toString(), style = MaterialTheme.typography.titleMedium, color = RepsTheme.colors.textPrimary)
             Text(
                 text = stringResource(R.string.nutrition_of, "${target.roundToInt()} ${stringResource(R.string.nutrition_kcal)}"),
                 style = MaterialTheme.typography.labelSmall,
-                color = RepsTextSecondary,
+                color = RepsTheme.colors.textSecondary,
             )
         }
     }
@@ -180,15 +175,15 @@ private fun MacroBar(label: String, value: Double, target: Double) {
     val animated by animateFloatAsState(fraction, tween(900, easing = FastOutSlowInEasing), label = "macroBar")
     Column {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(label, style = MaterialTheme.typography.labelSmall, color = RepsTextSecondary)
-            Text("${value.roundToInt()}/${target.roundToInt()}g", style = MaterialTheme.typography.labelSmall, color = RepsTextSecondary)
+            Text(label, style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textSecondary)
+            Text("${value.roundToInt()}/${target.roundToInt()}g", style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textSecondary)
         }
         Box(
             Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp)
                 .height(6.dp)
-                .background(RepsSurfaceElevated, RoundedCornerShape(3.dp)),
+                .background(RepsTheme.colors.surfaceElevated, RoundedCornerShape(3.dp)),
         ) {
             Box(Modifier.fillMaxWidth(animated).height(6.dp).background(RepsGreen, RoundedCornerShape(3.dp)))
         }
@@ -198,21 +193,21 @@ private fun MacroBar(label: String, value: Double, target: Double) {
 @Composable
 private fun WaterCard(state: NutritionUiState, onAdd: () -> Unit, onRemove: () -> Unit) {
     Row(
-        Modifier.fillMaxWidth().background(RepsSurface, MaterialTheme.shapes.large).padding(RepsTheme.dimens.cardPadding),
+        Modifier.fillMaxWidth().background(RepsTheme.colors.surface, MaterialTheme.shapes.large).padding(RepsTheme.dimens.cardPadding),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(Icons.Outlined.WaterDrop, contentDescription = null, tint = RepsGreen, modifier = Modifier.size(20.dp))
         Column(Modifier.weight(1f).padding(start = 10.dp)) {
-            Text(stringResource(R.string.nutrition_water), style = MaterialTheme.typography.titleSmall, color = RepsTextPrimary)
+            Text(stringResource(R.string.nutrition_water), style = MaterialTheme.typography.titleSmall, color = RepsTheme.colors.textPrimary)
             Text(
                 text = stringResource(R.string.nutrition_water_glasses, state.waterGlasses, state.waterTargetGlasses),
                 style = MaterialTheme.typography.bodySmall,
-                color = RepsTextSecondary,
+                color = RepsTheme.colors.textSecondary,
                 modifier = Modifier.padding(top = 2.dp),
             )
         }
         IconButton(onClick = onRemove) {
-            Icon(Icons.Outlined.Remove, contentDescription = stringResource(R.string.nutrition_water_remove_cd), tint = RepsTextSecondary)
+            Icon(Icons.Outlined.Remove, contentDescription = stringResource(R.string.nutrition_water_remove_cd), tint = RepsTheme.colors.textSecondary)
         }
         Box(
             Modifier
@@ -228,13 +223,13 @@ private fun WaterCard(state: NutritionUiState, onAdd: () -> Unit, onRemove: () -
 
 @Composable
 private fun MealCard(meal: Meal) {
-    Column(Modifier.fillMaxWidth().background(RepsSurface, MaterialTheme.shapes.large).padding(RepsTheme.dimens.cardPadding)) {
+    Column(Modifier.fillMaxWidth().background(RepsTheme.colors.surface, MaterialTheme.shapes.large).padding(RepsTheme.dimens.cardPadding)) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(meal.name, style = MaterialTheme.typography.titleSmall, color = RepsTextPrimary)
+            Text(meal.name, style = MaterialTheme.typography.titleSmall, color = RepsTheme.colors.textPrimary)
             Text(
                 "${meal.macros.calories.roundToInt()} ${stringResource(R.string.nutrition_kcal)}",
                 style = MaterialTheme.typography.labelMedium,
-                color = RepsTextSecondary,
+                color = RepsTheme.colors.textSecondary,
             )
         }
         Column(Modifier.padding(top = 8.dp)) {
@@ -244,13 +239,13 @@ private fun MealCard(meal: Meal) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Row {
-                        Text(item.name, style = MaterialTheme.typography.bodyMedium, color = RepsTextPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                        Text(" ${item.grams.roundToInt()}g", style = MaterialTheme.typography.labelSmall, color = RepsTextTertiary)
+                        Text(item.name, style = MaterialTheme.typography.bodyMedium, color = RepsTheme.colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Text(" ${item.grams.roundToInt()}g", style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textTertiary)
                     }
                     Text(
                         "${item.calories.roundToInt()} ${stringResource(R.string.nutrition_kcal)}",
                         style = MaterialTheme.typography.labelSmall,
-                        color = RepsTextSecondary,
+                        color = RepsTheme.colors.textSecondary,
                     )
                 }
             }
@@ -330,9 +325,9 @@ private fun AddMealSheet(onDismiss: () -> Unit, onSave: (String, List<FoodItem>)
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text("${item.name} · ${item.grams.roundToInt()}g", style = MaterialTheme.typography.bodySmall, color = RepsTextPrimary)
+                    Text("${item.name} · ${item.grams.roundToInt()}g", style = MaterialTheme.typography.bodySmall, color = RepsTheme.colors.textPrimary)
                     IconButton(onClick = { draftItems.remove(item) }, modifier = Modifier.size(28.dp)) {
-                        Icon(Icons.Filled.Close, contentDescription = null, tint = RepsTextTertiary, modifier = Modifier.size(16.dp))
+                        Icon(Icons.Filled.Close, contentDescription = null, tint = RepsTheme.colors.textTertiary, modifier = Modifier.size(16.dp))
                     }
                 }
             }

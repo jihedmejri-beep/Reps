@@ -24,9 +24,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.reps.app.R
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsSurface
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.domain.model.Difficulty
 
@@ -46,7 +43,7 @@ fun TodayWorkoutCard(
     Box(
         modifier
             .fillMaxWidth()
-            .background(RepsSurface, MaterialTheme.shapes.large)
+            .background(RepsTheme.colors.surface, MaterialTheme.shapes.large)
             .background(
                 // A faint green wash from the top-right lifts the card off the
                 // page without resorting to a border.
@@ -73,13 +70,13 @@ fun TodayWorkoutCard(
                     Text(
                         text = workoutName.uppercase(),
                         style = RepsTheme.textStyles.sectionTitle,
-                        color = RepsTextPrimary,
+                        color = RepsTheme.colors.textPrimary,
                         modifier = Modifier.padding(top = 4.dp),
                     )
                     Text(
                         text = muscleGroups,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = RepsTextSecondary,
+                        color = RepsTheme.colors.textSecondary,
                         modifier = Modifier.padding(top = 2.dp),
                     )
                 }
@@ -141,6 +138,6 @@ private fun MetaChip(
             painter != null -> Icon(painter, null, tint = RepsGreen, modifier = Modifier.size(13.dp))
             imageVector != null -> Icon(imageVector, null, tint = RepsGreen, modifier = Modifier.size(13.dp))
         }
-        Text(text, style = MaterialTheme.typography.labelMedium, color = RepsTextPrimary)
+        Text(text, style = MaterialTheme.typography.labelMedium, color = RepsTheme.colors.textPrimary)
     }
 }

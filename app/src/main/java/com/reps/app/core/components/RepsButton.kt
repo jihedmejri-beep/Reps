@@ -24,9 +24,6 @@ import androidx.compose.ui.unit.dp
 import com.reps.app.core.theme.PillShape
 import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsOnGreen
-import com.reps.app.core.theme.RepsOutline
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextTertiary
 import com.reps.app.core.theme.RepsTheme
 
 /**
@@ -99,10 +96,10 @@ fun RepsOutlinedButton(
         onClick = onClick,
         enabled = enabled,
         shape = PillShape,
-        border = BorderStroke(1.dp, RepsOutline),
+        border = BorderStroke(1.dp, RepsTheme.colors.outline),
         colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = RepsTextPrimary,
-            disabledContentColor = RepsTextTertiary,
+            contentColor = RepsTheme.colors.textPrimary,
+            disabledContentColor = RepsTheme.colors.textTertiary,
         ),
         modifier = modifier.fillMaxWidth().heightIn(min = RepsTheme.dimens.buttonHeight),
     ) {

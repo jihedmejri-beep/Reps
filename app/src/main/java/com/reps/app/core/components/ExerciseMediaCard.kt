@@ -1,6 +1,7 @@
 package com.reps.app.core.components
 
 import androidx.compose.foundation.background
+import com.reps.app.core.theme.RepsTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,8 +18,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.reps.app.core.theme.RepsSurfaceElevated
-import com.reps.app.core.theme.RepsTextTertiary
 
 /**
  * Reserved space for an exercise demonstration: a GIF today via Coil (which
@@ -37,7 +36,7 @@ fun ExerciseMediaCard(
             .fillMaxWidth()
             .aspectRatio(16f / 10f)
             .clip(MaterialTheme.shapes.large)
-            .background(RepsSurfaceElevated),
+            .background(RepsTheme.colors.surfaceElevated),
         contentAlignment = Alignment.Center,
     ) {
         if (mediaUrl.isNotBlank()) {
@@ -51,7 +50,7 @@ fun ExerciseMediaCard(
             Icon(
                 imageVector = Icons.Outlined.FitnessCenter,
                 contentDescription = null,
-                tint = RepsTextTertiary,
+                tint = RepsTheme.colors.textTertiary,
                 modifier = Modifier.size(36.dp),
             )
         }

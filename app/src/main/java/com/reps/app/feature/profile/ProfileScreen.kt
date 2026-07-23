@@ -5,9 +5,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -49,20 +52,14 @@ import com.reps.app.core.components.SectionHeader
 import com.reps.app.core.components.StatCard
 import com.reps.app.core.theme.RepsError
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsNearBlack
 import com.reps.app.core.theme.RepsOnGreen
-import com.reps.app.core.theme.RepsOutline
-import com.reps.app.core.theme.RepsSurface
-import com.reps.app.core.theme.RepsSurfaceElevated
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
-import com.reps.app.core.theme.RepsTextTertiary
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.util.BmiCalculator
 import com.reps.app.core.util.BmrCalculator
 import com.reps.app.core.util.UnitConverter
 import com.reps.app.domain.model.Goal
 import com.reps.app.domain.model.Sex
+import com.reps.app.domain.model.ThemeMode
 import com.reps.app.domain.model.UnitSystem
 import com.reps.app.domain.model.User
 import com.reps.app.feature.progress.AddWeightSheet
@@ -86,13 +83,14 @@ fun ProfileScreen(
     var showAddWeight by remember { mutableStateOf(false) }
     var showAccountInfo by remember { mutableStateOf(false) }
     var showSignOutConfirm by remember { mutableStateOf(false) }
+    var showThemePicker by remember { mutableStateOf(false) }
 
     val user = state.user
     val dimens = RepsTheme.dimens
 
     LazyColumn(
         state = listState,
-        modifier = Modifier.fillMaxSize().background(RepsNearBlack).statusBarsPadding(),
+        modifier = Modifier.fillMaxSize().background(RepsTheme.colors.background).statusBarsPadding(),
         contentPadding = PaddingValues(
             start = dimens.screenPadding,
             end = dimens.screenPadding,
@@ -129,7 +127,7 @@ fun ProfileScreen(
                     Text(
                         text = stringResource(R.string.progress_bmi_needs_profile),
                         style = MaterialTheme.typography.bodySmall,
-                        color = RepsTextTertiary,
+                        color = RepsTheme.colors.textTertiary,
                     )
                 }
             }
@@ -137,8 +135,10 @@ fun ProfileScreen(
                 PreferencesCard(
                     user = user,
                     notificationsEnabled = state.notificationsEnabled,
+                    themeMode = state.themeMode,
                     onToggleUnits = { viewModel.updateUnits(if (user.units == UnitSystem.METRIC) UnitSystem.IMPERIAL else UnitSystem.METRIC) },
                     onToggleNotifications = viewModel::toggleNotifications,
+                    onEditTheme = { showThemePicker = true },
                     onEditLanguage = { editingField = ProfileField.LANGUAGE },
                     onAccountSettings = { showAccountInfo = true },
                 )
@@ -147,7 +147,7 @@ fun ProfileScreen(
                 Box(
                     Modifier
                         .fillMaxWidth()
-                        .background(RepsSurface, MaterialTheme.shapes.large)
+                        .background(RepsTheme.colors.surface, MaterialTheme.shapes.large)
                         .padding(horizontal = dimens.cardPadding),
                 ) {
                     RepsListRow(
@@ -181,6 +181,14 @@ fun ProfileScreen(
         }
     }
 
+    if (showThemePicker) {
+        ThemePickerSheet(
+            selected = state.themeMode,
+            onDismiss = { showThemePicker = false },
+            onPick = { viewModel.updateThemeMode(it); showThemePicker = false },
+        )
+    }
+
     if (showAccountInfo) {
         AccountSettingsSheet(onDismiss = { showAccountInfo = false })
     }
@@ -188,9 +196,9 @@ fun ProfileScreen(
     if (showSignOutConfirm) {
         AlertDialog(
             onDismissRequest = { showSignOutConfirm = false },
-            containerColor = RepsSurfaceElevated,
-            title = { Text(stringResource(R.string.profile_sign_out_confirm_title), color = RepsTextPrimary) },
-            text = { Text(stringResource(R.string.profile_sign_out_confirm_body), color = RepsTextSecondary) },
+            containerColor = RepsTheme.colors.surfaceElevated,
+            title = { Text(stringResource(R.string.profile_sign_out_confirm_title), color = RepsTheme.colors.textPrimary) },
+            text = { Text(stringResource(R.string.profile_sign_out_confirm_body), color = RepsTheme.colors.textSecondary) },
             confirmButton = {
                 TextButton(onClick = {
                     showSignOutConfirm = false
@@ -200,7 +208,7 @@ fun ProfileScreen(
             },
             dismissButton = {
                 TextButton(onClick = { showSignOutConfirm = false }) {
-                    Text(stringResource(R.string.workouts_session_keep_training), color = RepsTextSecondary)
+                    Text(stringResource(R.string.workouts_session_keep_training), color = RepsTheme.colors.textSecondary)
                 }
             },
         )
@@ -220,8 +228,8 @@ private fun ProfileHero(user: User) {
                 color = RepsOnGreen,
             )
         }
-        Text(user.name, style = MaterialTheme.typography.headlineSmall, color = RepsTextPrimary, modifier = Modifier.padding(top = 12.dp))
-        Text(user.email, style = MaterialTheme.typography.bodySmall, color = RepsTextSecondary, modifier = Modifier.padding(top = 2.dp))
+        Text(user.name, style = MaterialTheme.typography.headlineSmall, color = RepsTheme.colors.textPrimary, modifier = Modifier.padding(top = 12.dp))
+        Text(user.email, style = MaterialTheme.typography.bodySmall, color = RepsTheme.colors.textSecondary, modifier = Modifier.padding(top = 2.dp))
     }
 }
 
@@ -235,11 +243,11 @@ private fun DetailsCard(
     onEditSex: () -> Unit,
     onEditGoal: () -> Unit,
 ) {
-    Column(Modifier.fillMaxWidth().background(RepsSurface, MaterialTheme.shapes.large).padding(horizontal = RepsTheme.dimens.cardPadding)) {
+    Column(Modifier.fillMaxWidth().background(RepsTheme.colors.surface, MaterialTheme.shapes.large).padding(horizontal = RepsTheme.dimens.cardPadding)) {
         Text(
             text = stringResource(R.string.profile_your_details),
             style = MaterialTheme.typography.titleSmall,
-            color = RepsTextPrimary,
+            color = RepsTheme.colors.textPrimary,
             modifier = Modifier.padding(top = 14.dp, bottom = 2.dp),
         )
         RepsListRow(
@@ -285,20 +293,26 @@ private fun DetailsCard(
 private fun BodyMetricsCard(user: User, currentWeightKg: Double) {
     val bmi = BmiCalculator.calculate(currentWeightKg, user.heightCm!!)
     val bmr = BmrCalculator.calculate(user.sex!!, currentWeightKg, user.heightCm, user.age!!)
-    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+    // IntrinsicSize.Min lets the shorter card stretch to the taller one: BMI
+    // carries a category line ("Healthy") that BMR has no equivalent for, so
+    // without this the two tiles are the same width but not the same height.
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        modifier = Modifier.height(IntrinsicSize.Min),
+    ) {
         StatCard(
             icon = Icons.Outlined.Straighten,
             label = stringResource(R.string.progress_bmi),
             value = "%.1f".format(bmi),
             deltaText = stringResource(BmiCalculator.categorise(bmi).labelRes),
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(1f).fillMaxHeight(),
         )
         StatCard(
             icon = Icons.Outlined.LocalFireDepartment,
             label = stringResource(R.string.progress_bmr),
             value = bmr.roundToInt().toString(),
             unit = "kcal/day",
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(1f).fillMaxHeight(),
         )
     }
 }
@@ -307,16 +321,18 @@ private fun BodyMetricsCard(user: User, currentWeightKg: Double) {
 private fun PreferencesCard(
     user: User,
     notificationsEnabled: Boolean,
+    themeMode: ThemeMode,
     onToggleUnits: () -> Unit,
     onToggleNotifications: () -> Unit,
+    onEditTheme: () -> Unit,
     onEditLanguage: () -> Unit,
     onAccountSettings: () -> Unit,
 ) {
-    Column(Modifier.fillMaxWidth().background(RepsSurface, MaterialTheme.shapes.large).padding(horizontal = RepsTheme.dimens.cardPadding)) {
+    Column(Modifier.fillMaxWidth().background(RepsTheme.colors.surface, MaterialTheme.shapes.large).padding(horizontal = RepsTheme.dimens.cardPadding)) {
         Text(
             text = stringResource(R.string.profile_preferences),
             style = MaterialTheme.typography.titleSmall,
-            color = RepsTextPrimary,
+            color = RepsTheme.colors.textPrimary,
             modifier = Modifier.padding(top = 14.dp, bottom = 2.dp),
         )
         RepsListRow(
@@ -335,9 +351,9 @@ private fun PreferencesCard(
         RepsListRow(
             label = stringResource(R.string.profile_theme),
             icon = Icons.Outlined.Tonality,
-            value = stringResource(R.string.profile_theme_dark),
+            value = stringResource(themeModeLabelRes(themeMode)),
+            onClick = onEditTheme,
             showDivider = true,
-            showChevron = false,
         )
         RepsListRow(
             label = stringResource(R.string.profile_language),
@@ -363,9 +379,9 @@ private fun RepsSwitch(checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
         colors = SwitchDefaults.colors(
             checkedTrackColor = RepsGreen,
             checkedThumbColor = RepsOnGreen,
-            uncheckedTrackColor = RepsSurfaceElevated,
-            uncheckedBorderColor = RepsOutline,
-            uncheckedThumbColor = RepsTextTertiary,
+            uncheckedTrackColor = RepsTheme.colors.surfaceElevated,
+            uncheckedBorderColor = RepsTheme.colors.outline,
+            uncheckedThumbColor = RepsTheme.colors.textTertiary,
         ),
     )
 }
@@ -380,4 +396,10 @@ private fun languageLabelRes(language: com.reps.app.domain.model.AppLanguage) = 
     com.reps.app.domain.model.AppLanguage.ENGLISH -> R.string.language_english
     com.reps.app.domain.model.AppLanguage.ARABIC -> R.string.language_arabic
     com.reps.app.domain.model.AppLanguage.FRENCH -> R.string.language_french
+}
+
+internal fun themeModeLabelRes(mode: ThemeMode) = when (mode) {
+    ThemeMode.SYSTEM -> R.string.profile_theme_system
+    ThemeMode.LIGHT -> R.string.profile_theme_light
+    ThemeMode.DARK -> R.string.profile_theme_dark
 }

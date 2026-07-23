@@ -27,12 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.reps.app.R
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsNearBlack
-import com.reps.app.core.theme.RepsOutline
-import com.reps.app.core.theme.RepsSurface
-import com.reps.app.core.theme.RepsSurfaceElevated
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
+import com.reps.app.core.theme.RepsTheme
 import com.reps.app.domain.model.Exercise
 import com.reps.app.domain.model.Workout
 
@@ -60,7 +55,7 @@ fun ExerciseRow(
         Box(
             Modifier
                 .size(40.dp)
-                .background(RepsSurfaceElevated, MaterialTheme.shapes.small),
+                .background(RepsTheme.colors.surfaceElevated, MaterialTheme.shapes.small),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
@@ -74,14 +69,14 @@ fun ExerciseRow(
             Text(
                 text = exercise.name,
                 style = MaterialTheme.typography.bodyLarge,
-                color = RepsTextPrimary,
+                color = RepsTheme.colors.textPrimary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
                 text = "${stringResource(exercise.muscleGroup.labelRes)} · ${exercise.equipment}",
                 style = MaterialTheme.typography.labelSmall,
-                color = RepsTextSecondary,
+                color = RepsTheme.colors.textSecondary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(top = 1.dp),
@@ -91,21 +86,21 @@ fun ExerciseRow(
             Text(
                 text = stringResource(exercise.difficulty.labelRes),
                 style = MaterialTheme.typography.labelSmall,
-                color = RepsTextSecondary,
+                color = RepsTheme.colors.textSecondary,
             )
         } else {
             Box(
                 Modifier
                     .size(22.dp)
                     .background(if (selected) RepsGreen else androidx.compose.ui.graphics.Color.Transparent, CircleShape)
-                    .border(1.dp, if (selected) RepsGreen else RepsOutline, CircleShape),
+                    .border(1.dp, if (selected) RepsGreen else RepsTheme.colors.outline, CircleShape),
                 contentAlignment = Alignment.Center,
             ) {
                 if (selected) {
                     Icon(
                         imageVector = Icons.Filled.Check,
                         contentDescription = null,
-                        tint = RepsNearBlack,
+                        tint = RepsTheme.colors.background,
                         modifier = Modifier.size(14.dp),
                     )
                 }
@@ -125,7 +120,7 @@ fun MiniWorkoutCard(
         modifier
             .width(160.dp)
             .clickable(role = Role.Button, onClick = onClick)
-            .background(RepsSurface, MaterialTheme.shapes.medium)
+            .background(RepsTheme.colors.surface, MaterialTheme.shapes.medium)
             .padding(14.dp),
     ) {
         Text(
@@ -136,7 +131,7 @@ fun MiniWorkoutCard(
         Text(
             text = workout.name,
             style = MaterialTheme.typography.titleSmall,
-            color = RepsTextPrimary,
+            color = RepsTheme.colors.textPrimary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(top = 4.dp),
@@ -145,7 +140,7 @@ fun MiniWorkoutCard(
             text = stringResource(R.string.home_exercise_count, workout.exercises.size) +
                 " · " + stringResource(R.string.home_duration_min, workout.estimatedMinutes),
             style = MaterialTheme.typography.labelSmall,
-            color = RepsTextSecondary,
+            color = RepsTheme.colors.textSecondary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(top = 4.dp),

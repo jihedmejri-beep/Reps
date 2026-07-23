@@ -20,10 +20,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsSurface
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
-import com.reps.app.core.theme.RepsTextTertiary
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.theme.RepsWeightDown
 import com.reps.app.core.theme.RepsWeightUp
@@ -53,7 +49,7 @@ fun StatCard(
     Column(
         modifier
             .fillMaxWidth()
-            .background(RepsSurface, MaterialTheme.shapes.medium)
+            .background(RepsTheme.colors.surface, MaterialTheme.shapes.medium)
             .padding(14.dp),
     ) {
         Row(
@@ -64,7 +60,7 @@ fun StatCard(
             Text(
                 text = label,
                 style = MaterialTheme.typography.bodySmall,
-                color = RepsTextSecondary,
+                color = RepsTheme.colors.textSecondary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -74,12 +70,12 @@ fun StatCard(
             horizontalArrangement = Arrangement.spacedBy(3.dp),
             modifier = Modifier.padding(top = 8.dp),
         ) {
-            Text(text = value, style = MaterialTheme.typography.titleLarge, color = RepsTextPrimary)
+            Text(text = value, style = MaterialTheme.typography.titleLarge, color = RepsTheme.colors.textPrimary)
             unit?.let {
                 Text(
                     text = it,
                     style = MaterialTheme.typography.bodySmall,
-                    color = RepsTextSecondary,
+                    color = RepsTheme.colors.textSecondary,
                     modifier = Modifier.padding(bottom = 2.dp),
                 )
             }
@@ -93,7 +89,7 @@ fun StatCard(
                 val tint = when (deltaDirection) {
                     DeltaDirection.UP -> RepsWeightUp
                     DeltaDirection.DOWN -> RepsWeightDown
-                    DeltaDirection.FLAT -> RepsTextTertiary
+                    DeltaDirection.FLAT -> RepsTheme.colors.textTertiary
                 }
                 if (deltaDirection != DeltaDirection.FLAT) {
                     Icon(

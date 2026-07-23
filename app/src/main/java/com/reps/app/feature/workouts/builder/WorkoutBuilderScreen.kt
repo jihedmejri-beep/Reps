@@ -43,11 +43,6 @@ import com.reps.app.core.components.RepsOutlinedButton
 import com.reps.app.core.components.RepsTextField
 import com.reps.app.core.components.SectionHeader
 import com.reps.app.core.theme.RepsError
-import com.reps.app.core.theme.RepsNearBlack
-import com.reps.app.core.theme.RepsSurfaceElevated
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
-import com.reps.app.core.theme.RepsTextTertiary
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.domain.model.Exercise
 import com.reps.app.domain.model.MuscleGroup
@@ -67,7 +62,7 @@ fun WorkoutBuilderScreen(
 
     val dimens = RepsTheme.dimens
     LazyColumn(
-        modifier = Modifier.fillMaxSize().background(RepsNearBlack).statusBarsPadding(),
+        modifier = Modifier.fillMaxSize().background(RepsTheme.colors.background).statusBarsPadding(),
         contentPadding = PaddingValues(
             start = dimens.screenPadding,
             end = dimens.screenPadding,
@@ -104,7 +99,7 @@ fun WorkoutBuilderScreen(
                 Text(
                     text = stringResource(R.string.workouts_builder_empty),
                     style = MaterialTheme.typography.bodySmall,
-                    color = RepsTextTertiary,
+                    color = RepsTheme.colors.textTertiary,
                     modifier = Modifier.padding(vertical = 8.dp),
                 )
             }
@@ -165,21 +160,21 @@ private fun SelectedExerciseRow(exercise: Exercise, onRemove: () -> Unit) {
             Text(
                 text = exercise.name,
                 style = MaterialTheme.typography.bodyLarge,
-                color = RepsTextPrimary,
+                color = RepsTheme.colors.textPrimary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
                 text = stringResource(exercise.muscleGroup.labelRes),
                 style = MaterialTheme.typography.labelSmall,
-                color = RepsTextSecondary,
+                color = RepsTheme.colors.textSecondary,
             )
         }
         IconButton(onClick = onRemove) {
             Icon(
                 imageVector = Icons.Filled.Close,
                 contentDescription = stringResource(R.string.workouts_builder_remove_cd),
-                tint = RepsTextTertiary,
+                tint = RepsTheme.colors.textTertiary,
             )
         }
     }
@@ -201,7 +196,7 @@ private fun ExercisePickerSheet(
         Text(
             text = stringResource(R.string.workouts_builder_selected, state.selectedExerciseIds.size),
             style = MaterialTheme.typography.labelSmall,
-            color = RepsTextSecondary,
+            color = RepsTheme.colors.textSecondary,
         )
         RepsTextField(
             value = state.pickerQuery,

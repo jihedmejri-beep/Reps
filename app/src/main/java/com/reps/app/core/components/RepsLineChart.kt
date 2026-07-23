@@ -32,9 +32,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsOutline
-import com.reps.app.core.theme.RepsSurfaceElevated
-import com.reps.app.core.theme.RepsTextPrimary
+import com.reps.app.core.theme.RepsTheme
 import kotlin.math.roundToInt
 
 /**
@@ -61,8 +59,11 @@ fun RepsLineChart(
     var scrubIndex by remember(values) { mutableStateOf<Int?>(null) }
 
     val density = LocalDensity.current
-    val textColorArgb = RepsTextPrimary.toArgb()
-    val chipColorArgb = RepsSurfaceElevated.toArgb()
+    val textColorArgb = RepsTheme.colors.textPrimary.toArgb()
+    val chipColorArgb = RepsTheme.colors.surfaceElevated.toArgb()
+    // Read here, in the composition, because the Canvas draw scope below is not
+    // a composable and cannot look the theme colour up itself.
+    val gridColor = RepsTheme.colors.outline
 
     Canvas(
         modifier
@@ -97,7 +98,7 @@ fun RepsLineChart(
         repeat(3) { i ->
             val y = topInset + plotHeight * (i / 2f)
             drawLine(
-                color = RepsOutline.copy(alpha = 0.5f),
+                color = gridColor.copy(alpha = 0.5f),
                 start = Offset(0f, y),
                 end = Offset(size.width, y),
                 strokeWidth = 1.dp.toPx(),
@@ -143,7 +144,7 @@ fun RepsLineChart(
         scrubIndex?.let { i ->
             val p = pointFor(i)
             drawLine(
-                color = RepsOutline,
+                color = gridColor,
                 start = Offset(p.x, topInset),
                 end = Offset(p.x, size.height - bottomInset),
                 strokeWidth = 1.dp.toPx(),

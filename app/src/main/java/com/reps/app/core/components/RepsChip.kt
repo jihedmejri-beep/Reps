@@ -16,11 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.reps.app.core.theme.PillShape
+import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsOnGreen
-import com.reps.app.core.theme.RepsOutline
-import com.reps.app.core.theme.RepsSurface
-import com.reps.app.core.theme.RepsTextSecondary
 import androidx.compose.foundation.layout.Box
 
 /**
@@ -35,17 +33,17 @@ fun RepsChip(
     modifier: Modifier = Modifier,
 ) {
     val background by animateColorAsState(
-        targetValue = if (selected) RepsGreen else RepsSurface,
+        targetValue = if (selected) RepsGreen else RepsTheme.colors.surface,
         animationSpec = tween(180),
         label = "chipBackground",
     )
     val border by animateColorAsState(
-        targetValue = if (selected) RepsGreen else RepsOutline,
+        targetValue = if (selected) RepsGreen else RepsTheme.colors.outline,
         animationSpec = tween(180),
         label = "chipBorder",
     )
     val content by animateColorAsState(
-        targetValue = if (selected) RepsOnGreen else RepsTextSecondary,
+        targetValue = if (selected) RepsOnGreen else RepsTheme.colors.textSecondary,
         animationSpec = tween(180),
         label = "chipContent",
     )

@@ -9,7 +9,6 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsTextPrimary
 import com.reps.app.core.theme.RepsTheme
 
 /**
@@ -31,7 +30,7 @@ fun SectionHeader(
         Text(
             text = title.uppercase(),
             style = RepsTheme.textStyles.sectionTitle,
-            color = RepsTextPrimary,
+            color = RepsTheme.colors.textPrimary,
             modifier = Modifier.padding(top = 2.dp),
         )
     }

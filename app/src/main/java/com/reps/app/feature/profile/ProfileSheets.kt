@@ -22,11 +22,12 @@ import com.reps.app.core.components.RepsButton
 import com.reps.app.core.components.RepsListRow
 import com.reps.app.core.components.RepsTextField
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsTextSecondary
+import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.util.UnitConverter
 import com.reps.app.domain.model.AppLanguage
 import com.reps.app.domain.model.Goal
 import com.reps.app.domain.model.Sex
+import com.reps.app.domain.model.ThemeMode
 import com.reps.app.domain.model.UnitSystem
 import com.reps.app.domain.model.User
 import kotlin.math.roundToInt
@@ -108,6 +109,21 @@ private fun <T> PickerSheet(
 }
 
 @Composable
+internal fun ThemePickerSheet(selected: ThemeMode, onDismiss: () -> Unit, onPick: (ThemeMode) -> Unit) {
+    PickerSheet(
+        title = stringResource(R.string.profile_theme),
+        options = listOf(
+            ThemeMode.SYSTEM to stringResource(R.string.profile_theme_system),
+            ThemeMode.LIGHT to stringResource(R.string.profile_theme_light),
+            ThemeMode.DARK to stringResource(R.string.profile_theme_dark),
+        ),
+        selected = selected,
+        onDismiss = onDismiss,
+        onPick = onPick,
+    )
+}
+
+@Composable
 internal fun SexPickerSheet(user: User, onDismiss: () -> Unit, onPick: (Sex) -> Unit) {
     PickerSheet(
         title = stringResource(R.string.profile_sex),
@@ -158,7 +174,7 @@ internal fun AccountSettingsSheet(onDismiss: () -> Unit) {
         Text(
             text = stringResource(R.string.profile_account_settings_body),
             style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
-            color = RepsTextSecondary,
+            color = RepsTheme.colors.textSecondary,
         )
     }
 }

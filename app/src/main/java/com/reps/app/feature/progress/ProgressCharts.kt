@@ -39,12 +39,6 @@ import com.reps.app.R
 import com.reps.app.core.components.RepsChip
 import com.reps.app.core.components.RepsLineChart
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsOutline
-import com.reps.app.core.theme.RepsSurface
-import com.reps.app.core.theme.RepsSurfaceElevated
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
-import com.reps.app.core.theme.RepsTextTertiary
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.theme.RepsWeightDown
 import com.reps.app.core.util.UnitConverter
@@ -57,7 +51,7 @@ import kotlin.math.roundToInt
 internal fun ChartHeader(eyebrow: String, title: String, modifier: Modifier = Modifier) {
     Column(modifier) {
         Text(eyebrow.uppercase(), style = RepsTheme.textStyles.eyebrow, color = RepsGreen)
-        Text(title, style = MaterialTheme.typography.titleMedium, color = RepsTextPrimary, modifier = Modifier.padding(top = 2.dp))
+        Text(title, style = MaterialTheme.typography.titleMedium, color = RepsTheme.colors.textPrimary, modifier = Modifier.padding(top = 2.dp))
     }
 }
 
@@ -69,7 +63,7 @@ internal fun WeightChartCard(state: ProgressUiState, onAddWeight: () -> Unit) {
     }
     val unitLabel = stringResource(if (state.units == UnitSystem.METRIC) R.string.workouts_kg else R.string.workouts_lb)
 
-    Column(Modifier.fillMaxWidth().background(RepsSurface, MaterialTheme.shapes.large).padding(RepsTheme.dimens.cardPadding)) {
+    Column(Modifier.fillMaxWidth().background(RepsTheme.colors.surface, MaterialTheme.shapes.large).padding(RepsTheme.dimens.cardPadding)) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Top) {
             ChartHeader(
                 eyebrow = stringResource(R.string.progress_weight_progression),
@@ -92,7 +86,7 @@ internal fun WeightChartCard(state: ProgressUiState, onAddWeight: () -> Unit) {
             Text(
                 text = stringResource(R.string.progress_chart_empty),
                 style = MaterialTheme.typography.bodySmall,
-                color = RepsTextTertiary,
+                color = RepsTheme.colors.textTertiary,
                 modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
             )
         }
@@ -106,7 +100,7 @@ internal fun StrengthChartCard(state: ProgressUiState, exerciseIds: List<String>
     val series = remember(state.sessions, selected) { strengthSeries(state.sessions, selected) }
     val unitLabel = stringResource(if (state.units == UnitSystem.METRIC) R.string.workouts_kg else R.string.workouts_lb)
 
-    Column(Modifier.fillMaxWidth().background(RepsSurface, MaterialTheme.shapes.large).padding(RepsTheme.dimens.cardPadding)) {
+    Column(Modifier.fillMaxWidth().background(RepsTheme.colors.surface, MaterialTheme.shapes.large).padding(RepsTheme.dimens.cardPadding)) {
         ChartHeader(
             eyebrow = stringResource(R.string.progress_strength_progression),
             title = exercise?.name.orEmpty(),
@@ -132,7 +126,7 @@ internal fun StrengthChartCard(state: ProgressUiState, exerciseIds: List<String>
             Text(
                 text = stringResource(R.string.progress_chart_empty),
                 style = MaterialTheme.typography.bodySmall,
-                color = RepsTextTertiary,
+                color = RepsTheme.colors.textTertiary,
                 modifier = Modifier.padding(bottom = 8.dp),
             )
         }
@@ -144,7 +138,7 @@ internal fun FrequencyCard(sessions: List<WorkoutSession>) {
     val buckets = remember(sessions) { weeklyFrequency(sessions) }
     val max = (buckets.maxOfOrNull { it.count } ?: 0).coerceAtLeast(1)
 
-    Column(Modifier.fillMaxWidth().background(RepsSurface, MaterialTheme.shapes.large).padding(RepsTheme.dimens.cardPadding)) {
+    Column(Modifier.fillMaxWidth().background(RepsTheme.colors.surface, MaterialTheme.shapes.large).padding(RepsTheme.dimens.cardPadding)) {
         ChartHeader(
             eyebrow = stringResource(R.string.progress_frequency),
             title = stringResource(R.string.progress_frequency_caption),
@@ -180,7 +174,7 @@ internal fun FrequencyCard(sessions: List<WorkoutSession>) {
                     Text(
                         text = bucket.label,
                         style = MaterialTheme.typography.labelSmall,
-                        color = RepsTextSecondary,
+                        color = RepsTheme.colors.textSecondary,
                         modifier = Modifier.padding(top = 4.dp),
                     )
                 }
@@ -191,7 +185,7 @@ internal fun FrequencyCard(sessions: List<WorkoutSession>) {
 
 @Composable
 internal fun MuscleDistributionCard(shares: List<MuscleShare>) {
-    Column(Modifier.fillMaxWidth().background(RepsSurface, MaterialTheme.shapes.large).padding(RepsTheme.dimens.cardPadding)) {
+    Column(Modifier.fillMaxWidth().background(RepsTheme.colors.surface, MaterialTheme.shapes.large).padding(RepsTheme.dimens.cardPadding)) {
         ChartHeader(
             eyebrow = stringResource(R.string.progress_muscle_distribution),
             title = stringResource(R.string.progress_muscle_distribution_caption),
@@ -209,7 +203,7 @@ internal fun MuscleDistributionCard(shares: List<MuscleShare>) {
                     Text(
                         text = stringResource(share.group.labelRes),
                         style = MaterialTheme.typography.labelMedium,
-                        color = RepsTextSecondary,
+                        color = RepsTheme.colors.textSecondary,
                         modifier = Modifier.width(66.dp),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -218,7 +212,7 @@ internal fun MuscleDistributionCard(shares: List<MuscleShare>) {
                         Modifier
                             .weight(1f)
                             .height(8.dp)
-                            .background(RepsSurfaceElevated, RoundedCornerShape(4.dp)),
+                            .background(RepsTheme.colors.surfaceElevated, RoundedCornerShape(4.dp)),
                     ) {
                         Box(
                             Modifier
@@ -230,7 +224,7 @@ internal fun MuscleDistributionCard(shares: List<MuscleShare>) {
                     Text(
                         text = "${share.pct}%",
                         style = MaterialTheme.typography.labelMedium,
-                        color = RepsTextPrimary,
+                        color = RepsTheme.colors.textPrimary,
                         modifier = Modifier.width(36.dp),
                         textAlign = androidx.compose.ui.text.style.TextAlign.End,
                     )
@@ -246,7 +240,7 @@ internal fun PersonalRecordsSection(prs: List<PersonalRecord>, exercisesById: Ma
         Text(
             text = stringResource(R.string.progress_personal_records),
             style = MaterialTheme.typography.titleSmall,
-            color = RepsTextPrimary,
+            color = RepsTheme.colors.textPrimary,
             modifier = Modifier.padding(bottom = 10.dp),
         )
         LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -255,7 +249,7 @@ internal fun PersonalRecordsSection(prs: List<PersonalRecord>, exercisesById: Ma
                 Column(
                     Modifier
                         .width(160.dp)
-                        .background(RepsSurface, MaterialTheme.shapes.medium)
+                        .background(RepsTheme.colors.surface, MaterialTheme.shapes.medium)
                         .padding(14.dp),
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -269,7 +263,7 @@ internal fun PersonalRecordsSection(prs: List<PersonalRecord>, exercisesById: Ma
                     Text(
                         text = exercise.name,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = RepsTextPrimary,
+                        color = RepsTheme.colors.textPrimary,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.padding(top = 8.dp),
@@ -277,7 +271,7 @@ internal fun PersonalRecordsSection(prs: List<PersonalRecord>, exercisesById: Ma
                     Text(
                         text = "${pr.weightKg.roundToInt()} kg × ${pr.reps}",
                         style = MaterialTheme.typography.titleSmall,
-                        color = RepsTextPrimary,
+                        color = RepsTheme.colors.textPrimary,
                         modifier = Modifier.padding(top = 6.dp),
                     )
                     Text(
@@ -302,7 +296,7 @@ internal fun AchievementsSection(sessionCount: Int, streakCount: Int, prCount: I
         Text(
             text = stringResource(R.string.progress_achievements),
             style = MaterialTheme.typography.titleSmall,
-            color = RepsTextPrimary,
+            color = RepsTheme.colors.textPrimary,
             modifier = Modifier.padding(bottom = 10.dp),
         )
         LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -313,13 +307,13 @@ internal fun AchievementsSection(sessionCount: Int, streakCount: Int, prCount: I
                         Modifier
                             .fillMaxWidth()
                             .height(84.dp)
-                            .background(RepsSurfaceElevated, MaterialTheme.shapes.medium),
+                            .background(RepsTheme.colors.surfaceElevated, MaterialTheme.shapes.medium),
                         contentAlignment = Alignment.Center,
                     ) {
                         Icon(
                             imageVector = icon,
                             contentDescription = null,
-                            tint = if (achievement.unlocked) RepsGreen else RepsTextTertiary.copy(alpha = 0.6f),
+                            tint = if (achievement.unlocked) RepsGreen else RepsTheme.colors.textTertiary.copy(alpha = 0.6f),
                             modifier = Modifier.size(28.dp),
                         )
                         if (!achievement.unlocked) {
@@ -327,17 +321,17 @@ internal fun AchievementsSection(sessionCount: Int, streakCount: Int, prCount: I
                                 Modifier
                                     .align(Alignment.BottomEnd)
                                     .size(20.dp)
-                                    .background(RepsSurface, CircleShape)
+                                    .background(RepsTheme.colors.surface, CircleShape)
                                     .padding(4.dp),
                             ) {
-                                Icon(Icons.Filled.Lock, contentDescription = null, tint = RepsTextTertiary, modifier = Modifier.size(10.dp))
+                                Icon(Icons.Filled.Lock, contentDescription = null, tint = RepsTheme.colors.textTertiary, modifier = Modifier.size(10.dp))
                             }
                         }
                     }
                     Text(
                         text = stringResource(titleRes),
                         style = MaterialTheme.typography.labelSmall,
-                        color = if (achievement.unlocked) RepsTextPrimary else RepsTextTertiary,
+                        color = if (achievement.unlocked) RepsTheme.colors.textPrimary else RepsTheme.colors.textTertiary,
                         maxLines = 2,
                         textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                         modifier = Modifier.padding(top = 8.dp),
@@ -362,7 +356,7 @@ internal fun RecentActivitySection(sessions: List<WorkoutSession>, exercisesById
         Text(
             text = stringResource(R.string.progress_recent_activity),
             style = MaterialTheme.typography.titleSmall,
-            color = RepsTextPrimary,
+            color = RepsTheme.colors.textPrimary,
             modifier = Modifier.padding(bottom = 10.dp),
         )
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -371,16 +365,16 @@ internal fun RecentActivitySection(sessions: List<WorkoutSession>, exercisesById
                 Column(
                     Modifier
                         .fillMaxWidth()
-                        .background(RepsSurface, MaterialTheme.shapes.medium)
+                        .background(RepsTheme.colors.surface, MaterialTheme.shapes.medium)
                         .padding(14.dp),
                 ) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text(session.name, style = MaterialTheme.typography.bodyLarge, color = RepsTextPrimary)
-                        Text(session.date.toString(), style = MaterialTheme.typography.labelSmall, color = RepsTextTertiary)
+                        Text(session.name, style = MaterialTheme.typography.bodyLarge, color = RepsTheme.colors.textPrimary)
+                        Text(session.date.toString(), style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textTertiary)
                     }
                     Row(Modifier.padding(top = 6.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                        Text("${session.durationMin} min", style = MaterialTheme.typography.labelSmall, color = RepsTextSecondary)
-                        Text("${volume.roundToInt()} kg", style = MaterialTheme.typography.labelSmall, color = RepsTextSecondary)
+                        Text("${session.durationMin} min", style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textSecondary)
+                        Text("${volume.roundToInt()} kg", style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textSecondary)
                     }
                     if (session.prsHit.isNotEmpty()) {
                         Row(

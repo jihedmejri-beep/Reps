@@ -62,14 +62,7 @@ import com.reps.app.core.components.RestTimer
 import com.reps.app.core.components.StatCard
 import com.reps.app.core.components.rememberRestTimerState
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsNearBlack
 import com.reps.app.core.theme.RepsOnGreen
-import com.reps.app.core.theme.RepsOutline
-import com.reps.app.core.theme.RepsSurface
-import com.reps.app.core.theme.RepsSurfaceElevated
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
-import com.reps.app.core.theme.RepsTextTertiary
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.util.UnitConverter
 import com.reps.app.domain.model.UnitSystem
@@ -113,7 +106,7 @@ fun WorkoutSessionScreen(
     Box(Modifier.fillMaxSize()) {
         val dimens = RepsTheme.dimens
         LazyColumn(
-            modifier = Modifier.fillMaxSize().background(RepsNearBlack).statusBarsPadding(),
+            modifier = Modifier.fillMaxSize().background(RepsTheme.colors.background).statusBarsPadding(),
             contentPadding = PaddingValues(
                 start = dimens.screenPadding,
                 end = dimens.screenPadding,
@@ -127,7 +120,7 @@ fun WorkoutSessionScreen(
                 Text(
                     text = state.workoutName,
                     style = MaterialTheme.typography.headlineSmall,
-                    color = RepsTextPrimary,
+                    color = RepsTheme.colors.textPrimary,
                 )
             }
             item {
@@ -198,9 +191,9 @@ fun WorkoutSessionScreen(
     if (showNoSetsDialog) {
         AlertDialog(
             onDismissRequest = { showNoSetsDialog = false },
-            containerColor = RepsSurfaceElevated,
-            title = { Text(stringResource(R.string.workouts_session_no_sets_title), color = RepsTextPrimary) },
-            text = { Text(stringResource(R.string.workouts_session_no_sets_body), color = RepsTextSecondary) },
+            containerColor = RepsTheme.colors.surfaceElevated,
+            title = { Text(stringResource(R.string.workouts_session_no_sets_title), color = RepsTheme.colors.textPrimary) },
+            text = { Text(stringResource(R.string.workouts_session_no_sets_body), color = RepsTheme.colors.textSecondary) },
             confirmButton = {
                 TextButton(onClick = {
                     showNoSetsDialog = false
@@ -211,7 +204,7 @@ fun WorkoutSessionScreen(
             },
             dismissButton = {
                 TextButton(onClick = { showNoSetsDialog = false }) {
-                    Text(stringResource(R.string.workouts_session_keep_training), color = RepsTextSecondary)
+                    Text(stringResource(R.string.workouts_session_keep_training), color = RepsTheme.colors.textSecondary)
                 }
             },
         )
@@ -220,8 +213,8 @@ fun WorkoutSessionScreen(
     completionResult?.let { result ->
         AlertDialog(
             onDismissRequest = {},
-            containerColor = RepsSurfaceElevated,
-            title = { Text(stringResource(R.string.workouts_session_complete_title), color = RepsTextPrimary) },
+            containerColor = RepsTheme.colors.surfaceElevated,
+            title = { Text(stringResource(R.string.workouts_session_complete_title), color = RepsTheme.colors.textPrimary) },
             text = {
                 Text(
                     text = stringResource(
@@ -229,7 +222,7 @@ fun WorkoutSessionScreen(
                         result.volumeKg.roundToInt().toString(),
                         result.completedSetCount,
                     ),
-                    color = RepsTextSecondary,
+                    color = RepsTheme.colors.textSecondary,
                 )
             },
             confirmButton = {
@@ -256,7 +249,7 @@ private fun SessionExerciseCard(
     Column(
         Modifier
             .fillMaxWidth()
-            .background(RepsSurface, MaterialTheme.shapes.large)
+            .background(RepsTheme.colors.surface, MaterialTheme.shapes.large)
             .padding(RepsTheme.dimens.cardPadding),
     ) {
         Row(
@@ -265,18 +258,18 @@ private fun SessionExerciseCard(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(Modifier.weight(1f)) {
-                Text(exercise.name, style = MaterialTheme.typography.titleSmall, color = RepsTextPrimary)
+                Text(exercise.name, style = MaterialTheme.typography.titleSmall, color = RepsTheme.colors.textPrimary)
                 Text(
                     text = "${stringResource(exercise.muscleGroup.labelRes)} · ${exercise.equipment}",
                     style = MaterialTheme.typography.labelSmall,
-                    color = RepsTextSecondary,
+                    color = RepsTheme.colors.textSecondary,
                     modifier = Modifier.padding(top = 2.dp),
                 )
             }
             Icon(
                 imageVector = if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
                 contentDescription = null,
-                tint = RepsTextTertiary,
+                tint = RepsTheme.colors.textTertiary,
             )
         }
 
@@ -291,20 +284,20 @@ private fun SessionExerciseCard(
                 Text(
                     stringResource(R.string.workouts_set),
                     style = MaterialTheme.typography.labelSmall,
-                    color = RepsTextSecondary,
+                    color = RepsTheme.colors.textSecondary,
                     modifier = Modifier.weight(0.7f),
                 )
                 Text(
                     stringResource(if (units == UnitSystem.METRIC) R.string.workouts_kg else R.string.workouts_lb),
                     style = MaterialTheme.typography.labelSmall,
-                    color = RepsTextSecondary,
+                    color = RepsTheme.colors.textSecondary,
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center,
                 )
                 Text(
                     stringResource(R.string.workouts_reps),
                     style = MaterialTheme.typography.labelSmall,
-                    color = RepsTextSecondary,
+                    color = RepsTheme.colors.textSecondary,
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center,
                 )
@@ -348,7 +341,7 @@ private fun SetRow(
         Text(
             text = (index + 1).toString(),
             style = MaterialTheme.typography.bodyMedium,
-            color = RepsTextSecondary,
+            color = RepsTheme.colors.textSecondary,
             modifier = Modifier.weight(0.7f),
         )
         SetValueField(
@@ -365,7 +358,7 @@ private fun SetRow(
             modifier = Modifier.weight(1f).padding(horizontal = 4.dp),
         )
         val checkColor by animateColorAsState(
-            targetValue = if (set.completed) RepsGreen else RepsSurfaceElevated,
+            targetValue = if (set.completed) RepsGreen else RepsTheme.colors.surfaceElevated,
             animationSpec = tween(180),
             label = "setCheck",
         )
@@ -373,7 +366,7 @@ private fun SetRow(
             Modifier
                 .size(32.dp)
                 .background(checkColor, MaterialTheme.shapes.small)
-                .border(1.dp, if (set.completed) RepsGreen else RepsOutline, MaterialTheme.shapes.small)
+                .border(1.dp, if (set.completed) RepsGreen else RepsTheme.colors.outline, MaterialTheme.shapes.small)
                 .clickable(onClick = onToggle),
             contentAlignment = Alignment.Center,
         ) {
@@ -395,7 +388,7 @@ private fun SetValueField(
         onValueChange = onValueChange,
         singleLine = true,
         textStyle = TextStyle(
-            color = RepsTextPrimary,
+            color = RepsTheme.colors.textPrimary,
             fontSize = MaterialTheme.typography.bodyMedium.fontSize,
             textAlign = TextAlign.Center,
         ),
@@ -403,7 +396,7 @@ private fun SetValueField(
         cursorBrush = SolidColor(RepsGreen),
         modifier = modifier
             .height(36.dp)
-            .background(RepsSurfaceElevated, MaterialTheme.shapes.small),
+            .background(RepsTheme.colors.surfaceElevated, MaterialTheme.shapes.small),
         decorationBox = { inner ->
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { inner() }
         },

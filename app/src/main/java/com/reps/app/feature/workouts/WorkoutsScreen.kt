@@ -41,10 +41,7 @@ import com.reps.app.core.components.RepsChip
 import com.reps.app.core.components.RepsTextField
 import com.reps.app.core.components.SectionHeader
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsNearBlack
 import com.reps.app.core.theme.RepsOnGreen
-import com.reps.app.core.theme.RepsTextSecondary
-import com.reps.app.core.theme.RepsTextTertiary
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.domain.model.MuscleGroup
 import com.reps.app.navigation.OnTabReselected
@@ -66,7 +63,7 @@ fun WorkoutsScreen(
     val dimens = RepsTheme.dimens
     LazyColumn(
         state = listState,
-        modifier = Modifier.fillMaxSize().background(RepsNearBlack).statusBarsPadding(),
+        modifier = Modifier.fillMaxSize().background(RepsTheme.colors.background).statusBarsPadding(),
         contentPadding = PaddingValues(
             start = dimens.screenPadding,
             end = dimens.screenPadding,
@@ -91,7 +88,7 @@ fun WorkoutsScreen(
                 Text(
                     text = stringResource(R.string.workouts_my_workouts),
                     style = MaterialTheme.typography.titleSmall,
-                    color = com.reps.app.core.theme.RepsTextPrimary,
+                    color = com.reps.app.core.theme.RepsTheme.colors.textPrimary,
                 )
                 Box(
                     Modifier
@@ -166,21 +163,21 @@ private fun EmptyExerciseState() {
         Box(
             Modifier
                 .size(52.dp)
-                .background(com.reps.app.core.theme.RepsSurface, androidx.compose.foundation.shape.CircleShape),
+                .background(com.reps.app.core.theme.RepsTheme.colors.surface, androidx.compose.foundation.shape.CircleShape),
             contentAlignment = Alignment.Center,
         ) {
-            Icon(Icons.Outlined.SearchOff, contentDescription = null, tint = RepsTextTertiary, modifier = Modifier.size(22.dp))
+            Icon(Icons.Outlined.SearchOff, contentDescription = null, tint = RepsTheme.colors.textTertiary, modifier = Modifier.size(22.dp))
         }
         Text(
             text = stringResource(R.string.workouts_no_matches_title),
             style = MaterialTheme.typography.titleSmall,
-            color = com.reps.app.core.theme.RepsTextPrimary,
+            color = com.reps.app.core.theme.RepsTheme.colors.textPrimary,
             modifier = Modifier.padding(top = 14.dp),
         )
         Text(
             text = stringResource(R.string.workouts_no_matches_subtitle),
             style = MaterialTheme.typography.bodySmall,
-            color = RepsTextSecondary,
+            color = RepsTheme.colors.textSecondary,
             modifier = Modifier.padding(top = 4.dp),
         )
     }

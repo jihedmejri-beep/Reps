@@ -26,10 +26,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.reps.app.R
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsSurface
-import com.reps.app.core.theme.RepsSurfaceElevated
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
 import com.reps.app.core.theme.RepsTheme
 
 /**
@@ -48,13 +44,13 @@ fun QuickActionsRow(
     Column(
         modifier
             .fillMaxWidth()
-            .background(RepsSurface, MaterialTheme.shapes.large)
+            .background(RepsTheme.colors.surface, MaterialTheme.shapes.large)
             .padding(RepsTheme.dimens.cardPadding),
     ) {
         Text(
             text = stringResource(R.string.home_quick_actions),
             style = MaterialTheme.typography.titleSmall,
-            color = RepsTextPrimary,
+            color = RepsTheme.colors.textPrimary,
         )
         Row(
             Modifier.fillMaxWidth().padding(top = 12.dp),
@@ -102,7 +98,7 @@ private fun QuickAction(
             Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
-                .background(RepsSurfaceElevated, MaterialTheme.shapes.medium)
+                .background(RepsTheme.colors.surfaceElevated, MaterialTheme.shapes.medium)
                 .clickable(
                     enabled = enabled,
                     role = Role.Button,
@@ -123,7 +119,7 @@ private fun QuickAction(
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = RepsTextSecondary,
+            color = RepsTheme.colors.textSecondary,
             modifier = Modifier.padding(top = 6.dp),
         )
     }

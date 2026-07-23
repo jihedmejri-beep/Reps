@@ -39,7 +39,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.reps.app.core.components.backdropSource
 import com.reps.app.core.components.rememberBackdropState
-import com.reps.app.core.theme.RepsNearBlack
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.feature.auth.login.LoginScreen
 import com.reps.app.feature.auth.signup.SignUpScreen
@@ -91,7 +90,7 @@ fun RepsApp(navController: NavHostController = rememberNavController()) {
     LaunchedEffect(currentRoute) { navBarScroll.reset() }
 
     CompositionLocalProvider(LocalTabReselect provides tabReselect) {
-        Box(Modifier.fillMaxSize().background(RepsNearBlack)) {
+        Box(Modifier.fillMaxSize().background(RepsTheme.colors.background)) {
             Box(
                 Modifier
                     .fillMaxSize()

@@ -23,12 +23,8 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.reps.app.core.theme.RepsError
+import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsOutline
-import com.reps.app.core.theme.RepsSurfaceElevated
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
-import com.reps.app.core.theme.RepsTextTertiary
 
 /**
  * One row in a settings/detail list: an optional leading icon, a label with an
@@ -51,7 +47,7 @@ fun RepsListRow(
 ) {
     Column(modifier.fillMaxWidth()) {
         if (showDivider) {
-            Box(Modifier.fillMaxWidth().height(1.dp).background(RepsOutline))
+            Box(Modifier.fillMaxWidth().height(1.dp).background(RepsTheme.colors.outline))
         }
         Row(
             modifier = Modifier
@@ -71,7 +67,7 @@ fun RepsListRow(
                 Box(
                     Modifier
                         .size(36.dp)
-                        .background(RepsSurfaceElevated, MaterialTheme.shapes.small),
+                        .background(RepsTheme.colors.surfaceElevated, MaterialTheme.shapes.small),
                     contentAlignment = Alignment.Center,
                 ) {
                     Icon(it, contentDescription = null, tint = RepsGreen, modifier = Modifier.size(17.dp))
@@ -81,13 +77,13 @@ fun RepsListRow(
                 Text(
                     text = label,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = if (danger) RepsError else RepsTextPrimary,
+                    color = if (danger) RepsError else RepsTheme.colors.textPrimary,
                 )
                 sub?.let {
                     Text(
                         text = it,
                         style = MaterialTheme.typography.bodySmall,
-                        color = RepsTextSecondary,
+                        color = RepsTheme.colors.textSecondary,
                         modifier = Modifier.padding(top = 1.dp),
                     )
                 }
@@ -99,7 +95,7 @@ fun RepsListRow(
                     Text(
                         text = it,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = RepsTextSecondary,
+                        color = RepsTheme.colors.textSecondary,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -108,7 +104,7 @@ fun RepsListRow(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = null,
-                        tint = RepsTextTertiary,
+                        tint = RepsTheme.colors.textTertiary,
                         modifier = Modifier.size(18.dp),
                     )
                 }

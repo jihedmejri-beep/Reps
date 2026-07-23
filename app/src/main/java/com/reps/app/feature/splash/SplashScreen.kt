@@ -116,6 +116,9 @@ private fun SplashContent(
     BoxWithConstraints(
         Modifier
             .fillMaxSize()
+            // The splash is a fixed brand moment - always the near-black brand
+            // background, regardless of the app's light/dark setting, because
+            // the wordmark on it is white.
             .background(RepsNearBlack)
             // No ripple: the splash has no pressed state to communicate.
             .clickable(

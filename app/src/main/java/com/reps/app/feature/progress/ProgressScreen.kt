@@ -40,10 +40,6 @@ import com.reps.app.core.components.SectionHeader
 import com.reps.app.core.components.StatCard
 import com.reps.app.core.components.StreakBadge
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsNearBlack
-import com.reps.app.core.theme.RepsSurface
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.util.UnitConverter
 import com.reps.app.domain.model.Streak
@@ -73,7 +69,7 @@ fun ProgressScreen(viewModel: ProgressViewModel = hiltViewModel()) {
     val dimens = RepsTheme.dimens
     LazyColumn(
         state = listState,
-        modifier = Modifier.fillMaxSize().background(RepsNearBlack).statusBarsPadding(),
+        modifier = Modifier.fillMaxSize().background(RepsTheme.colors.background).statusBarsPadding(),
         contentPadding = PaddingValues(
             start = dimens.screenPadding,
             end = dimens.screenPadding,
@@ -139,7 +135,7 @@ private fun HeroCard(state: ProgressUiState) {
     Column(
         Modifier
             .fillMaxWidth()
-            .background(RepsSurface, MaterialTheme.shapes.large)
+            .background(RepsTheme.colors.surface, MaterialTheme.shapes.large)
             .padding(RepsTheme.dimens.cardPadding),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -156,7 +152,7 @@ private fun HeroCard(state: ProgressUiState) {
                     else -> stringResource(R.string.home_rest_day)
                 },
                 style = MaterialTheme.typography.titleSmall,
-                color = RepsTextPrimary,
+                color = RepsTheme.colors.textPrimary,
             )
         }
         Text(
@@ -171,7 +167,7 @@ private fun HeroCard(state: ProgressUiState) {
                 else -> stringResource(R.string.progress_hero_rest_day_sub)
             },
             style = MaterialTheme.typography.bodySmall,
-            color = RepsTextSecondary,
+            color = RepsTheme.colors.textSecondary,
             modifier = Modifier.padding(top = 4.dp, bottom = 14.dp),
         )
 
@@ -179,12 +175,12 @@ private fun HeroCard(state: ProgressUiState) {
             Text(
                 text = stringResource(R.string.progress_weekly_completion),
                 style = MaterialTheme.typography.titleSmall,
-                color = RepsTextPrimary,
+                color = RepsTheme.colors.textPrimary,
             )
             Text(
                 text = stringResource(R.string.progress_this_week, completed, scheduled),
                 style = MaterialTheme.typography.labelMedium,
-                color = RepsTextSecondary,
+                color = RepsTheme.colors.textSecondary,
             )
         }
         WeekMeter(sessions = state.sessions, today = today, modifier = Modifier.padding(top = 10.dp))
@@ -212,7 +208,7 @@ private fun WeekMeter(sessions: List<com.reps.app.domain.model.WorkoutSession>, 
                 Text(
                     text = day.dayOfWeek.name.take(1),
                     style = MaterialTheme.typography.labelSmall,
-                    color = if (isToday) RepsTextPrimary else RepsTextSecondary,
+                    color = if (isToday) RepsTheme.colors.textPrimary else RepsTheme.colors.textSecondary,
                     modifier = Modifier.padding(top = 4.dp),
                 )
             }
@@ -234,7 +230,7 @@ private fun AnalyticsSection(state: ProgressUiState) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(stringResource(R.string.progress_eyebrow), style = MaterialTheme.typography.titleSmall, color = RepsTextPrimary)
+            Text(stringResource(R.string.progress_eyebrow), style = MaterialTheme.typography.titleSmall, color = RepsTheme.colors.textPrimary)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 com.reps.app.core.components.RepsChip(
                     label = stringResource(R.string.progress_this_month),
@@ -314,7 +310,7 @@ private fun deltaLabel(curr: Double, prev: Double): String? {
 @Composable
 private fun StreakSection(streakCount: Int) {
     Column {
-        Text(stringResource(R.string.progress_streak), style = MaterialTheme.typography.titleSmall, color = RepsTextPrimary, modifier = Modifier.padding(bottom = 10.dp))
+        Text(stringResource(R.string.progress_streak), style = MaterialTheme.typography.titleSmall, color = RepsTheme.colors.textPrimary, modifier = Modifier.padding(bottom = 10.dp))
         StreakBadge(Streak(count = streakCount))
     }
 }

@@ -32,11 +32,6 @@ import androidx.compose.ui.unit.dp
 import com.reps.app.R
 import com.reps.app.core.theme.RepsError
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsOutline
-import com.reps.app.core.theme.RepsSurface
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
-import com.reps.app.core.theme.RepsTextTertiary
 import com.reps.app.core.theme.RepsTheme
 
 /**
@@ -67,7 +62,7 @@ fun RepsTextField(
             singleLine = singleLine,
             isError = error != null,
             placeholder = placeholder?.let {
-                { Text(it, style = MaterialTheme.typography.bodyLarge, color = RepsTextTertiary) }
+                { Text(it, style = MaterialTheme.typography.bodyLarge, color = RepsTheme.colors.textTertiary) }
             },
             leadingIcon = leadingIcon?.let { { FieldIcon(it) } },
             textStyle = MaterialTheme.typography.bodyLarge,
@@ -111,7 +106,7 @@ fun RepsPasswordField(
             singleLine = true,
             isError = error != null,
             placeholder = placeholder?.let {
-                { Text(it, style = MaterialTheme.typography.bodyLarge, color = RepsTextTertiary) }
+                { Text(it, style = MaterialTheme.typography.bodyLarge, color = RepsTheme.colors.textTertiary) }
             },
             leadingIcon = leadingIcon?.let { { FieldIcon(it) } },
             visualTransformation = if (visible) {
@@ -130,7 +125,7 @@ fun RepsPasswordField(
                         contentDescription = stringResource(
                             if (visible) R.string.auth_hide_password else R.string.auth_show_password,
                         ),
-                        tint = RepsTextTertiary,
+                        tint = RepsTheme.colors.textTertiary,
                         modifier = Modifier.size(20.dp),
                     )
                 }
@@ -155,7 +150,7 @@ private fun FieldLabel(label: String?) {
     Text(
         text = label.uppercase(),
         style = RepsTheme.textStyles.eyebrow,
-        color = RepsTextSecondary,
+        color = RepsTheme.colors.textSecondary,
         modifier = Modifier.padding(bottom = 6.dp),
     )
 }
@@ -176,21 +171,21 @@ private fun FieldIcon(painter: Painter) {
     Icon(
         painter = painter,
         contentDescription = null,
-        tint = RepsTextTertiary,
+        tint = RepsTheme.colors.textTertiary,
         modifier = Modifier.size(18.dp),
     )
 }
 
 @Composable
 private fun repsFieldColors() = OutlinedTextFieldDefaults.colors(
-    focusedTextColor = RepsTextPrimary,
-    unfocusedTextColor = RepsTextPrimary,
-    focusedContainerColor = RepsSurface,
-    unfocusedContainerColor = RepsSurface,
-    disabledContainerColor = RepsSurface,
-    errorContainerColor = RepsSurface,
+    focusedTextColor = RepsTheme.colors.textPrimary,
+    unfocusedTextColor = RepsTheme.colors.textPrimary,
+    focusedContainerColor = RepsTheme.colors.surface,
+    unfocusedContainerColor = RepsTheme.colors.surface,
+    disabledContainerColor = RepsTheme.colors.surface,
+    errorContainerColor = RepsTheme.colors.surface,
     cursorColor = RepsGreen,
     focusedBorderColor = RepsGreen,
-    unfocusedBorderColor = RepsOutline,
+    unfocusedBorderColor = RepsTheme.colors.outline,
     errorBorderColor = RepsError,
 )

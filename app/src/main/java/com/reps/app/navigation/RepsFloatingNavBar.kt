@@ -1,46 +1,48 @@
 package com.reps.app.navigation
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.reps.app.core.components.BackdropState
 import com.reps.app.core.components.backdropBlur
 import com.reps.app.core.components.rememberBackdropState
+import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsOffWhite
-import com.reps.app.core.theme.RepsSurface
-import com.reps.app.core.theme.RepsSurfaceElevated
 import com.reps.app.core.theme.RepsTheme
-
-/** `rgba(20, 20, 19, 0.72)` - RepsSurface, let through by the backdrop blur. */
-private val PillFill = RepsSurface.copy(alpha = 0.72f)
 
 /** `border: 1px solid rgba(244, 242, 234, 0.07)` */
 private val PillBorder = RepsOffWhite.copy(alpha = 0.07f)
@@ -57,14 +59,19 @@ private val BackdropBlurRadius = 11.dp
 /** Extra travel so the pill's shadow clears the screen edge when hidden. */
 private val HiddenOvershoot = 20.dp
 
+/** Inset of the sliding indicator from the edges of its tab slot. */
+private val IndicatorInsetX = 8.dp
+private val IndicatorInsetY = 8.dp
+
 /**
  * The floating bottom navigation: a translucent, blurred pill sitting above the
  * content rather than a bar docked to the bottom edge.
  *
- * Selection is shown three ways at once - a neutral indicator slides and resizes
- * behind the active tab, the icon tints green and pops, and the label unfolds
- * beside it. The indicator stays neutral on purpose: green on green would bury
- * the icon it is meant to be highlighting.
+ * Icon-only, in the Instagram register - no labels. Selection reads two ways: a
+ * neutral indicator slides behind the active icon, and the icon tints green and
+ * pops. The indicator stays neutral on purpose; green on green would bury the
+ * icon it is meant to be highlighting. With no labels every tab is the same
+ * width, so the indicator is one fixed slot that only ever slides.
  *
  * @param hidden true while the user is scrolling down, which slides the whole
  *   pill off the bottom edge instead of leaving it over the content.
@@ -78,9 +85,13 @@ fun RepsFloatingNavBar(
     modifier: Modifier = Modifier,
 ) {
     val dimens = RepsTheme.dimens
-    val density = LocalDensity.current
     val tabs = remember { TopLevelTab.entries }
     val selectedIndex = tabs.indexOf(selected).coerceAtLeast(0)
+
+    // The pill fill is the theme surface let through the blur at 0.72 alpha, so
+    // it tracks light/dark. Computed here rather than as a top-level constant
+    // because the theme colour is only available inside a composition.
+    val pillFill = RepsTheme.colors.surface.copy(alpha = 0.72f)
 
     val slide by animateFloatAsState(
         targetValue = if (hidden) 1f else 0f,
@@ -92,23 +103,6 @@ fun RepsFloatingNavBar(
         animationSpec = tween(NavFadeMs),
         label = "navFade",
     )
-
-    val labels = tabs.map { stringResource(it.labelRes) }
-    val labelStyle = RepsTheme.textStyles.navLabel
-    val measurer = rememberTextMeasurer()
-
-    // Measured up front rather than read back from layout. Knowing every final
-    // width analytically means the indicator can spring straight to where the
-    // tab will end up, instead of chasing a box that is still resizing.
-    val naturalLabelWidths = remember(labels, labelStyle, density, measurer) {
-        labels.map { with(density) { measurer.measure(it, labelStyle).size.width.toDp() } }
-    }
-
-    // Measured off a string with an ascender and a descender so the height does
-    // not depend on which labels happen to have tall glyphs.
-    val labelHeight = remember(labelStyle, density, measurer) {
-        with(density) { measurer.measure("Ay", labelStyle).size.height.toDp() }
-    }
 
     BoxWithConstraints(
         modifier = modifier
@@ -125,91 +119,95 @@ fun RepsFloatingNavBar(
             ),
         contentAlignment = Alignment.Center,
     ) {
-        val gapTotal = TabGap * (tabs.size - 1)
-        val available = maxWidth - dimens.navPillPadding * 2 - gapTotal
-
-        // Solved rather than assumed: at the reference padding, five tabs leave
-        // roughly 32dp for the label on a 360dp screen, which renders "Workouts"
-        // as "Work". Padding gives way first, then the icon gap, then the label.
-        val geometry = NavBarLayout.solve(
-            availableWidth = available.value,
-            tabCount = tabs.size,
-            iconSize = dimens.navIconSize.value,
-            widestLabel = (naturalLabelWidths.maxOrNull() ?: 0.dp).value,
-            referencePadding = dimens.navTabPadding.value,
-            referenceGap = IconLabelGap.value,
-            minPadding = MinTabPadding.value,
-            minGap = MinIconLabelGap.value,
-        )
-        val tabPadding = geometry.tabPadding.dp
-        val iconGap = geometry.iconGap.dp
-        val labelCap = geometry.labelCap.dp
-
-        val inactiveTabWidth = geometry.inactiveTabWidth(dimens.navIconSize.value).dp
-        val labelWidths = naturalLabelWidths.map { it.coerceAtMost(labelCap) }
-
-        // Every tab before the selected one is collapsed, so the indicator's
-        // resting offset is a plain multiple of the collapsed width.
-        val indicatorTargetX = (inactiveTabWidth + TabGap) * selectedIndex
-        val indicatorTargetWidth = inactiveTabWidth + labelWidths[selectedIndex]
+        // Icons only, so the tabs split the pill evenly and the indicator is a
+        // single slot that slides - no per-label width to solve for.
+        val innerWidth = maxWidth - dimens.navPillPadding * 2
+        val tabWidth = innerWidth / tabs.size
 
         val indicatorX by animateDpAsState(
-            targetValue = indicatorTargetX,
+            targetValue = tabWidth * selectedIndex,
             animationSpec = spring(IndicatorXDamping, IndicatorStiffness),
             label = "indicatorX",
-        )
-        val indicatorWidth by animateDpAsState(
-            targetValue = indicatorTargetWidth,
-            animationSpec = spring(IndicatorWidthDamping, IndicatorStiffness),
-            label = "indicatorWidth",
-        )
-
-        // A large system font scale grows the label past the fixed 64dp pill, so
-        // the height is the greater of the design value and what the content
-        // actually needs. Kept exact rather than heightIn(min = ) because the
-        // indicator fills this height and cannot resolve against a wrap.
-        val pillHeight = maxOf(
-            dimens.navHeight,
-            maxOf(dimens.navIconSize * ActiveIconScale, labelHeight) +
-                dimens.navPillPadding * 2 + 16.dp,
         )
 
         Box(
             Modifier
-                .height(pillHeight)
+                .height(dimens.navHeight)
                 .pillShadow()
                 .backdropBlur(backdrop, BackdropBlurRadius, PillShape)
-                .background(PillFill, PillShape)
+                .background(pillFill, PillShape)
                 .border(1.dp, PillBorder, PillShape)
                 // Keeps each tab's ripple inside the pill's rounded ends.
                 .clip(PillShape)
                 .padding(dimens.navPillPadding),
         ) {
+            // The neutral highlight. Dp offsets mirror under RTL, so it travels
+            // the right way in Arabic without a second code path.
             Box(
                 Modifier
-                    // Dp offsets mirror under RTL, so the indicator travels the
-                    // right way in Arabic without a second code path.
                     .offset(x = indicatorX)
-                    .width(indicatorWidth)
+                    .width(tabWidth)
                     .fillMaxHeight()
-                    .background(RepsSurfaceElevated, PillShape)
+                    .padding(horizontal = IndicatorInsetX, vertical = IndicatorInsetY)
+                    .background(RepsTheme.colors.surfaceElevated, PillShape)
                     .border(1.dp, IndicatorBorder, PillShape),
             )
 
-            Row(horizontalArrangement = Arrangement.spacedBy(TabGap)) {
-                tabs.forEachIndexed { index, tab ->
-                    NavTab(
-                        label = labels[index],
-                        iconRes = tab.iconRes,
-                        isSelected = index == selectedIndex,
-                        labelMaxWidth = labelCap,
-                        tabPadding = tabPadding,
-                        iconGap = iconGap,
+            Row(Modifier.fillMaxSize()) {
+                tabs.forEach { tab ->
+                    NavIconTab(
+                        tab = tab,
+                        isSelected = tab == selected,
                         onClick = { onSelect(tab) },
+                        modifier = Modifier.weight(1f).fillMaxHeight(),
                     )
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun NavIconTab(
+    tab: TopLevelTab,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val dimens = RepsTheme.dimens
+    val tint by animateColorAsState(
+        targetValue = if (isSelected) RepsGreen else RepsTheme.colors.textTertiary,
+        animationSpec = tween(TintMs),
+        label = "navTint",
+    )
+    val scale by animateFloatAsState(
+        targetValue = if (isSelected) ActiveIconScale else 1f,
+        animationSpec = tween(IconScaleMs, easing = BackOut),
+        label = "navIconScale",
+    )
+
+    Box(
+        modifier = modifier
+            .clip(PillShape)
+            .selectable(
+                selected = isSelected,
+                onClick = onClick,
+                role = Role.Tab,
+                interactionSource = remember { MutableInteractionSource() },
+                // The sliding indicator is the selection feedback; a ripple on
+                // top of it just muddies the motion.
+                indication = null,
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            painter = painterResource(tab.iconRes),
+            // No visible label, so the icon has to name the tab for a screen
+            // reader on its own.
+            contentDescription = stringResource(tab.labelRes),
+            tint = tint,
+            modifier = Modifier.size(dimens.navIconSize).scale(scale),
+        )
     }
 }
 

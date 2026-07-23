@@ -276,6 +276,8 @@
     <string name="profile_notifications_sub">تذكيرات التمرين</string>
     <string name="profile_theme">المظهر</string>
     <string name="profile_theme_dark">داكن</string>
+    <string name="profile_theme_light">فاتح</string>
+    <string name="profile_theme_system">النظام</string>
     <string name="profile_account_settings_body">ستتوفر هنا كلمة المرور والبريد الإلكتروني وطرق تسجيل الدخول المرتبطة بمجرد ربط الحسابات بـ Firebase.</string>
     <string name="profile_sign_out_confirm_title">تسجيل الخروج؟</string>
     <string name="profile_sign_out_confirm_body">يمكنك تسجيل الدخول مرة أخرى في أي وقت — تبقى بياناتك على هذا الجهاز.</string>

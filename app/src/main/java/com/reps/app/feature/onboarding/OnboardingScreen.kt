@@ -57,6 +57,8 @@ private fun OnboardingContent(
     val dimens = RepsTheme.dimens
 
     BoxWithConstraints(
+        // Always the near-black brand background: the wordmark shown here is
+        // white, so this screen stays dark whatever the app's theme.
         Modifier.fillMaxSize().background(RepsNearBlack),
     ) {
         // The mark is sized off screen width so it holds its proportions from a

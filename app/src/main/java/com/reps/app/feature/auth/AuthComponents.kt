@@ -24,9 +24,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.reps.app.R
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsOutline
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
 import com.reps.app.core.theme.RepsTheme
 
 /**
@@ -43,12 +40,12 @@ fun AuthHeader(
         Text(
             text = headline.uppercase(),
             style = RepsTheme.textStyles.sectionTitle,
-            color = RepsTextPrimary,
+            color = RepsTheme.colors.textPrimary,
         )
         Text(
             text = subtext,
             style = MaterialTheme.typography.bodyMedium,
-            color = RepsTextSecondary,
+            color = RepsTheme.colors.textSecondary,
             modifier = Modifier.padding(top = 6.dp),
         )
     }
@@ -62,13 +59,13 @@ fun AuthOrDivider(modifier: Modifier = Modifier) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Box(Modifier.weight(1f).height(1.dp).background(RepsOutline))
+        Box(Modifier.weight(1f).height(1.dp).background(RepsTheme.colors.outline))
         Text(
             text = stringResource(R.string.auth_or),
             style = MaterialTheme.typography.labelSmall,
-            color = RepsTextSecondary,
+            color = RepsTheme.colors.textSecondary,
         )
-        Box(Modifier.weight(1f).height(1.dp).background(RepsOutline))
+        Box(Modifier.weight(1f).height(1.dp).background(RepsTheme.colors.outline))
     }
 }
 
@@ -87,7 +84,7 @@ fun AuthFooterLink(
 ) {
     Text(
         text = buildAnnotatedString {
-            withStyle(SpanStyle(color = RepsTextSecondary)) { append(question) }
+            withStyle(SpanStyle(color = RepsTheme.colors.textSecondary)) { append(question) }
             append(" ")
             withStyle(SpanStyle(color = RepsGreen)) { append(action) }
         },

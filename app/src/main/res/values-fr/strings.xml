@@ -276,6 +276,8 @@
     <string name="profile_notifications_sub">Rappels de séance</string>
     <string name="profile_theme">Thème</string>
     <string name="profile_theme_dark">Sombre</string>
+    <string name="profile_theme_light">Clair</string>
+    <string name="profile_theme_system">Système</string>
     <string name="profile_account_settings_body">Le mot de passe, l\'e-mail et les méthodes de connexion associées seront disponibles ici une fois les comptes gérés par Firebase.</string>
     <string name="profile_sign_out_confirm_title">Se déconnecter ?</string>
     <string name="profile_sign_out_confirm_body">Tu peux te reconnecter à tout moment — tes données restent sur cet appareil.</string>

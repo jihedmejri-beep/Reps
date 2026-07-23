@@ -27,11 +27,6 @@ import com.reps.app.core.components.RepsBackButton
 import com.reps.app.core.theme.PillShape
 import com.reps.app.core.theme.RepsError
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsNearBlack
-import com.reps.app.core.theme.RepsOutline
-import com.reps.app.core.theme.RepsSurface
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.domain.model.Exercise
 import com.reps.app.navigation.navBarClearance
@@ -49,7 +44,7 @@ fun ExerciseDetailScreen(
 private fun ExerciseDetailContent(exercise: Exercise, onBack: () -> Unit) {
     val dimens = RepsTheme.dimens
     LazyColumn(
-        modifier = Modifier.fillMaxSize().background(RepsNearBlack).statusBarsPadding(),
+        modifier = Modifier.fillMaxSize().background(RepsTheme.colors.background).statusBarsPadding(),
         contentPadding = PaddingValues(
             start = dimens.screenPadding,
             end = dimens.screenPadding,
@@ -72,7 +67,7 @@ private fun ExerciseDetailContent(exercise: Exercise, onBack: () -> Unit) {
                 Text(
                     text = exercise.name,
                     style = MaterialTheme.typography.headlineSmall,
-                    color = RepsTextPrimary,
+                    color = RepsTheme.colors.textPrimary,
                 )
                 Row(
                     modifier = Modifier.padding(top = 10.dp),
@@ -95,7 +90,7 @@ private fun ExerciseDetailContent(exercise: Exercise, onBack: () -> Unit) {
                 Text(
                     text = exercise.description,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = RepsTextSecondary,
+                    color = RepsTheme.colors.textSecondary,
                     modifier = Modifier.padding(top = 6.dp),
                 )
             }
@@ -115,7 +110,7 @@ private fun ExerciseDetailContent(exercise: Exercise, onBack: () -> Unit) {
                     Text(
                         text = mistake,
                         style = MaterialTheme.typography.bodySmall,
-                        color = RepsTextSecondary,
+                        color = RepsTheme.colors.textSecondary,
                     )
                 }
             }
@@ -128,10 +123,10 @@ private fun ExerciseDetailContent(exercise: Exercise, onBack: () -> Unit) {
 private fun InfoTag(text: String) {
     Box(
         Modifier
-            .background(RepsSurface, PillShape)
-            .border(1.dp, RepsOutline, PillShape)
+            .background(RepsTheme.colors.surface, PillShape)
+            .border(1.dp, RepsTheme.colors.outline, PillShape)
             .padding(horizontal = 12.dp, vertical = 7.dp),
     ) {
-        Text(text = text, style = MaterialTheme.typography.labelSmall, color = RepsTextSecondary)
+        Text(text = text, style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textSecondary)
     }
 }

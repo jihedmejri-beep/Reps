@@ -14,9 +14,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.reps.app.core.theme.RepsOutline
-import com.reps.app.core.theme.RepsSurfaceElevated
-import com.reps.app.core.theme.RepsTextPrimary
 import com.reps.app.core.theme.RepsTheme
 
 /**
@@ -37,10 +34,10 @@ fun RepsBottomSheet(
         onDismissRequest = onDismissRequest,
         modifier = modifier,
         sheetState = sheetState,
-        containerColor = RepsSurfaceElevated,
-        contentColor = RepsTextPrimary,
+        containerColor = RepsTheme.colors.surfaceElevated,
+        contentColor = RepsTheme.colors.textPrimary,
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-        dragHandle = { BottomSheetDefaults.DragHandle(color = RepsOutline) },
+        dragHandle = { BottomSheetDefaults.DragHandle(color = RepsTheme.colors.outline) },
     ) {
         Column(
             Modifier
@@ -51,7 +48,7 @@ fun RepsBottomSheet(
                 Text(
                     text = it,
                     style = MaterialTheme.typography.headlineSmall,
-                    color = RepsTextPrimary,
+                    color = RepsTheme.colors.textPrimary,
                     modifier = Modifier.padding(bottom = 16.dp),
                 )
             }

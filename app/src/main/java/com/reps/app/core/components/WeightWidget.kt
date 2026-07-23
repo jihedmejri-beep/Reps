@@ -20,10 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.reps.app.R
-import com.reps.app.core.theme.RepsSurface
-import com.reps.app.core.theme.RepsTextPrimary
-import com.reps.app.core.theme.RepsTextSecondary
-import com.reps.app.core.theme.RepsTextTertiary
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.theme.RepsWeightDown
 import com.reps.app.core.theme.RepsWeightUp
@@ -48,7 +44,7 @@ fun WeightWidget(
 ) {
     Column(
         modifier = modifier
-            .background(RepsSurface, MaterialTheme.shapes.medium)
+            .background(RepsTheme.colors.surface, MaterialTheme.shapes.medium)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
             .padding(RepsTheme.dimens.cardPadding),
     ) {
@@ -59,13 +55,13 @@ fun WeightWidget(
             Icon(
                 imageVector = Icons.Outlined.MonitorWeight,
                 contentDescription = null,
-                tint = RepsTextSecondary,
+                tint = RepsTheme.colors.textSecondary,
                 modifier = Modifier.size(15.dp),
             )
             Text(
                 text = stringResource(R.string.weight_label),
                 style = MaterialTheme.typography.bodySmall,
-                color = RepsTextSecondary,
+                color = RepsTheme.colors.textSecondary,
             )
         }
 
@@ -73,7 +69,7 @@ fun WeightWidget(
             Text(
                 text = stringResource(R.string.weight_no_data),
                 style = MaterialTheme.typography.bodyMedium,
-                color = RepsTextTertiary,
+                color = RepsTheme.colors.textTertiary,
                 modifier = Modifier.padding(top = 10.dp),
             )
             return@Column
@@ -87,14 +83,14 @@ fun WeightWidget(
             Text(
                 text = UnitConverter.formatWeight(weightKg, units),
                 style = RepsTheme.textStyles.statValue,
-                color = RepsTextPrimary,
+                color = RepsTheme.colors.textPrimary,
             )
             Text(
                 text = stringResource(
                     if (units == UnitSystem.METRIC) R.string.workouts_kg else R.string.workouts_lb,
                 ),
                 style = MaterialTheme.typography.bodySmall,
-                color = RepsTextSecondary,
+                color = RepsTheme.colors.textSecondary,
                 modifier = Modifier.padding(bottom = 4.dp),
             )
         }
