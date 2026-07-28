@@ -15,11 +15,22 @@ val RepsGreenPressed = Color(0xFF63C503)
 // reads on it in both themes - this stays constant on purpose.
 val RepsOnGreen = RepsNearBlack
 
+// Semantic states, brand-fixed and constant across light/dark.
+// Alert red: errors and hard limits. Caution amber: soft warnings.
+val RepsError = Color(0xFFE5534B)
+val RepsCaution = Color(0xFFF2A93B)
+
 // Weight movement reads as direction, not as good or bad: which way is wanted
-// depends on whether the user is cutting or bulking.
+// depends on whether the user is cutting or bulking. Green for the wanted
+// direction, caution amber for the other.
 val RepsWeightDown = RepsGreen
-val RepsWeightUp = Color(0xFFE8B33A)
-val RepsError = Color(0xFFE5484D)
+val RepsWeightUp = RepsCaution
+
+// Nutrition macros - one hue each so protein, carbs and fat stay distinguishable
+// at a glance. A categorical set, deliberately not derived from the brand green.
+val RepsProtein = Color(0xFFE2726B)
+val RepsCarbs = Color(0xFFF4B942)
+val RepsFat = Color(0xFF4F9DDE)
 
 // ---------------------------------------------------------------------------
 // Dark palette - the original brand surfaces. Kept as named constants so the

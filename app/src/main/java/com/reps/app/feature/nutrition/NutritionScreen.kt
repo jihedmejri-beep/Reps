@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
@@ -53,7 +54,10 @@ import com.reps.app.core.components.RepsButton
 import com.reps.app.core.components.RepsOutlinedButton
 import com.reps.app.core.components.RepsTextField
 import com.reps.app.core.components.SectionHeader
+import com.reps.app.core.theme.RepsCarbs
+import com.reps.app.core.theme.RepsFat
 import com.reps.app.core.theme.RepsGreen
+import com.reps.app.core.theme.RepsProtein
 import com.reps.app.core.theme.RepsOnGreen
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.domain.model.FoodItem
@@ -136,9 +140,9 @@ private fun MacroSummaryCard(state: NutritionUiState) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(20.dp)) {
             CalorieRing(consumed = totals.calories, target = state.target.calories)
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                MacroBar(stringResource(R.string.nutrition_protein), totals.protein, state.target.protein)
-                MacroBar(stringResource(R.string.nutrition_carbs), totals.carbs, state.target.carbs)
-                MacroBar(stringResource(R.string.nutrition_fat), totals.fat, state.target.fat)
+                MacroBar(stringResource(R.string.nutrition_protein), totals.protein, state.target.protein, RepsProtein)
+                MacroBar(stringResource(R.string.nutrition_carbs), totals.carbs, state.target.carbs, RepsCarbs)
+                MacroBar(stringResource(R.string.nutrition_fat), totals.fat, state.target.fat, RepsFat)
             }
         }
     }
@@ -170,12 +174,17 @@ private fun CalorieRing(consumed: Double, target: Double, modifier: Modifier = M
 }
 
 @Composable
-private fun MacroBar(label: String, value: Double, target: Double) {
+private fun MacroBar(label: String, value: Double, target: Double, color: Color) {
     val fraction = if (target <= 0.0) 0f else (value / target).toFloat().coerceIn(0f, 1f)
     val animated by animateFloatAsState(fraction, tween(900, easing = FastOutSlowInEasing), label = "macroBar")
     Column {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(label, style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textSecondary)
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                // A small colour dot ties the label to its bar, so the macro is
+                // named and colour-coded rather than relying on colour alone.
+                Box(Modifier.size(7.dp).background(color, CircleShape))
+                Text(label, style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textSecondary)
+            }
             Text("${value.roundToInt()}/${target.roundToInt()}g", style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textSecondary)
         }
         Box(
@@ -185,7 +194,7 @@ private fun MacroBar(label: String, value: Double, target: Double) {
                 .height(6.dp)
                 .background(RepsTheme.colors.surfaceElevated, RoundedCornerShape(3.dp)),
         ) {
-            Box(Modifier.fillMaxWidth(animated).height(6.dp).background(RepsGreen, RoundedCornerShape(3.dp)))
+            Box(Modifier.fillMaxWidth(animated).height(6.dp).background(color, RoundedCornerShape(3.dp)))
         }
     }
 }
