@@ -68,11 +68,10 @@
     <string name="home_start_workout">Démarrer la séance</string>
     <string name="home_exercise_count">%1$d exercices</string>
     <string name="home_duration_min">%1$d min</string>
-    <string name="home_quick_actions">Actions rapides</string>
-    <string name="home_action_start">Démarrer</string>
-    <string name="home_action_weight">Poids</string>
-    <string name="home_action_meal">Repas</string>
-    <string name="home_action_timer">Minuteur</string>
+    <string name="home_set_count">%1$d séries</string>
+    <string name="home_exercises_label">Exercices</string>
+    <string name="home_set_scheme">%1$d × %2$d</string>
+    <string name="home_more_exercises">+%1$d de plus</string>
     <string name="home_rest_day">Jour de repos</string>
     <string name="home_rest_day_subtext">Rien de prévu. La récupération fait partie du plan.</string>
     <string name="home_daily_motivation">Motivation du jour</string>

@@ -34,7 +34,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.reps.app.R
 import com.reps.app.core.components.MotivationQuoteCard
-import com.reps.app.core.components.QuickActionsRow
 import com.reps.app.core.components.StreakBadge
 import com.reps.app.core.components.TodayWorkoutCard
 import com.reps.app.core.components.WeightWidget
@@ -53,8 +52,6 @@ import com.reps.app.navigation.navBarClearance
 fun HomeScreen(
     onStartWorkout: (String) -> Unit,
     onOpenWeight: () -> Unit,
-    onOpenMeal: () -> Unit,
-    onOpenTimer: () -> Unit,
     onOpenNotifications: () -> Unit,
     onOpenProfile: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
@@ -64,8 +61,6 @@ fun HomeScreen(
         state = state,
         onStartWorkout = onStartWorkout,
         onOpenWeight = onOpenWeight,
-        onOpenMeal = onOpenMeal,
-        onOpenTimer = onOpenTimer,
         onOpenNotifications = onOpenNotifications,
         onOpenProfile = onOpenProfile,
     )
@@ -76,8 +71,6 @@ private fun HomeContent(
     state: HomeUiState,
     onStartWorkout: (String) -> Unit,
     onOpenWeight: () -> Unit,
-    onOpenMeal: () -> Unit,
-    onOpenTimer: () -> Unit,
     onOpenNotifications: () -> Unit,
     onOpenProfile: () -> Unit,
 ) {
@@ -132,23 +125,15 @@ private fun HomeContent(
                     workoutName = workout.name,
                     muscleGroups = muscles,
                     exerciseCount = workout.exercises.size,
+                    setCount = state.todaySetCount,
                     durationMin = workout.estimatedMinutes,
                     difficulty = workout.difficulty,
+                    exercises = state.todayExercises,
                     onStart = { onStartWorkout(workout.id) },
                 )
             } else {
                 RestDayCard()
             }
-        }
-
-        item {
-            QuickActionsRow(
-                onStart = { state.todayWorkout?.let { onStartWorkout(it.id) } },
-                onWeight = onOpenWeight,
-                onMeal = onOpenMeal,
-                onTimer = onOpenTimer,
-                startEnabled = state.todayWorkout != null,
-            )
         }
 
         item {
@@ -256,6 +241,13 @@ private fun HomePreview() {
                     com.reps.app.domain.model.MuscleGroup.CHEST,
                     com.reps.app.domain.model.MuscleGroup.SHOULDERS,
                 ),
+                todayExercises = listOf(
+                    TodayExercise("Bench Press", 3, 8),
+                    TodayExercise("Incline DB Press", 3, 10),
+                    TodayExercise("Cable Fly", 3, 12),
+                    TodayExercise("Overhead Press", 3, 8),
+                ),
+                todaySetCount = 12,
                 currentWeightKg = 78.4,
                 weeklyDeltaKg = -0.6,
                 units = UnitSystem.METRIC,
@@ -264,8 +256,6 @@ private fun HomePreview() {
             ),
             onStartWorkout = {},
             onOpenWeight = {},
-            onOpenMeal = {},
-            onOpenTimer = {},
             onOpenNotifications = {},
             onOpenProfile = {},
         )

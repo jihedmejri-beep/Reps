@@ -68,11 +68,10 @@
     <string name="home_start_workout">ابدأ التمرين</string>
     <string name="home_exercise_count">%1$d تمارين</string>
     <string name="home_duration_min">%1$d دقيقة</string>
-    <string name="home_quick_actions">إجراءات سريعة</string>
-    <string name="home_action_start">ابدأ</string>
-    <string name="home_action_weight">الوزن</string>
-    <string name="home_action_meal">وجبة</string>
-    <string name="home_action_timer">مؤقت</string>
+    <string name="home_set_count">%1$d مجموعات</string>
+    <string name="home_exercises_label">التمارين</string>
+    <string name="home_set_scheme">%1$d × %2$d</string>
+    <string name="home_more_exercises">+%1$d أخرى</string>
     <string name="home_rest_day">يوم راحة</string>
     <string name="home_rest_day_subtext">لا يوجد تمرين مجدول. الراحة جزء من الخطة.</string>
     <string name="home_daily_motivation">تحفيز يومي</string>

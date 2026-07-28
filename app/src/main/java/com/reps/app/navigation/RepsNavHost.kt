@@ -195,11 +195,10 @@ private fun TabPager(
         when (tabs[page]) {
             TopLevelTab.HOME -> HomeScreen(
                 onStartWorkout = { navController.navigate(Routes.workoutSession(it)) },
-                // These are tabs, not pushes: the quick actions move the pager
-                // rather than stacking a second copy of a tab on top of itself.
+                // The weight widget deep-links into Progress; that is a tab, so
+                // it moves the pager rather than pushing a second copy of a tab
+                // on top of itself.
                 onOpenWeight = { onSelectTab(TopLevelTab.PROGRESS) },
-                onOpenMeal = { onSelectTab(TopLevelTab.NUTRITION) },
-                onOpenTimer = { navController.navigate(Routes.TIMER) },
                 onOpenNotifications = { navController.navigate(Routes.NOTIFICATIONS) },
                 onOpenProfile = { onSelectTab(TopLevelTab.PROFILE) },
             )

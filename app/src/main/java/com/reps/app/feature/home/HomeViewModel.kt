@@ -25,12 +25,23 @@ import java.time.LocalDate
 import javax.inject.Inject
 import kotlin.math.abs
 
+/** One line in the Today card's exercise breakdown: "Bench Press · 3 × 8". */
+data class TodayExercise(
+    val name: String,
+    val setCount: Int,
+    val reps: Int,
+)
+
 data class HomeUiState(
     val userName: String = "",
     val streak: Streak = Streak(),
     val todayWorkout: Workout? = null,
     /** Resolved to localised labels by the screen, not stringified here. */
     val todayMuscleGroups: List<MuscleGroup> = emptyList(),
+    /** The workout's exercises in order, for the Today card breakdown. */
+    val todayExercises: List<TodayExercise> = emptyList(),
+    /** Sets across the whole workout, shown as a headline count. */
+    val todaySetCount: Int = 0,
     val currentWeightKg: Double? = null,
     val weeklyDeltaKg: Double? = null,
     val units: UnitSystem = UnitSystem.METRIC,
@@ -49,17 +60,43 @@ class HomeViewModel @Inject constructor(
 
     private val today = LocalDate.now()
 
-    private val todayWorkoutFlow: Flow<Pair<Workout?, List<MuscleGroup>>> =
+    /** Everything the Today card needs, resolved once the exercises are loaded. */
+    private data class TodayWorkout(
+        val workout: Workout? = null,
+        val muscles: List<MuscleGroup> = emptyList(),
+        val exercises: List<TodayExercise> = emptyList(),
+        val setCount: Int = 0,
+    )
+
+    private val todayWorkoutFlow: Flow<TodayWorkout> =
         workoutRepository.observeWorkoutFor(today).flatMapLatest { workout ->
             if (workout == null) {
-                flowOf(null to emptyList())
+                flowOf(TodayWorkout())
             } else {
                 flow {
-                    val exercises = exerciseRepository.getByIds(
-                        workout.exercises.sortedBy { it.position }.map { it.exerciseId },
+                    val ordered = workout.exercises.sortedBy { it.position }
+                    val byId = exerciseRepository.getByIds(ordered.map { it.exerciseId })
+                        .associateBy { it.id }
+                    val exercises = ordered.mapNotNull { we ->
+                        byId[we.exerciseId]?.let { ex ->
+                            TodayExercise(
+                                name = ex.name,
+                                setCount = we.sets.size,
+                                // Templates use one rep target per exercise; the
+                                // first set is representative.
+                                reps = we.sets.firstOrNull()?.reps ?: 0,
+                            )
+                        }
+                    }
+                    emit(
+                        TodayWorkout(
+                            workout = workout,
+                            // Distinct, in workout order: "Chest & Shoulders", not a set.
+                            muscles = ordered.mapNotNull { byId[it.exerciseId]?.muscleGroup }.distinct(),
+                            exercises = exercises,
+                            setCount = ordered.sumOf { it.sets.size },
+                        ),
                     )
-                    // Distinct, in workout order: "Chest & Shoulders", not a set.
-                    emit(workout to exercises.map { it.muscleGroup }.distinct())
                 }
             }
         }
@@ -68,15 +105,17 @@ class HomeViewModel @Inject constructor(
         userRepository.observeUser(),
         weightRepository.observeEntries(),
         todayWorkoutFlow,
-    ) { user, weights, (workout, muscles) ->
+    ) { user, weights, todayData ->
         HomeUiState(
             userName = user?.name.orEmpty(),
             streak = Streak(
                 count = user?.streakCount ?: 0,
                 lastWorkoutDate = user?.lastWorkoutDate,
             ),
-            todayWorkout = workout,
-            todayMuscleGroups = muscles,
+            todayWorkout = todayData.workout,
+            todayMuscleGroups = todayData.muscles,
+            todayExercises = todayData.exercises,
+            todaySetCount = todayData.setCount,
             currentWeightKg = weights.maxByOrNull { it.date }?.weightKg,
             weeklyDeltaKg = weeklyDelta(weights),
             units = user?.units ?: UnitSystem.METRIC,

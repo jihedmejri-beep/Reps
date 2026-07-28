@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.outlined.Schedule
@@ -21,22 +23,30 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.reps.app.R
 import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.domain.model.Difficulty
+import com.reps.app.feature.home.TodayExercise
+
+/** How many exercises the breakdown shows before collapsing the rest into "+N more". */
+private const val MaxVisibleExercises = 5
 
 /**
- * The headline card on Home: what is scheduled today and a way straight into it.
+ * The headline card on Home: what is scheduled today, a breakdown of the work it
+ * contains, and a way straight into it.
  */
 @Composable
 fun TodayWorkoutCard(
     workoutName: String,
     muscleGroups: String,
     exerciseCount: Int,
+    setCount: Int,
     durationMin: Int,
     difficulty: Difficulty,
+    exercises: List<TodayExercise>,
     onStart: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -107,6 +117,14 @@ fun TodayWorkoutCard(
                 )
             }
 
+            if (exercises.isNotEmpty()) {
+                ExerciseBreakdown(
+                    exercises = exercises,
+                    setCount = setCount,
+                    modifier = Modifier.padding(top = 16.dp),
+                )
+            }
+
             RepsButton(
                 text = stringResource(R.string.home_start_workout),
                 onClick = onStart,
@@ -114,6 +132,87 @@ fun TodayWorkoutCard(
                 modifier = Modifier.padding(top = 16.dp),
             )
         }
+    }
+}
+
+@Composable
+private fun ExerciseBreakdown(
+    exercises: List<TodayExercise>,
+    setCount: Int,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier.fillMaxWidth()) {
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(RepsTheme.colors.outline),
+        )
+        Row(
+            Modifier.fillMaxWidth().padding(top = 12.dp, bottom = 6.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = stringResource(R.string.home_exercises_label).uppercase(),
+                style = RepsTheme.textStyles.eyebrow,
+                color = RepsTheme.colors.textSecondary,
+            )
+            Text(
+                text = stringResource(R.string.home_set_count, setCount),
+                style = MaterialTheme.typography.labelMedium,
+                color = RepsTheme.colors.textSecondary,
+            )
+        }
+
+        exercises.take(MaxVisibleExercises).forEachIndexed { index, exercise ->
+            ExerciseRow(number = index + 1, exercise = exercise)
+        }
+
+        val hidden = exercises.size - MaxVisibleExercises
+        if (hidden > 0) {
+            Text(
+                text = stringResource(R.string.home_more_exercises, hidden),
+                style = MaterialTheme.typography.labelMedium,
+                color = RepsGreen,
+                modifier = Modifier.padding(top = 6.dp, start = 32.dp),
+            )
+        }
+    }
+}
+
+@Composable
+private fun ExerciseRow(number: Int, exercise: TodayExercise) {
+    Row(
+        Modifier.fillMaxWidth().padding(vertical = 5.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            Modifier
+                .size(22.dp)
+                .background(RepsGreen.copy(alpha = 0.12f), CircleShape),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = number.toString(),
+                style = MaterialTheme.typography.labelSmall,
+                color = RepsGreen,
+            )
+        }
+        Text(
+            text = exercise.name,
+            style = MaterialTheme.typography.bodyMedium,
+            color = RepsTheme.colors.textPrimary,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f).padding(start = 10.dp),
+        )
+        Text(
+            text = stringResource(R.string.home_set_scheme, exercise.setCount, exercise.reps),
+            style = MaterialTheme.typography.labelMedium,
+            color = RepsTheme.colors.textSecondary,
+            modifier = Modifier.padding(start = 8.dp),
+        )
     }
 }
 

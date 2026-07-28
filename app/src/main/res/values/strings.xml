@@ -68,11 +68,10 @@
     <string name="home_start_workout">Start Workout</string>
     <string name="home_exercise_count">%1$d exercises</string>
     <string name="home_duration_min">%1$d min</string>
-    <string name="home_quick_actions">Quick Actions</string>
-    <string name="home_action_start">Start</string>
-    <string name="home_action_weight">Weight</string>
-    <string name="home_action_meal">Meal</string>
-    <string name="home_action_timer">Timer</string>
+    <string name="home_set_count">%1$d sets</string>
+    <string name="home_exercises_label">Exercises</string>
+    <string name="home_set_scheme">%1$d × %2$d</string>
+    <string name="home_more_exercises">+%1$d more</string>
     <string name="home_rest_day">Rest day</string>
     <string name="home_rest_day_subtext">Nothing scheduled. Recovery is part of the plan.</string>
     <string name="home_daily_motivation">Daily Motivation</string>
