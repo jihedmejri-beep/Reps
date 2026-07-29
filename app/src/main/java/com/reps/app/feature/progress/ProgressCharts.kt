@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.reps.app.R
 import com.reps.app.core.components.RepsChip
 import com.reps.app.core.components.RepsLineChart
+import com.reps.app.core.theme.RepsAchievement
 import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.theme.RepsWeightDown
@@ -313,7 +314,7 @@ internal fun AchievementsSection(sessionCount: Int, streakCount: Int, prCount: I
                         Icon(
                             imageVector = icon,
                             contentDescription = null,
-                            tint = if (achievement.unlocked) RepsGreen else RepsTheme.colors.textTertiary.copy(alpha = 0.6f),
+                            tint = if (achievement.unlocked) RepsAchievement else RepsTheme.colors.textTertiary.copy(alpha = 0.6f),
                             modifier = Modifier.size(28.dp),
                         )
                         if (!achievement.unlocked) {

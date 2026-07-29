@@ -35,14 +35,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.reps.app.R
 import com.reps.app.core.components.DeltaDirection
-import com.reps.app.core.components.MotivationQuoteCard
 import com.reps.app.core.components.SectionHeader
 import com.reps.app.core.components.StatCard
-import com.reps.app.core.components.StreakBadge
 import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.util.UnitConverter
-import com.reps.app.domain.model.Streak
 import com.reps.app.navigation.OnTabReselected
 import com.reps.app.navigation.Routes
 import com.reps.app.navigation.navBarClearance
@@ -86,7 +83,6 @@ fun ProgressScreen(viewModel: ProgressViewModel = hiltViewModel()) {
         }
 
         item { HeroCard(state) }
-        item { MotivationQuoteCard(state.quote) }
         item { AnalyticsSection(state) }
         item { WeightChartCard(state, onAddWeight = { showAddWeight = true }) }
 
@@ -104,7 +100,6 @@ fun ProgressScreen(viewModel: ProgressViewModel = hiltViewModel()) {
             item { PersonalRecordsSection(prs, state.exercisesById) }
         }
 
-        item { StreakSection(state.streakCount) }
         item { AchievementsSection(state.sessions.size, state.streakCount, prs.size) }
 
         if (state.sessions.isNotEmpty()) {
@@ -305,12 +300,4 @@ private fun deltaLabel(curr: Double, prev: Double): String? {
     if (pct == 0) return null
     val signed = "${if (pct > 0) "+" else ""}$pct"
     return stringResource(R.string.progress_delta_vs_last_month, signed)
-}
-
-@Composable
-private fun StreakSection(streakCount: Int) {
-    Column {
-        Text(stringResource(R.string.progress_streak), style = MaterialTheme.typography.titleSmall, color = RepsTheme.colors.textPrimary, modifier = Modifier.padding(bottom = 10.dp))
-        StreakBadge(Streak(count = streakCount))
-    }
 }

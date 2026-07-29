@@ -32,6 +32,11 @@ val RepsProtein = Color(0xFFE2726B)
 val RepsCarbs = Color(0xFFF4B942)
 val RepsFat = Color(0xFF4F9DDE)
 
+// Rewards - unlocked achievements read as trophy gold, drawn from the palette's
+// amber family so they sit apart from the brand green without inventing a new
+// hue. Named for the reward, not overloaded onto the caution amber.
+val RepsAchievement = Color(0xFFF2A93B)
+
 // ---------------------------------------------------------------------------
 // Dark palette - the original brand surfaces. Kept as named constants so the
 // dark scheme, previews, and any code that wants an explicit dark value still
