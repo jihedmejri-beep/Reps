@@ -143,6 +143,7 @@ fun ProfileScreen(
                     onAccountSettings = { showAccountInfo = true },
                 )
             }
+            item { CreditsCard() }
             item {
                 Box(
                     Modifier
@@ -367,6 +368,33 @@ private fun PreferencesCard(
             icon = Icons.Outlined.Settings,
             onClick = onAccountSettings,
             showDivider = true,
+        )
+    }
+}
+
+// TODO: fill in the real author name from the Wikimedia Commons file page for
+// "Muscles front and back" before shipping - this placeholder must not go out
+// as-is.
+private const val MUSCLE_MAP_AUTHOR = "[author name pending]"
+
+@Composable
+private fun CreditsCard() {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .background(RepsTheme.colors.surface, MaterialTheme.shapes.large)
+            .padding(horizontal = RepsTheme.dimens.cardPadding, vertical = 14.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.profile_credits_title),
+            style = MaterialTheme.typography.titleSmall,
+            color = RepsTheme.colors.textPrimary,
+        )
+        Text(
+            text = stringResource(R.string.profile_credits_muscle_map, MUSCLE_MAP_AUTHOR),
+            style = MaterialTheme.typography.bodySmall,
+            color = RepsTheme.colors.textSecondary,
+            modifier = Modifier.padding(top = 6.dp),
         )
     }
 }

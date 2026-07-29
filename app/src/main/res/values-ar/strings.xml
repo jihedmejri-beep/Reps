@@ -166,6 +166,10 @@
     <string name="workouts_no_matches_title">لا توجد نتائج</string>
     <string name="workouts_no_matches_subtitle">جرّب بحثًا أو تصفية مختلفة.</string>
     <string name="exercise_media_cd">عرض توضيحي لـ %1$s</string>
+    <string name="exercise_tab_muscles">العضلات</string>
+    <string name="exercise_tab_howto">الطريقة</string>
+    <string name="exercise_howto_placeholder">الصور التوضيحية خطوة بخطوة قريبًا.</string>
+    <string name="muscle_map_cd">خريطة الجسم تُبرز %1$s</string>
     <string name="workouts_builder_selected">تم اختيار %1$d</string>
     <string name="workouts_builder_remove_cd">إزالة التمرين</string>
     <string name="workouts_builder_empty">لم تتم إضافة أي تمارين بعد.</string>
@@ -269,6 +273,8 @@
     <string name="profile_units_metric">متري (كجم، سم)</string>
     <string name="profile_units_imperial">إمبراطوري (رطل، بوصة)</string>
     <string name="profile_settings">إعدادات الحساب</string>
+    <string name="profile_credits_title">الاعتمادات والتراخيص</string>
+    <string name="profile_credits_muscle_map">مخطط العضلات مقتبس من "Muscles front and back" بواسطة %1$s، عبر ويكيميديا كومنز، مرخّص بموجب CC BY-SA 4.0 (creativecommons.org/licenses/by-sa/4.0). تم تعديله للاستخدام في Reps.</string>
     <string name="profile_sign_out">تسجيل الخروج</string>
     <string name="profile_save">حفظ التغييرات</string>
     <string name="profile_notifications">الإشعارات</string>

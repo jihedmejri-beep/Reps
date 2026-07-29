@@ -166,6 +166,10 @@
     <string name="workouts_no_matches_title">Aucun résultat</string>
     <string name="workouts_no_matches_subtitle">Essaie une autre recherche ou un autre filtre.</string>
     <string name="exercise_media_cd">Démonstration de %1$s</string>
+    <string name="exercise_tab_muscles">Muscles</string>
+    <string name="exercise_tab_howto">Technique</string>
+    <string name="exercise_howto_placeholder">Photos étape par étape à venir.</string>
+    <string name="muscle_map_cd">Schéma corporel mettant en évidence : %1$s</string>
     <string name="workouts_builder_selected">%1$d sélectionné(s)</string>
     <string name="workouts_builder_remove_cd">Retirer l\'exercice</string>
     <string name="workouts_builder_empty">Aucun exercice ajouté pour l\'instant.</string>
@@ -269,6 +273,8 @@
     <string name="profile_units_metric">Métrique (kg, cm)</string>
     <string name="profile_units_imperial">Impérial (lb, po)</string>
     <string name="profile_settings">Paramètres du compte</string>
+    <string name="profile_credits_title">Crédits et licences</string>
+    <string name="profile_credits_muscle_map">Schéma musculaire adapté de « Muscles front and back » par %1$s, via Wikimedia Commons, sous licence CC BY-SA 4.0 (creativecommons.org/licenses/by-sa/4.0). Modifié pour une utilisation dans Reps.</string>
     <string name="profile_sign_out">Se déconnecter</string>
     <string name="profile_save">Enregistrer</string>
     <string name="profile_notifications">Notifications</string>
