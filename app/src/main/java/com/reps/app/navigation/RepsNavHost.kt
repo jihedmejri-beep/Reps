@@ -45,6 +45,7 @@ import com.reps.app.feature.auth.signup.SignUpScreen
 import com.reps.app.feature.home.HomeScreen
 import com.reps.app.feature.notifications.NotificationsScreen
 import com.reps.app.feature.nutrition.NutritionScreen
+import com.reps.app.feature.nutrition.assistant.AssistantScreen
 import com.reps.app.feature.onboarding.OnboardingScreen
 import com.reps.app.feature.profile.ProfileScreen
 import com.reps.app.feature.progress.ProgressScreen
@@ -211,7 +212,9 @@ private fun TabPager(
                 onOpenBuilder = { navController.navigate(Routes.WORKOUT_BUILDER) },
             )
 
-            TopLevelTab.NUTRITION -> NutritionScreen()
+            TopLevelTab.NUTRITION -> NutritionScreen(
+                onOpenAssistant = { navController.navigate(Routes.NUTRITION_ASSISTANT) },
+            )
 
             TopLevelTab.PROFILE -> ProfileScreen(
                 onSignedOut = { navController.replaceWith(Routes.LOGIN) },
@@ -289,6 +292,9 @@ private fun NavGraphBuilder.repsGraph(
     composable(Routes.TIMER) { Placeholder("Timer") }
     composable(Routes.NOTIFICATIONS) {
         NotificationsScreen(onBack = { navController.popBackStack() })
+    }
+    composable(Routes.NUTRITION_ASSISTANT) {
+        AssistantScreen(onBack = { navController.popBackStack() })
     }
 }
 

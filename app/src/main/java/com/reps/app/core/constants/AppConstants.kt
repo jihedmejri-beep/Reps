@@ -23,6 +23,11 @@ object AppConstants {
         const val MEALS = "meals"
     }
 
+    /** Cloud Functions backing the nutrition assistant. See /functions. */
+    object Functions {
+        const val REGION = "us-central1"
+    }
+
     object Notifications {
         const val CHANNEL_REMINDERS = "reps_reminders"
         const val CHANNEL_TIMER = "reps_timer"

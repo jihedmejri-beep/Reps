@@ -302,6 +302,27 @@
     <string name="notification_workout_today">%1$s today</string>
     <string name="notification_workout_today_body">Your session is scheduled. Keep the streak alive.</string>
 
+    <!-- Nutrition assistant -->
+    <string name="assistant_eyebrow">Assistant</string>
+    <string name="assistant_title">Log with AI</string>
+    <string name="assistant_open">Log a meal by describing it</string>
+    <string name="assistant_intro">Tell me what you ate and I\'ll work out the nutrition. Plain language is fine.</string>
+    <string name="assistant_hint">e.g. grilled chicken with rice</string>
+    <string name="assistant_send">Send</string>
+    <string name="assistant_thinking">Thinking…</string>
+    <string name="assistant_analysing">Looking up the nutrition…</string>
+    <string name="assistant_logged">Added to today</string>
+    <string name="assistant_from_cache">From cache</string>
+    <string name="assistant_partial">Some ingredients weren\'t found, so these totals are incomplete: %1$s</string>
+    <string name="assistant_source">Source: USDA FoodData Central</string>
+    <string name="assistant_retry">Try again</string>
+    <string name="assistant_error_network">You appear to be offline.</string>
+    <string name="assistant_error_signin">Sign in to use the assistant.</string>
+    <string name="assistant_error_rate_limited">Too many requests just now. Give it a moment.</string>
+    <string name="assistant_error_model">The assistant is temporarily unavailable.</string>
+    <string name="assistant_error_food_db">The food database isn\'t responding.</string>
+    <string name="assistant_error_unknown">Something went wrong.</string>
+
     <!-- Content descriptions -->
     <string name="cd_logo">REPS logo</string>
     <string name="cd_back">Navigate back</string>

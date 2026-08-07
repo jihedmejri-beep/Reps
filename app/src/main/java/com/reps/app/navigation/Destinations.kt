@@ -31,6 +31,9 @@ object Routes {
     const val TIMER = "timer"
     const val NOTIFICATIONS = "notifications"
 
+    /** The conversational meal logger, pushed from the Nutrition tab. */
+    const val NUTRITION_ASSISTANT = "nutrition/assistant"
+
     fun exerciseDetail(exerciseId: String) = "exercise/$exerciseId"
     fun workoutSession(workoutId: String) = "workout/session/$workoutId"
 }

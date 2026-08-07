@@ -24,6 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material3.Icon
@@ -68,7 +69,10 @@ import com.reps.app.navigation.navBarClearance
 import kotlin.math.roundToInt
 
 @Composable
-fun NutritionScreen(viewModel: NutritionViewModel = hiltViewModel()) {
+fun NutritionScreen(
+    onOpenAssistant: () -> Unit = {},
+    viewModel: NutritionViewModel = hiltViewModel(),
+) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val listState = androidx.compose.foundation.lazy.rememberLazyListState()
     var showAddMeal by remember { mutableStateOf(false) }
@@ -109,6 +113,7 @@ fun NutritionScreen(viewModel: NutritionViewModel = hiltViewModel()) {
         }
 
         item { MacroSummaryCard(state) }
+        item { AssistantEntryCard(onClick = onOpenAssistant) }
         item { WaterCard(state, onAdd = viewModel::addWater, onRemove = viewModel::removeWater) }
 
         if (state.meals.isEmpty() && !state.loading) {
@@ -195,6 +200,48 @@ private fun MacroBar(label: String, value: Double, target: Double, color: Color)
                 .background(RepsTheme.colors.surfaceElevated, RoundedCornerShape(3.dp)),
         ) {
             Box(Modifier.fillMaxWidth(animated).height(6.dp).background(color, RoundedCornerShape(3.dp)))
+        }
+    }
+}
+
+/**
+ * Entry point to the conversational logger. Sits directly under the macro
+ * summary because describing a meal is the fastest way to fill that ring - the
+ * manual sheet stays available from the header for anyone who prefers it.
+ */
+@Composable
+private fun AssistantEntryCard(onClick: () -> Unit) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .background(RepsTheme.colors.surface, MaterialTheme.shapes.large)
+            .clickable(onClickLabel = stringResource(R.string.assistant_open), onClick = onClick)
+            .padding(RepsTheme.dimens.cardPadding),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            Modifier.size(34.dp).background(RepsGreen, CircleShape),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                Icons.Outlined.AutoAwesome,
+                contentDescription = null,
+                tint = RepsOnGreen,
+                modifier = Modifier.size(18.dp),
+            )
+        }
+        Column(Modifier.weight(1f).padding(start = 10.dp)) {
+            Text(
+                stringResource(R.string.assistant_title),
+                style = MaterialTheme.typography.titleSmall,
+                color = RepsTheme.colors.textPrimary,
+            )
+            Text(
+                stringResource(R.string.assistant_open),
+                style = MaterialTheme.typography.bodySmall,
+                color = RepsTheme.colors.textSecondary,
+                modifier = Modifier.padding(top = 2.dp),
+            )
         }
     }
 }
