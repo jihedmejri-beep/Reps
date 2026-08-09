@@ -253,6 +253,51 @@
     <string name="nutrition_water_remove_cd">إزالة كوب ماء</string>
     <string name="nutrition_ingredient_required">أضف اسماً وكمية بالغرام.</string>
 
+    <!-- Nutrition assistant -->
+    <string name="assistant_title">مساعد التغذية</string>
+    <string name="assistant_badge">AI</string>
+    <string name="assistant_fab_cd">اسأل مساعد التغذية الذكي</string>
+    <string name="assistant_menu_cd">خيارات إضافية</string>
+    <string name="assistant_history">سجل المحادثات</string>
+    <string name="assistant_new_chat">محادثة جديدة</string>
+    <string name="assistant_welcome_body">كيف أساعدك في تغذيتك اليوم؟</string>
+    <string name="assistant_suggestion_meal">حلّل وجبتي</string>
+    <string name="assistant_suggestion_calories">احسب السعرات</string>
+    <string name="assistant_suggestion_protein">تحقق من البروتين</string>
+    <string name="assistant_suggestion_eat">ماذا آكل؟</string>
+    <string name="assistant_composer_hint">راسل مساعد التغذية…</string>
+    <string name="assistant_send_cd">إرسال الرسالة</string>
+    <string name="assistant_typing_cd">المساعد يكتب</string>
+    <string name="assistant_history_eyebrow">المساعد</string>
+    <string name="assistant_history_title">السجل</string>
+    <string name="assistant_history_empty">لا توجد محادثات بعد.</string>
+
+    <!--
+      Placeholder assistant replies. These are demo copy for the interface only -
+      they are replaced wholesale once the real assistant is connected, so nothing
+      here should be read as a nutrition figure.
+    -->
+    <string name="assistant_reply_meal">أخبرني بما كان في الطبق وبالكمية التقريبية لكل صنف — وسأحلل الوجبة إلى سعرات وماكروز.</string>
+    <string name="assistant_reply_calories">أعطني الأصناف وكمياتها وسأجمعها لك. الكميات هي الأهم هنا، فقدّرها بأفضل ما تستطيع.</string>
+    <string name="assistant_reply_protein">البروتين هو الهدف الذي يقصّر فيه معظم الناس. سجّل ما أكلته حتى الآن وسأخبرك بالمتبقي لبلوغ رقم اليوم.</string>
+    <string name="assistant_reply_eat">وجبة يقودها البروتين مع حصة كربوهيدرات معقولة تناسب السعرات المتبقية لديك — دجاج مشوي مع أرز وخضار ورقية خيار موفّق.</string>
+    <string name="assistant_reply_meal_estimate">مما وصفته يبدو هذا نحو 520 سعرة تقريباً. أكّد الكميات وسأضبط الرقم أكثر.</string>
+    <string name="assistant_reply_balance">هذا يناسب يومك جيداً. البروتين هو ما يستحق المتابعة — بقية أهدافك فيها متسع.</string>
+    <string name="assistant_reply_more_detail">سؤال جيد. أخبرني أكثر عن الكميات لأكون أدق.</string>
+
+    <string name="assistant_conv_breakfast">سعرات الفطور</string>
+    <string name="assistant_conv_protein">كمية البروتين</string>
+    <string name="assistant_conv_dinner">أفكار عشاء صحية</string>
+    <string name="assistant_conv_postworkout">وجبة بعد التمرين</string>
+    <string name="assistant_conv_breakfast_q">كم سعرة كانت في فطوري؟</string>
+    <string name="assistant_conv_breakfast_a">ثلاث بيضات وشريحتا خبز محمّص وموزة تعادل نحو 520 سعرة، مع حوالي 27 غراماً من البروتين.</string>
+    <string name="assistant_conv_postworkout_q">ماذا آكل بعد التمرين؟</string>
+    <string name="assistant_conv_postworkout_a">بروتين وكربوهيدرات معاً، خلال ساعة أو ساعتين. مخفوق مع موزة يفي بالغرض، ووجبة حقيقية تفي به أيضاً.</string>
+    <string name="assistant_time_today">اليوم</string>
+    <string name="assistant_time_yesterday">أمس</string>
+    <string name="assistant_time_this_week">في وقت سابق هذا الأسبوع</string>
+    <string name="assistant_time_last_week">الأسبوع الماضي</string>
+
     <!-- Profile -->
     <string name="profile_eyebrow">الحساب</string>
     <string name="profile_title">الملف الشخصي</string>

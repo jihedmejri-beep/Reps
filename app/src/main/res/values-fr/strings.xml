@@ -253,6 +253,51 @@
     <string name="nutrition_water_remove_cd">Retirer un verre d\'eau</string>
     <string name="nutrition_ingredient_required">Ajoute un nom et une quantité en grammes.</string>
 
+    <!-- Nutrition assistant -->
+    <string name="assistant_title">Assistant Nutrition</string>
+    <string name="assistant_badge">IA</string>
+    <string name="assistant_fab_cd">Interroger l\'assistant nutrition IA</string>
+    <string name="assistant_menu_cd">Plus d\'options</string>
+    <string name="assistant_history">Historique des conversations</string>
+    <string name="assistant_new_chat">Nouvelle conversation</string>
+    <string name="assistant_welcome_body">Comment puis-je t\'aider côté nutrition aujourd\'hui ?</string>
+    <string name="assistant_suggestion_meal">Analyser mon repas</string>
+    <string name="assistant_suggestion_calories">Calculer les calories</string>
+    <string name="assistant_suggestion_protein">Vérifier mes protéines</string>
+    <string name="assistant_suggestion_eat">Que devrais-je manger ?</string>
+    <string name="assistant_composer_hint">Écris à l\'assistant nutrition…</string>
+    <string name="assistant_send_cd">Envoyer le message</string>
+    <string name="assistant_typing_cd">L\'assistant écrit</string>
+    <string name="assistant_history_eyebrow">Assistant</string>
+    <string name="assistant_history_title">Historique</string>
+    <string name="assistant_history_empty">Aucune conversation pour le moment.</string>
+
+    <!--
+      Placeholder assistant replies. These are demo copy for the interface only -
+      they are replaced wholesale once the real assistant is connected, so nothing
+      here should be read as a nutrition figure.
+    -->
+    <string name="assistant_reply_meal">Dis-moi ce qu\'il y avait dans l\'assiette et environ quelle quantité de chaque — je décompose le repas en calories et macros.</string>
+    <string name="assistant_reply_calories">Donne-moi les aliments et leurs portions et je fais le total. Les portions comptent plus que tout ici, alors estime-les au mieux.</string>
+    <string name="assistant_reply_protein">Les protéines sont l\'objectif que la plupart des gens manquent. Enregistre ce que tu as mangé et je te dirai ce qu\'il reste pour atteindre le chiffre du jour.</string>
+    <string name="assistant_reply_eat">Un repas mené par les protéines avec une portion correcte de glucides irait bien avec les calories qu\'il te reste — poulet grillé, riz et un légume vert reste une valeur sûre.</string>
+    <string name="assistant_reply_meal_estimate">D\'après ta description, cela ressemble à environ 520 kcal. Confirme les portions et j\'affinerai.</string>
+    <string name="assistant_reply_balance">Cela s\'intègre bien à ta journée. Les protéines sont à surveiller — le reste de tes objectifs a de la marge.</string>
+    <string name="assistant_reply_more_detail">Bonne question. Donne-moi un peu plus de détails sur les portions et je serai plus précis.</string>
+
+    <string name="assistant_conv_breakfast">Calories du petit-déjeuner</string>
+    <string name="assistant_conv_protein">Mon apport en protéines</string>
+    <string name="assistant_conv_dinner">Idées de dîner sain</string>
+    <string name="assistant_conv_postworkout">Repas après l\'entraînement</string>
+    <string name="assistant_conv_breakfast_q">Combien de calories dans mon petit-déjeuner ?</string>
+    <string name="assistant_conv_breakfast_a">Trois œufs, deux tranches de pain grillé et une banane font environ 520 kcal, avec à peu près 27 g de protéines.</string>
+    <string name="assistant_conv_postworkout_q">Que manger après l\'entraînement ?</string>
+    <string name="assistant_conv_postworkout_a">Protéines et glucides ensemble, dans l\'heure ou les deux heures qui suivent. Un shake avec une banane fait l\'affaire, un vrai repas aussi.</string>
+    <string name="assistant_time_today">Aujourd\'hui</string>
+    <string name="assistant_time_yesterday">Hier</string>
+    <string name="assistant_time_this_week">Plus tôt cette semaine</string>
+    <string name="assistant_time_last_week">La semaine dernière</string>
+
     <!-- Profile -->
     <string name="profile_eyebrow">Compte</string>
     <string name="profile_title">Profil</string>

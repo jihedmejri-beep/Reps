@@ -253,6 +253,51 @@
     <string name="nutrition_water_remove_cd">Remove a glass of water</string>
     <string name="nutrition_ingredient_required">Add a name and gram amount.</string>
 
+    <!-- Nutrition assistant -->
+    <string name="assistant_title">Nutrition Assistant</string>
+    <string name="assistant_badge">AI</string>
+    <string name="assistant_fab_cd">Ask the Nutrition AI Assistant</string>
+    <string name="assistant_menu_cd">More options</string>
+    <string name="assistant_history">Conversation History</string>
+    <string name="assistant_new_chat">New Chat</string>
+    <string name="assistant_welcome_body">How can I help with your nutrition today?</string>
+    <string name="assistant_suggestion_meal">Analyse my meal</string>
+    <string name="assistant_suggestion_calories">Calculate calories</string>
+    <string name="assistant_suggestion_protein">Check my protein intake</string>
+    <string name="assistant_suggestion_eat">What should I eat?</string>
+    <string name="assistant_composer_hint">Message Nutrition Assistant…</string>
+    <string name="assistant_send_cd">Send message</string>
+    <string name="assistant_typing_cd">Assistant is typing</string>
+    <string name="assistant_history_eyebrow">Assistant</string>
+    <string name="assistant_history_title">History</string>
+    <string name="assistant_history_empty">No conversations yet.</string>
+
+    <!--
+      Placeholder assistant replies. These are demo copy for the interface only -
+      they are replaced wholesale once the real assistant is connected, so nothing
+      here should be read as a nutrition figure.
+    -->
+    <string name="assistant_reply_meal">Tell me what was on the plate and roughly how much of each — I\'ll break the meal down into calories and macros.</string>
+    <string name="assistant_reply_calories">Give me the foods and their portions and I\'ll add them up. Portions matter more than anything else here, so estimate them as best you can.</string>
+    <string name="assistant_reply_protein">Protein is the target most people fall short on. Log what you\'ve eaten so far and I\'ll tell you how much is left to hit today\'s number.</string>
+    <string name="assistant_reply_eat">Something protein-led with a decent carb portion would suit the calories you have left — grilled chicken with rice and a green vegetable is a solid default.</string>
+    <string name="assistant_reply_meal_estimate">From what you\'ve described that looks like roughly 520 kcal. Confirm the portions and I can tighten that up.</string>
+    <string name="assistant_reply_balance">That fits your day well. Protein is the one worth watching — the rest of your targets have room in them.</string>
+    <string name="assistant_reply_more_detail">Good question. Tell me a little more about the portions and I can be more precise.</string>
+
+    <string name="assistant_conv_breakfast">Breakfast calories</string>
+    <string name="assistant_conv_protein">My protein intake</string>
+    <string name="assistant_conv_dinner">Healthy dinner ideas</string>
+    <string name="assistant_conv_postworkout">Post-workout meal</string>
+    <string name="assistant_conv_breakfast_q">How many calories were in my breakfast?</string>
+    <string name="assistant_conv_breakfast_a">Three eggs, two slices of toast and a banana comes to about 520 kcal, with roughly 27g of protein.</string>
+    <string name="assistant_conv_postworkout_q">What should I eat after training?</string>
+    <string name="assistant_conv_postworkout_a">Protein and carbs together, within an hour or two. A shake with a banana works, but a real meal works just as well.</string>
+    <string name="assistant_time_today">Today</string>
+    <string name="assistant_time_yesterday">Yesterday</string>
+    <string name="assistant_time_this_week">Earlier this week</string>
+    <string name="assistant_time_last_week">Last week</string>
+
     <!-- Profile -->
     <string name="profile_eyebrow">Account</string>
     <string name="profile_title">Profile</string>

@@ -25,6 +25,14 @@ object Routes {
     const val NUTRITION = "nutrition"
     const val PROFILE = "profile"
 
+    /**
+     * The nutrition assistant, pushed from the Nutrition tab. History is a
+     * separate destination on top of it rather than a sheet, so the two share
+     * one ViewModel through the assistant's back stack entry.
+     */
+    const val NUTRITION_ASSISTANT = "nutrition/assistant"
+    const val NUTRITION_ASSISTANT_HISTORY = "nutrition/assistant/history"
+
     const val EXERCISE_DETAIL = "exercise/{exerciseId}"
     const val WORKOUT_BUILDER = "workout/builder"
     const val WORKOUT_SESSION = "workout/session/{workoutId}"
