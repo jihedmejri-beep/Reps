@@ -1,0 +1,52 @@
+{
+  "identityHash": "b49926e44f0990e6edfc12d83e80cc82",
+  "source": {
+    "sqlite": "database/reps_dataset/data/output/reps_offline.sqlite",
+    "json": "database/reps_dataset/data/output/reps_exercises_clean.json"
+  },
+  "problems": [],
+  "exercises": 828,
+  "translations": 2484,
+  "muscles": 1736,
+  "duplicateMuscleRowsCollapsed": 0,
+  "equipment": 710,
+  "duplicateEquipmentRowsCollapsed": 0,
+  "aliases": 95,
+  "images": 336,
+  "imagesWithoutRemoteUrl": 0,
+  "svgCopied": 32,
+  "svgMissing": [],
+  "muscleSvgAssets": 30,
+  "bodyDiagrams": 2,
+  "integrity": {
+    "sourceIntegrityCheck": "ok",
+    "duplicateExerciseIds": 0,
+    "duplicateExternalIds": 0,
+    "exercisesMissingAnyTranslation": 0,
+    "exercisesWithoutMuscles": 122,
+    "exercisesWithoutPrimaryMuscle": 128,
+    "exercisesWithoutEquipment": 181,
+    "exercisesWithoutImage": 564,
+    "exercisesWithMultipleMainImages": 10,
+    "orphanRows": {
+      "translations": 0,
+      "muscles": 0,
+      "equipment": 0,
+      "images": 0
+    },
+    "muscleNamesWithoutSvg": [],
+    "categories": {
+      "Back": 154,
+      "Shoulders": 106,
+      "Arms": 136,
+      "Abs": 100,
+      "Legs": 195,
+      "Calves": 12,
+      "Chest": 78,
+      "Cardio": 47
+    },
+    "hasDifficultyData": false
+  },
+  "outputBytes": 3354624,
+  "outputPath": "app/src/main/assets/reps_exercises.db"
+}

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">REPS</string>
 
@@ -145,7 +145,6 @@
     <string name="workouts_title">Exercises</string>
     <string name="workouts_filter_all">All</string>
     <string name="workouts_search">Search exercises</string>
-    <string name="workouts_common_mistakes">Common mistakes</string>
     <string name="workouts_description">Description</string>
     <string name="workouts_builder_eyebrow">Build</string>
     <string name="workouts_builder_title">New Workout</string>
@@ -167,9 +166,23 @@
     <string name="workouts_no_matches_subtitle">Try a different search or filter.</string>
     <string name="exercise_media_cd">%1$s demonstration</string>
     <string name="exercise_tab_muscles">Muscles</string>
-    <string name="exercise_tab_howto">How-to</string>
-    <string name="exercise_howto_placeholder">Step-by-step photos coming soon.</string>
+    <string name="exercise_tab_demo">Demo</string>
     <string name="muscle_map_cd">Body map highlighting the %1$s</string>
+    <string name="exercise_body_front">Front</string>
+    <string name="exercise_body_back">Back</string>
+    <string name="exercise_no_muscle_data">No muscle data for this exercise.</string>
+    <string name="exercise_media_none">No demonstration image available.</string>
+    <string name="exercise_media_unavailable">Demonstration unavailable offline.</string>
+    <string name="exercise_section_muscles">Target muscles</string>
+    <string name="exercise_section_starting_position">Starting position</string>
+    <string name="exercise_section_steps">How to perform</string>
+    <string name="exercise_section_tips">Tips</string>
+    <string name="exercise_section_notes">Notes</string>
+    <string name="exercise_section_aliases">Also known as</string>
+    <string name="exercise_no_instructions">No instructions recorded for this exercise yet.</string>
+    <string name="exercise_license">Exercise data: %1$s</string>
+    <string name="exercise_not_found_title">Exercise unavailable</string>
+    <string name="exercise_not_found_body">This exercise is not in the catalogue on this device.</string>
     <string name="workouts_builder_selected">%1$d selected</string>
     <string name="workouts_builder_remove_cd">Remove exercise</string>
     <string name="workouts_builder_empty">No exercises added yet.</string>
@@ -191,6 +204,7 @@
     <string name="muscle_arms">Arms</string>
     <string name="muscle_abs">Abs</string>
     <string name="muscle_glutes">Glutes</string>
+    <string name="muscle_calves">Calves</string>
     <string name="muscle_cardio">Cardio</string>
 
     <!-- Difficulty -->

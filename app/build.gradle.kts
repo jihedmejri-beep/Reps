@@ -56,6 +56,21 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    androidResources {
+        // The exercise catalogue ships as a prebuilt SQLite file. AAPT compresses
+        // assets by default, and Room cannot open a compressed asset - it has to
+        // copy it out byte-for-byte on first launch.
+        noCompress += "db"
+    }
+}
+
+// Room's exported schema is what tools/build_exercise_db.py reads to generate
+// assets/reps_exercises.db with the exact DDL and identity hash Room will
+// validate against at open time. Without this the generated file drifts.
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+    arg("room.generateKotlin", "true")
 }
 
 composeCompiler {
@@ -90,6 +105,10 @@ dependencies {
 
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.work.runtime.ktx)
+
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)

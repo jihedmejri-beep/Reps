@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- REPS is the brand name and stays in Latin script across all locales. -->
 
@@ -145,7 +145,6 @@
     <string name="workouts_title">التمارين</string>
     <string name="workouts_filter_all">الكل</string>
     <string name="workouts_search">ابحث عن تمرين</string>
-    <string name="workouts_common_mistakes">أخطاء شائعة</string>
     <string name="workouts_description">الوصف</string>
     <string name="workouts_builder_eyebrow">إنشاء</string>
     <string name="workouts_builder_title">تمرين جديد</string>
@@ -167,9 +166,23 @@
     <string name="workouts_no_matches_subtitle">جرّب بحثًا أو تصفية مختلفة.</string>
     <string name="exercise_media_cd">عرض توضيحي لـ %1$s</string>
     <string name="exercise_tab_muscles">العضلات</string>
-    <string name="exercise_tab_howto">الطريقة</string>
-    <string name="exercise_howto_placeholder">الصور التوضيحية خطوة بخطوة قريبًا.</string>
+    <string name="exercise_tab_demo">عرض</string>
     <string name="muscle_map_cd">خريطة الجسم تُبرز %1$s</string>
+    <string name="exercise_body_front">الأمام</string>
+    <string name="exercise_body_back">الخلف</string>
+    <string name="exercise_no_muscle_data">لا توجد بيانات عضلية لهذا التمرين.</string>
+    <string name="exercise_media_none">لا تتوفر صورة توضيحية.</string>
+    <string name="exercise_media_unavailable">العرض التوضيحي غير متاح دون اتصال.</string>
+    <string name="exercise_section_muscles">العضلات المستهدفة</string>
+    <string name="exercise_section_starting_position">وضعية البداية</string>
+    <string name="exercise_section_steps">طريقة الأداء</string>
+    <string name="exercise_section_tips">نصائح</string>
+    <string name="exercise_section_notes">ملاحظات</string>
+    <string name="exercise_section_aliases">يُعرف أيضًا بـ</string>
+    <string name="exercise_no_instructions">لا توجد تعليمات مسجّلة لهذا التمرين بعد.</string>
+    <string name="exercise_license">بيانات التمرين: %1$s</string>
+    <string name="exercise_not_found_title">التمرين غير متاح</string>
+    <string name="exercise_not_found_body">هذا التمرين غير موجود في الكتالوج على هذا الجهاز.</string>
     <string name="workouts_builder_selected">تم اختيار %1$d</string>
     <string name="workouts_builder_remove_cd">إزالة التمرين</string>
     <string name="workouts_builder_empty">لم تتم إضافة أي تمارين بعد.</string>
@@ -191,6 +204,7 @@
     <string name="muscle_arms">الذراعان</string>
     <string name="muscle_abs">البطن</string>
     <string name="muscle_glutes">المؤخرة</string>
+    <string name="muscle_calves">السمانة</string>
     <string name="muscle_cardio">الكارديو</string>
 
     <!-- Difficulty -->

@@ -1,12 +1,10 @@
-package com.reps.app.data.fake
+﻿package com.reps.app.data.fake
 
 import com.reps.app.domain.model.Difficulty
-import com.reps.app.domain.model.Exercise
 import com.reps.app.domain.model.ExerciseSet
 import com.reps.app.domain.model.FoodItem
 import com.reps.app.domain.model.Goal
 import com.reps.app.domain.model.Meal
-import com.reps.app.domain.model.MuscleGroup
 import com.reps.app.domain.model.Sex
 import com.reps.app.domain.model.UnitSystem
 import com.reps.app.domain.model.User
@@ -20,7 +18,12 @@ import kotlin.math.sin
 import kotlin.random.Random
 
 /**
- * Stand-in content for building the UI before Firestore is wired.
+ * Stand-in *user* content for building the UI before Firestore is wired: the
+ * profile, the workout templates, the weight history, the meals.
+ *
+ * The exercise catalogue is no longer part of this - it is real, and lives in
+ * `assets/reps_exercises.db`. What remains here references it by real id (see
+ * [SampleData.CatalogIds]) rather than inventing exercises of its own.
  *
  * The figures mirror the reference mockups (Alex Rivera, a 12-day streak, Push
  * Day at 78.4 kg) so the screens can be compared against them directly.
@@ -41,218 +44,30 @@ object SampleData {
         lastWorkoutDate = LocalDate.now().minusDays(1),
     )
 
-    val exercises: List<Exercise> = listOf(
-        Exercise(
-            id = "bench-press",
-            name = "Barbell Bench Press",
-            muscleGroup = MuscleGroup.CHEST,
-            equipment = "Barbell",
-            description = "Lie flat, grip just wider than shoulder width, lower the bar to " +
-                "mid-chest under control, then drive it back up without bouncing.",
-            mistakes = listOf(
-                "Flaring the elbows to 90 degrees, which strains the shoulder joint.",
-                "Bouncing the bar off the chest instead of pausing under control.",
-                "Lifting the hips off the bench to force the last rep.",
-            ),
-            difficulty = Difficulty.INTERMEDIATE,
-        ),
-        Exercise(
-            id = "incline-db-press",
-            name = "Incline Dumbbell Press",
-            muscleGroup = MuscleGroup.CHEST,
-            equipment = "Dumbbells",
-            description = "Set the bench to roughly 30 degrees and press the dumbbells from " +
-                "the outer chest to directly over the collarbone.",
-            mistakes = listOf(
-                "Setting the incline too steep, turning it into a shoulder press.",
-                "Clashing the dumbbells together at the top and losing tension.",
-            ),
-            difficulty = Difficulty.BEGINNER,
-        ),
-        Exercise(
-            id = "cable-fly",
-            name = "Cable Fly",
-            muscleGroup = MuscleGroup.CHEST,
-            equipment = "Cable machine",
-            description = "With a slight bend in the elbows, bring both handles together in " +
-                "front of the sternum and squeeze before returning slowly.",
-            mistakes = listOf(
-                "Bending the elbows through the rep, which turns it into a press.",
-                "Going so heavy the range of motion collapses.",
-            ),
-            difficulty = Difficulty.BEGINNER,
-        ),
-        Exercise(
-            id = "overhead-press",
-            name = "Overhead Press",
-            muscleGroup = MuscleGroup.SHOULDERS,
-            equipment = "Barbell",
-            description = "Press the bar from the front rack to lockout overhead, moving the " +
-                "head back through as the bar passes the face.",
-            mistakes = listOf(
-                "Leaning back excessively and turning it into an incline press.",
-                "Stopping short of full lockout.",
-            ),
-            difficulty = Difficulty.INTERMEDIATE,
-        ),
-        Exercise(
-            id = "lateral-raise",
-            name = "Lateral Raise",
-            muscleGroup = MuscleGroup.SHOULDERS,
-            equipment = "Dumbbells",
-            description = "Raise the dumbbells out to the sides to shoulder height, leading " +
-                "with the elbows.",
-            mistakes = listOf(
-                "Swinging the weight up with momentum from the hips.",
-                "Raising above shoulder height, which shifts the work to the traps.",
-            ),
-            difficulty = Difficulty.BEGINNER,
-        ),
-        Exercise(
-            id = "triceps-pushdown",
-            name = "Triceps Pushdown",
-            muscleGroup = MuscleGroup.ARMS,
-            equipment = "Cable machine",
-            description = "Keep the elbows pinned to the ribs and extend the forearms down " +
-                "until the arms are straight.",
-            mistakes = listOf(
-                "Letting the elbows drift forward and away from the body.",
-                "Leaning over the bar to push with bodyweight.",
-            ),
-            difficulty = Difficulty.BEGINNER,
-        ),
-        Exercise(
-            id = "deadlift",
-            name = "Conventional Deadlift",
-            muscleGroup = MuscleGroup.BACK,
-            equipment = "Barbell",
-            description = "Hinge at the hips, keep the bar against the legs and stand up by " +
-                "driving the floor away.",
-            mistakes = listOf(
-                "Letting the hips shoot up first, turning it into a stiff-leg pull.",
-                "Rounding the lower back under load.",
-                "Jerking the bar off the floor instead of taking the slack out.",
-            ),
-            difficulty = Difficulty.ADVANCED,
-        ),
-        Exercise(
-            id = "pull-up",
-            name = "Pull-Up",
-            muscleGroup = MuscleGroup.BACK,
-            equipment = "Bodyweight",
-            description = "Hang at full stretch and pull until the chin clears the bar, " +
-                "driving the elbows down and back.",
-            mistakes = listOf(
-                "Kipping when the goal is a strict rep.",
-                "Cutting the bottom range and never fully extending.",
-            ),
-            difficulty = Difficulty.INTERMEDIATE,
-        ),
-        Exercise(
-            id = "barbell-row",
-            name = "Barbell Row",
-            muscleGroup = MuscleGroup.BACK,
-            equipment = "Barbell",
-            description = "Hinge to roughly 45 degrees and row the bar to the lower ribs.",
-            mistakes = listOf(
-                "Standing up progressively through the set.",
-                "Using so much momentum the lats stop working.",
-            ),
-            difficulty = Difficulty.INTERMEDIATE,
-        ),
-        Exercise(
-            id = "back-squat",
-            name = "Barbell Back Squat",
-            muscleGroup = MuscleGroup.LEGS,
-            equipment = "Barbell",
-            description = "Brace, break at the hips and knees together, and descend until the " +
-                "hip crease passes the knee.",
-            mistakes = listOf(
-                "Knees caving inward out of the hole.",
-                "Rising hips first, which dumps the load onto the lower back.",
-                "Cutting depth as the weight climbs.",
-            ),
-            difficulty = Difficulty.INTERMEDIATE,
-        ),
-        Exercise(
-            id = "romanian-deadlift",
-            name = "Romanian Deadlift",
-            muscleGroup = MuscleGroup.LEGS,
-            equipment = "Barbell",
-            description = "Push the hips back with a near-straight leg until the hamstrings " +
-                "stretch, then drive the hips forward.",
-            mistakes = listOf(
-                "Squatting the weight down instead of hinging.",
-                "Chasing depth past the point the back rounds.",
-            ),
-            difficulty = Difficulty.INTERMEDIATE,
-        ),
-        Exercise(
-            id = "leg-press",
-            name = "Leg Press",
-            muscleGroup = MuscleGroup.LEGS,
-            equipment = "Machine",
-            description = "Lower the sled until the knees reach roughly 90 degrees, then press " +
-                "without locking out hard.",
-            mistakes = listOf(
-                "Letting the lower back round off the pad at the bottom.",
-                "Snapping the knees into full lockout.",
-            ),
-            difficulty = Difficulty.BEGINNER,
-        ),
-        Exercise(
-            id = "hip-thrust",
-            name = "Barbell Hip Thrust",
-            muscleGroup = MuscleGroup.GLUTES,
-            equipment = "Barbell",
-            description = "With the shoulder blades on a bench, drive the hips to full " +
-                "extension and squeeze at the top.",
-            mistakes = listOf(
-                "Hyperextending the lower back instead of finishing with the glutes.",
-                "Letting the chin drift up and the ribs flare.",
-            ),
-            difficulty = Difficulty.BEGINNER,
-        ),
-        Exercise(
-            id = "plank",
-            name = "Plank",
-            muscleGroup = MuscleGroup.ABS,
-            equipment = "Bodyweight",
-            description = "Hold a straight line from heel to head on the forearms, ribs down " +
-                "and glutes braced.",
-            mistakes = listOf(
-                "Letting the hips sag toward the floor.",
-                "Piking the hips up to make the hold easier.",
-            ),
-            difficulty = Difficulty.BEGINNER,
-        ),
-        Exercise(
-            id = "hanging-leg-raise",
-            name = "Hanging Leg Raise",
-            muscleGroup = MuscleGroup.ABS,
-            equipment = "Bodyweight",
-            description = "From a dead hang, raise the legs to hip height or above without " +
-                "swinging.",
-            mistakes = listOf(
-                "Swinging between reps and using momentum.",
-                "Only moving the hips while the lower back stays arched.",
-            ),
-            difficulty = Difficulty.ADVANCED,
-        ),
-        Exercise(
-            id = "rowing-machine",
-            name = "Rowing Machine",
-            muscleGroup = MuscleGroup.CARDIO,
-            equipment = "Rower",
-            description = "Drive with the legs, then swing the torso back, then pull the " +
-                "handle to the ribs. Reverse that order on the recovery.",
-            mistakes = listOf(
-                "Pulling with the arms before the legs have driven.",
-                "Rounding the back at the catch.",
-            ),
-            difficulty = Difficulty.BEGINNER,
-        ),
-    )
+    /**
+     * Catalogue ids for the demo templates below.
+     *
+     * These are real `exercises.id` values from `assets/reps_exercises.db`, not
+     * invented slugs: the templates have to resolve against the same catalogue
+     * the rest of the app reads, or Home shows a workout whose exercises do not
+     * exist. The comment on each is its English name and wger id, so a lookup
+     * is a grep away.
+     */
+    private object CatalogIds {
+        const val BENCH_PRESS = "3717d144-7815-4a97-9a56-956fb889c996"        // Bench Press (73)
+        const val INCLINE_DB_PRESS = "57e17672-52b9-43cf-8d0d-4b3f06a0c0d0"   // Incline Bench Press - Dumbbell (537)
+        const val CABLE_FLY = "07c5b9f4-2be5-4a3d-b6d2-16235da1ae3a"          // Fly With Cable (237)
+        const val SHOULDER_PRESS = "8b0a0371-c0a9-42a7-aab7-68d520542fb2"     // Shoulder Press, Barbell (566)
+        const val LATERAL_RAISE = "63375f5b-2d81-471c-bea4-fc3d207e96cb"      // Lateral Raises (348)
+        const val TRICEPS_PUSHDOWN = "6ebb138e-bb0a-402e-84e5-68fe0896e897"   // Triceps Pushdown (1185)
+        const val DEADLIFT = "ee8e8db4-2d82-49e1-ab7f-891e9a354934"           // Deadlifts (184)
+        const val PULL_UP = "8e420408-0682-4ab6-89f5-2681e54c7ce0"            // Pull-ups (475)
+        const val BARBELL_ROW = "4af6dbd9-8991-484b-9810-68f117c21edf"        // Bent Over Rowing (83)
+        const val BACK_SQUAT = "5d0e0a8b-1940-4034-b4ae-b965859f1ff0"         // Barbell Full Squat (1801)
+        const val ROMANIAN_DEADLIFT = "2e7ffff9-e603-4b28-98c8-31d1a6ce8cd9"  // Romanian Deadlift (507)
+        const val LEG_PRESS = "66a42396-c207-44da-bc75-758a89d32404"          // Leg Press (371)
+        const val HIP_THRUST = "19a289c0-33af-4055-bb34-3570c2975d3d"         // Hip Thrust (294)
+    }
 
     val pushDay = Workout(
         id = "push-day",
@@ -261,12 +76,12 @@ object SampleData {
         estimatedMinutes = 52,
         scheduledDays = setOf(DayOfWeek.MONDAY, DayOfWeek.THURSDAY),
         exercises = listOf(
-            WorkoutExercise("bench-press", 0, defaultSets(60.0, 8)),
-            WorkoutExercise("incline-db-press", 1, defaultSets(24.0, 10)),
-            WorkoutExercise("cable-fly", 2, defaultSets(15.0, 12)),
-            WorkoutExercise("overhead-press", 3, defaultSets(40.0, 8)),
-            WorkoutExercise("lateral-raise", 4, defaultSets(10.0, 14)),
-            WorkoutExercise("triceps-pushdown", 5, defaultSets(30.0, 12)),
+            WorkoutExercise(CatalogIds.BENCH_PRESS, 0, defaultSets(60.0, 8)),
+            WorkoutExercise(CatalogIds.INCLINE_DB_PRESS, 1, defaultSets(24.0, 10)),
+            WorkoutExercise(CatalogIds.CABLE_FLY, 2, defaultSets(15.0, 12)),
+            WorkoutExercise(CatalogIds.SHOULDER_PRESS, 3, defaultSets(40.0, 8)),
+            WorkoutExercise(CatalogIds.LATERAL_RAISE, 4, defaultSets(10.0, 14)),
+            WorkoutExercise(CatalogIds.TRICEPS_PUSHDOWN, 5, defaultSets(30.0, 12)),
         ),
     )
 
@@ -277,9 +92,9 @@ object SampleData {
         estimatedMinutes = 48,
         scheduledDays = setOf(DayOfWeek.TUESDAY, DayOfWeek.FRIDAY),
         exercises = listOf(
-            WorkoutExercise("deadlift", 0, defaultSets(100.0, 5)),
-            WorkoutExercise("pull-up", 1, defaultSets(0.0, 8)),
-            WorkoutExercise("barbell-row", 2, defaultSets(60.0, 8)),
+            WorkoutExercise(CatalogIds.DEADLIFT, 0, defaultSets(100.0, 5)),
+            WorkoutExercise(CatalogIds.PULL_UP, 1, defaultSets(0.0, 8)),
+            WorkoutExercise(CatalogIds.BARBELL_ROW, 2, defaultSets(60.0, 8)),
         ),
     )
 
@@ -290,10 +105,10 @@ object SampleData {
         estimatedMinutes = 58,
         scheduledDays = setOf(DayOfWeek.WEDNESDAY, DayOfWeek.SATURDAY),
         exercises = listOf(
-            WorkoutExercise("back-squat", 0, defaultSets(90.0, 6)),
-            WorkoutExercise("romanian-deadlift", 1, defaultSets(70.0, 8)),
-            WorkoutExercise("leg-press", 2, defaultSets(140.0, 10)),
-            WorkoutExercise("hip-thrust", 3, defaultSets(80.0, 10)),
+            WorkoutExercise(CatalogIds.BACK_SQUAT, 0, defaultSets(90.0, 6)),
+            WorkoutExercise(CatalogIds.ROMANIAN_DEADLIFT, 1, defaultSets(70.0, 8)),
+            WorkoutExercise(CatalogIds.LEG_PRESS, 2, defaultSets(140.0, 10)),
+            WorkoutExercise(CatalogIds.HIP_THRUST, 3, defaultSets(80.0, 10)),
         ),
     )
 
