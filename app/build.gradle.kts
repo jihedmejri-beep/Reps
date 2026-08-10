@@ -97,6 +97,9 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.analytics)
+    // Callable functions are how the app reaches the nutrition assistant: the
+    // Groq and USDA keys have to stay server-side.
+    implementation(libs.firebase.functions)
 
     implementation(libs.play.services.auth)
     implementation(libs.play.services.games.v2)

@@ -3,12 +3,14 @@ package com.reps.app.di
 import com.reps.app.data.fake.FakeAuthRepository
 import com.reps.app.data.fake.FakeExerciseRepository
 import com.reps.app.data.fake.FakeMealRepository
+import com.reps.app.data.fake.FakeNutritionAssistantRepository
 import com.reps.app.data.fake.FakeUserRepository
 import com.reps.app.data.fake.FakeWeightRepository
 import com.reps.app.data.fake.FakeWorkoutRepository
 import com.reps.app.domain.repository.AuthRepository
 import com.reps.app.domain.repository.ExerciseRepository
 import com.reps.app.domain.repository.MealRepository
+import com.reps.app.domain.repository.NutritionAssistantRepository
 import com.reps.app.domain.repository.UserRepository
 import com.reps.app.domain.repository.WeightRepository
 import com.reps.app.domain.repository.WorkoutRepository
@@ -51,4 +53,18 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindMealRepository(impl: FakeMealRepository): MealRepository
+
+    /**
+     * The assistant follows the same rule as everything above: the fake ships
+     * until the backend is deployed, so the screen runs today without a Groq
+     * key, a USDA key, or any functions in the project.
+     *
+     * To point it at the real agents, deploy /functions and swap this for
+     * FunctionsNutritionAssistantRepository - nothing else changes.
+     */
+    @Binds
+    @Singleton
+    abstract fun bindNutritionAssistantRepository(
+        impl: FakeNutritionAssistantRepository,
+    ): NutritionAssistantRepository
 }
