@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.Dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -45,6 +46,9 @@ import com.reps.app.feature.auth.signup.SignUpScreen
 import com.reps.app.feature.home.HomeScreen
 import com.reps.app.feature.notifications.NotificationsScreen
 import com.reps.app.feature.nutrition.NutritionScreen
+import com.reps.app.feature.nutrition.assistant.ConversationHistoryScreen
+import com.reps.app.feature.nutrition.assistant.NutritionAssistantScreen
+import com.reps.app.feature.nutrition.assistant.NutritionAssistantViewModel
 import com.reps.app.feature.onboarding.OnboardingScreen
 import com.reps.app.feature.profile.ProfileScreen
 import com.reps.app.feature.progress.ProgressScreen
@@ -211,7 +215,9 @@ private fun TabPager(
                 onOpenBuilder = { navController.navigate(Routes.WORKOUT_BUILDER) },
             )
 
-            TopLevelTab.NUTRITION -> NutritionScreen()
+            TopLevelTab.NUTRITION -> NutritionScreen(
+                onOpenAssistant = { navController.navigate(Routes.NUTRITION_ASSISTANT) },
+            )
 
             TopLevelTab.PROFILE -> ProfileScreen(
                 onSignedOut = { navController.replaceWith(Routes.LOGIN) },
@@ -268,6 +274,31 @@ private fun NavGraphBuilder.repsGraph(
             pagerState = pagerState,
             navController = navController,
             onSelectTab = onSelectTab,
+        )
+    }
+
+    composable(Routes.NUTRITION_ASSISTANT) {
+        NutritionAssistantScreen(
+            onBack = { navController.popBackStack() },
+            onOpenHistory = { navController.navigate(Routes.NUTRITION_ASSISTANT_HISTORY) },
+            viewModel = hiltViewModel(),
+        )
+    }
+    composable(Routes.NUTRITION_ASSISTANT_HISTORY) { entry ->
+        // Scoped to the assistant's entry, not this one, so picking a
+        // conversation lands in the transcript the user came from. That entry is
+        // still on the stack: history is only reachable from on top of it.
+        val assistantEntry = remember(entry) {
+            navController.getBackStackEntry(Routes.NUTRITION_ASSISTANT)
+        }
+        val viewModel: NutritionAssistantViewModel = hiltViewModel(assistantEntry)
+        ConversationHistoryScreen(
+            onBack = { navController.popBackStack() },
+            onOpen = { id ->
+                viewModel.openConversation(id)
+                navController.popBackStack()
+            },
+            viewModel = viewModel,
         )
     }
 

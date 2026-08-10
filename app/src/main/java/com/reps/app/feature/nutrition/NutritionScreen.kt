@@ -62,13 +62,17 @@ import com.reps.app.core.theme.RepsOnGreen
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.domain.model.FoodItem
 import com.reps.app.domain.model.Meal
+import com.reps.app.feature.nutrition.assistant.NutritionAssistantFab
 import com.reps.app.navigation.OnTabReselected
 import com.reps.app.navigation.Routes
 import com.reps.app.navigation.navBarClearance
 import kotlin.math.roundToInt
 
 @Composable
-fun NutritionScreen(viewModel: NutritionViewModel = hiltViewModel()) {
+fun NutritionScreen(
+    onOpenAssistant: () -> Unit,
+    viewModel: NutritionViewModel = hiltViewModel(),
+) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val listState = androidx.compose.foundation.lazy.rememberLazyListState()
     var showAddMeal by remember { mutableStateOf(false) }
@@ -76,50 +80,62 @@ fun NutritionScreen(viewModel: NutritionViewModel = hiltViewModel()) {
     OnTabReselected(Routes.NUTRITION) { listState.animateScrollToItem(0) }
 
     val dimens = RepsTheme.dimens
-    LazyColumn(
-        state = listState,
-        modifier = Modifier.fillMaxSize().background(RepsTheme.colors.background).statusBarsPadding(),
-        contentPadding = PaddingValues(
-            start = dimens.screenPadding,
-            end = dimens.screenPadding,
-            bottom = navBarClearance(),
-        ),
-        verticalArrangement = Arrangement.spacedBy(dimens.sectionGap),
-    ) {
-        item {
-            Row(
-                Modifier.fillMaxWidth().padding(top = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Top,
-            ) {
-                SectionHeader(
-                    eyebrow = stringResource(R.string.nutrition_eyebrow),
-                    title = stringResource(R.string.nutrition_title),
-                )
-                Box(
-                    Modifier
-                        .size(38.dp)
-                        .background(RepsGreen, MaterialTheme.shapes.small)
-                        .clickable { showAddMeal = true },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.nutrition_add_meal), tint = RepsOnGreen)
-                }
-            }
-        }
-
-        item { MacroSummaryCard(state) }
-        item { WaterCard(state, onAdd = viewModel::addWater, onRemove = viewModel::removeWater) }
-
-        if (state.meals.isEmpty() && !state.loading) {
+    Box(Modifier.fillMaxSize()) {
+        LazyColumn(
+            state = listState,
+            modifier = Modifier.fillMaxSize().background(RepsTheme.colors.background).statusBarsPadding(),
+            contentPadding = PaddingValues(
+                start = dimens.screenPadding,
+                end = dimens.screenPadding,
+                bottom = navBarClearance(),
+            ),
+            verticalArrangement = Arrangement.spacedBy(dimens.sectionGap),
+        ) {
             item {
-                Column(Modifier.fillMaxWidth().padding(vertical = 32.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(stringResource(R.string.nutrition_empty), style = MaterialTheme.typography.bodyMedium, color = RepsTheme.colors.textTertiary)
+                Row(
+                    Modifier.fillMaxWidth().padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Top,
+                ) {
+                    SectionHeader(
+                        eyebrow = stringResource(R.string.nutrition_eyebrow),
+                        title = stringResource(R.string.nutrition_title),
+                    )
+                    Box(
+                        Modifier
+                            .size(38.dp)
+                            .background(RepsGreen, MaterialTheme.shapes.small)
+                            .clickable { showAddMeal = true },
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.nutrition_add_meal), tint = RepsOnGreen)
+                    }
                 }
             }
-        } else {
-            items(state.meals, key = { it.id }) { meal -> MealCard(meal) }
+
+            item { MacroSummaryCard(state) }
+            item { WaterCard(state, onAdd = viewModel::addWater, onRemove = viewModel::removeWater) }
+
+            if (state.meals.isEmpty() && !state.loading) {
+                item {
+                    Column(Modifier.fillMaxWidth().padding(vertical = 32.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(stringResource(R.string.nutrition_empty), style = MaterialTheme.typography.bodyMedium, color = RepsTheme.colors.textTertiary)
+                    }
+                }
+            } else {
+                items(state.meals, key = { it.id }) { meal -> MealCard(meal) }
+            }
         }
+
+        // Sits above the floating nav pill rather than beside it: navBarClearance
+        // is the same distance the list reserves at its foot, so the button lands
+        // clear of the pill and of the last card.
+        NutritionAssistantFab(
+            onClick = onOpenAssistant,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = dimens.screenPadding, bottom = navBarClearance()),
+        )
     }
 
     if (showAddMeal) {
