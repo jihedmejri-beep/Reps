@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.reps.app.R
+import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.theme.RepsWeightDown
 import com.reps.app.core.theme.RepsWeightUp
@@ -55,7 +56,7 @@ fun WeightWidget(
             Icon(
                 imageVector = Icons.Outlined.MonitorWeight,
                 contentDescription = null,
-                tint = RepsTheme.colors.textSecondary,
+                tint = RepsGreen,
                 modifier = Modifier.size(15.dp),
             )
             Text(

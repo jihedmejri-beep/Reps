@@ -25,6 +25,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.reps.app.R
+import com.reps.app.core.theme.RepsAchievement
 import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.domain.model.Streak
@@ -48,7 +49,7 @@ fun StreakBadge(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(RepsGreen.copy(alpha = 0.08f), RoundedCornerShape(14.dp))
+            .background(RepsAchievement.copy(alpha = 0.10f), RoundedCornerShape(14.dp))
             .padding(horizontal = 14.dp, vertical = 12.dp)
             // Read as one sentence, not icon then number then seven bars.
             .clearAndSetSemantics { contentDescription = "$countText. $nudge" },
@@ -58,7 +59,7 @@ fun StreakBadge(
         Icon(
             imageVector = Icons.Outlined.LocalFireDepartment,
             contentDescription = null,
-            tint = RepsGreen,
+            tint = RepsAchievement,
             modifier = Modifier.size(20.dp),
         )
         Column(Modifier.weight(1f)) {
@@ -100,7 +101,7 @@ private fun MeterBar(filled: Boolean, height: Dp) {
             .width(4.dp)
             .height(height)
             .background(
-                color = if (filled) RepsGreen else RepsGreen.copy(alpha = 0.18f),
+                color = if (filled) RepsAchievement else RepsAchievement.copy(alpha = 0.18f),
                 shape = RoundedCornerShape(1.dp),
             ),
     )

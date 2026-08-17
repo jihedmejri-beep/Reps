@@ -37,6 +37,12 @@ val RepsFat = Color(0xFF4F9DDE)
 // hue. Named for the reward, not overloaded onto the caution amber.
 val RepsAchievement = Color(0xFFF2A93B)
 
+// Per-tab nav accent - a fresh teal reserved for the Nutrition tab icon. The
+// brand green is too close in hue to read as a second colour at icon scale,
+// so this sits on the opposite side of the colour wheel from the coral and
+// amber used by Workouts and Progress.
+val RepsNavNutrition = Color(0xFF2DD4A8)
+
 // ---------------------------------------------------------------------------
 // Dark palette - the original brand surfaces. Kept as named constants so the
 // dark scheme, previews, and any code that wants an explicit dark value still
