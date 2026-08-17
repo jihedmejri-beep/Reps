@@ -11,6 +11,8 @@ import com.reps.app.data.fake.FakeWorkoutRepository
 import com.reps.app.domain.repository.AuthRepository
 import com.reps.app.domain.repository.ExerciseRepository
 import com.reps.app.domain.repository.MealRepository
+import com.reps.app.domain.repository.MuscleSvgRepository
+import com.reps.app.domain.repository.NutritionAssistantRepository
 import com.reps.app.domain.repository.UserRepository
 import com.reps.app.domain.repository.WeightRepository
 import com.reps.app.domain.repository.WorkoutRepository
