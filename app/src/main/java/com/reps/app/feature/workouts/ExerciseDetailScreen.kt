@@ -6,19 +6,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FitnessCenter
-import androidx.compose.material3.Icon
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,19 +28,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.reps.app.R
-import com.reps.app.core.components.MuscleMapDiagram
+import com.reps.app.core.components.ExerciseMediaCard
+import com.reps.app.core.components.MuscleTargetDiagram
 import com.reps.app.core.components.RepsBackButton
 import com.reps.app.core.theme.PillShape
-import com.reps.app.core.theme.RepsError
 import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsOnGreen
 import com.reps.app.core.theme.RepsTheme
-import com.reps.app.domain.model.Exercise
-import com.reps.app.domain.model.MuscleGroup
+import com.reps.app.domain.model.ExerciseDetail
+import com.reps.app.domain.model.MuscleDiagram
+import com.reps.app.domain.model.MuscleTarget
 import com.reps.app.navigation.navBarClearance
 
 @Composable
@@ -50,15 +50,32 @@ fun ExerciseDetailScreen(
     onBack: () -> Unit,
     viewModel: ExerciseDetailViewModel = hiltViewModel(),
 ) {
-    val exercise by viewModel.exercise.collectAsStateWithLifecycle()
-    exercise?.let { ExerciseDetailContent(exercise = it, onBack = onBack) }
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val detail = state.detail
+
+    when {
+        detail != null -> ExerciseDetailContent(
+            detail = detail,
+            diagram = state.diagram,
+            onBack = onBack,
+        )
+        state.notFound -> ExerciseUnavailable(onBack = onBack)
+        else -> LoadingState()
+    }
 }
 
 @Composable
-private fun ExerciseDetailContent(exercise: Exercise, onBack: () -> Unit) {
+private fun ExerciseDetailContent(
+    detail: ExerciseDetail,
+    diagram: MuscleDiagram,
+    onBack: () -> Unit,
+) {
     val dimens = RepsTheme.dimens
     LazyColumn(
-        modifier = Modifier.fillMaxSize().background(RepsTheme.colors.background).statusBarsPadding(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(RepsTheme.colors.background)
+            .statusBarsPadding(),
         contentPadding = PaddingValues(
             start = dimens.screenPadding,
             end = dimens.screenPadding,
@@ -69,71 +86,125 @@ private fun ExerciseDetailContent(exercise: Exercise, onBack: () -> Unit) {
     ) {
         item { RepsBackButton(onClick = onBack) }
 
-        item { ExerciseMediaTabs(exercise) }
+        item { ExerciseMediaTabs(detail, diagram) }
 
         item {
             Column {
                 Text(
-                    text = exercise.name,
+                    text = detail.name,
                     style = MaterialTheme.typography.headlineSmall,
                     color = RepsTheme.colors.textPrimary,
                 )
-                Row(
+                FlowRow(
                     modifier = Modifier.padding(top = 10.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    InfoTag(stringResource(exercise.muscleGroup.labelRes))
-                    InfoTag(exercise.equipment)
-                    InfoTag(stringResource(exercise.difficulty.labelRes))
+                    InfoTag(stringResource(detail.exercise.muscleGroup.labelRes))
+                    detail.equipment.forEach { InfoTag(it) }
+                    // The catalogue records no difficulty, so this tag simply
+                    // does not appear rather than defaulting to "Beginner".
+                    detail.exercise.difficulty?.let { InfoTag(stringResource(it.labelRes)) }
                 }
             }
         }
 
-        item {
-            Column {
-                Text(
-                    text = stringResource(R.string.workouts_description).uppercase(),
-                    style = RepsTheme.textStyles.eyebrow,
-                    color = RepsGreen,
-                )
-                Text(
-                    text = exercise.description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = RepsTheme.colors.textSecondary,
-                    modifier = Modifier.padding(top = 6.dp),
-                )
+        if (detail.allMuscles.isNotEmpty()) {
+            item {
+                Section(stringResource(R.string.exercise_section_muscles)) {
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        detail.primaryMuscles.forEach { MuscleTag(it, primary = true) }
+                        detail.secondaryMuscles.forEach { MuscleTag(it, primary = false) }
+                    }
+                }
             }
         }
 
-        if (exercise.mistakes.isNotEmpty()) {
+        if (detail.summary.isNotBlank()) {
+            item {
+                Section(stringResource(R.string.workouts_description)) {
+                    Body(detail.summary)
+                }
+            }
+        }
+
+        if (detail.startingPosition.isNotBlank()) {
+            item {
+                Section(stringResource(R.string.exercise_section_starting_position)) {
+                    Body(detail.startingPosition)
+                }
+            }
+        }
+
+        if (detail.steps.isNotEmpty()) {
+            item {
+                Section(stringResource(R.string.exercise_section_steps)) {
+                    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        detail.steps.forEachIndexed { index, step ->
+                            NumberedStep(index + 1, step)
+                        }
+                    }
+                }
+            }
+        }
+
+        if (detail.tips.isNotEmpty()) {
+            item {
+                Section(stringResource(R.string.exercise_section_tips)) {
+                    BulletList(detail.tips, RepsGreen)
+                }
+            }
+        }
+
+        if (detail.notes.isNotEmpty()) {
+            item {
+                Section(stringResource(R.string.exercise_section_notes)) {
+                    BulletList(detail.notes, RepsTheme.colors.textTertiary)
+                }
+            }
+        }
+
+        if (detail.aliases.isNotEmpty()) {
+            item {
+                Section(stringResource(R.string.exercise_section_aliases)) {
+                    Body(detail.aliases.joinToString(" · "))
+                }
+            }
+        }
+
+        if (!detail.hasInstructions && detail.steps.isEmpty()) {
             item {
                 Text(
-                    text = stringResource(R.string.workouts_common_mistakes).uppercase(),
-                    style = RepsTheme.textStyles.eyebrow,
-                    color = RepsGreen,
+                    text = stringResource(R.string.exercise_no_instructions),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = RepsTheme.colors.textTertiary,
                 )
             }
-            items(exercise.mistakes) { mistake ->
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("•", style = MaterialTheme.typography.bodyMedium, color = RepsError)
-                    Text(
-                        text = mistake,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = RepsTheme.colors.textSecondary,
-                    )
-                }
+        }
+
+        if (detail.licenseName.isNotBlank()) {
+            item {
+                Text(
+                    text = stringResource(R.string.exercise_license, detail.licenseName),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = RepsTheme.colors.textTertiary,
+                )
             }
         }
     }
 }
 
 /**
- * The demonstration block: two small tabs - a full-body muscle map highlighting
- * the worked group, and a step-by-step how-to (photos supplied later).
+ * The demonstration block: the muscle map the catalogue draws for this exercise,
+ * and its remote demonstration photo. Muscles lead because they are local and
+ * always present; the photo may be missing or offline.
  */
 @Composable
-private fun ExerciseMediaTabs(exercise: Exercise) {
-    var selected by rememberSaveable { mutableIntStateOf(0) }
+private fun ExerciseMediaTabs(detail: ExerciseDetail, diagram: MuscleDiagram) {
+    var selected by rememberSaveable(detail.id) { mutableIntStateOf(0) }
     Column {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             MediaTab(
@@ -142,7 +213,7 @@ private fun ExerciseMediaTabs(exercise: Exercise) {
                 modifier = Modifier.weight(1f),
             ) { selected = 0 }
             MediaTab(
-                label = stringResource(R.string.exercise_tab_howto),
+                label = stringResource(R.string.exercise_tab_demo),
                 selected = selected == 1,
                 modifier = Modifier.weight(1f),
             ) { selected = 1 }
@@ -157,14 +228,25 @@ private fun ExerciseMediaTabs(exercise: Exercise) {
             contentAlignment = Alignment.Center,
         ) {
             when (selected) {
-                0 -> MuscleMapDiagram(
-                    highlightedMuscles = exercise.muscleGroup.mapKeys(),
+                0 -> MuscleTargetDiagram(
+                    frontPrimary = diagram.frontPrimary,
+                    frontSecondary = diagram.frontSecondary,
+                    backPrimary = diagram.backPrimary,
+                    backSecondary = diagram.backSecondary,
+                    frontBodyAsset = diagram.frontBodyAsset,
+                    backBodyAsset = diagram.backBodyAsset,
+                    contentDescription = detail.primaryMuscles
+                        .takeIf { it.isNotEmpty() }
+                        ?.joinToString(", ") { it.displayName }
+                        ?.let { stringResource(R.string.muscle_map_cd, it) },
+                )
+                else -> ExerciseMediaCard(
+                    mediaUrl = detail.exercise.mediaUrl,
                     contentDescription = stringResource(
-                        R.string.muscle_map_cd,
-                        stringResource(exercise.muscleGroup.labelRes),
+                        R.string.exercise_media_cd,
+                        detail.name,
                     ),
                 )
-                else -> HowToPlaceholder()
             }
         }
     }
@@ -194,51 +276,88 @@ private fun MediaTab(
 }
 
 @Composable
-private fun HowToPlaceholder() {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            repeat(2) {
-                Box(
-                    Modifier
-                        .weight(1f)
-                        .aspectRatio(1f)
-                        .clip(MaterialTheme.shapes.medium)
-                        .background(RepsTheme.colors.surface),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.FitnessCenter,
-                        contentDescription = null,
-                        tint = RepsTheme.colors.textTertiary,
-                        modifier = Modifier.size(28.dp),
-                    )
-                }
-            }
+private fun Section(title: String, content: @Composable () -> Unit) {
+    Column {
+        Text(
+            text = title.uppercase(),
+            style = RepsTheme.textStyles.eyebrow,
+            color = RepsGreen,
+            modifier = Modifier.padding(bottom = 8.dp),
+        )
+        content()
+    }
+}
+
+@Composable
+private fun Body(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodyMedium,
+        color = RepsTheme.colors.textSecondary,
+    )
+}
+
+@Composable
+private fun NumberedStep(number: Int, text: String) {
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        Box(
+            Modifier
+                .size(22.dp)
+                .background(RepsGreen, PillShape),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = "$number",
+                style = MaterialTheme.typography.labelSmall,
+                color = RepsOnGreen,
+            )
         }
         Text(
-            text = stringResource(R.string.exercise_howto_placeholder),
-            style = MaterialTheme.typography.bodySmall,
-            color = RepsTheme.colors.textTertiary,
-            modifier = Modifier.padding(top = 12.dp),
+            text = text,
+            style = MaterialTheme.typography.bodyMedium,
+            color = RepsTheme.colors.textSecondary,
         )
     }
 }
 
-/** The map region name(s) this group highlights; CARDIO lights nothing. */
-private fun MuscleGroup.mapKeys(): List<String> = when (this) {
-    MuscleGroup.CHEST -> listOf("chest")
-    MuscleGroup.BACK -> listOf("back")
-    MuscleGroup.LEGS -> listOf("legs")
-    MuscleGroup.SHOULDERS -> listOf("shoulders")
-    MuscleGroup.ARMS -> listOf("arms")
-    MuscleGroup.ABS -> listOf("abs")
-    // The source art has no separate glutes shape; the back/lower-back region
-    // it's attached to is the closest verified match.
-    MuscleGroup.GLUTES -> listOf("back")
-    MuscleGroup.CARDIO -> emptyList()
+@Composable
+private fun BulletList(items: List<String>, bulletColor: androidx.compose.ui.graphics.Color) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        items.forEach { item ->
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("•", style = MaterialTheme.typography.bodyMedium, color = bulletColor)
+                Text(
+                    text = item,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = RepsTheme.colors.textSecondary,
+                )
+            }
+        }
+    }
 }
 
-/** A plain, non-interactive descriptive pill - muscle group / equipment / difficulty. */
+/** Primary muscles carry the brand fill; secondary ones only an outline. */
+@Composable
+private fun MuscleTag(muscle: MuscleTarget, primary: Boolean) {
+    Box(
+        Modifier
+            .background(if (primary) RepsGreen else RepsTheme.colors.surface, PillShape)
+            .border(
+                1.dp,
+                if (primary) RepsGreen else RepsTheme.colors.outline,
+                PillShape,
+            )
+            .padding(horizontal = 12.dp, vertical = 7.dp),
+    ) {
+        Text(
+            text = muscle.displayName,
+            style = MaterialTheme.typography.labelSmall,
+            color = if (primary) RepsOnGreen else RepsTheme.colors.textSecondary,
+        )
+    }
+}
+
+/** A plain, non-interactive descriptive pill - muscle group / equipment. */
 @Composable
 private fun InfoTag(text: String) {
     Box(
@@ -247,6 +366,53 @@ private fun InfoTag(text: String) {
             .border(1.dp, RepsTheme.colors.outline, PillShape)
             .padding(horizontal = 12.dp, vertical = 7.dp),
     ) {
-        Text(text = text, style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textSecondary)
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelSmall,
+            color = RepsTheme.colors.textSecondary,
+        )
+    }
+}
+
+@Composable
+private fun LoadingState() {
+    Box(
+        Modifier.fillMaxSize().background(RepsTheme.colors.background),
+        contentAlignment = Alignment.Center,
+    ) {
+        CircularProgressIndicator(color = RepsGreen, strokeWidth = 2.dp, modifier = Modifier.size(28.dp))
+    }
+}
+
+@Composable
+private fun ExerciseUnavailable(onBack: () -> Unit) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(RepsTheme.colors.background)
+            .statusBarsPadding()
+            .padding(RepsTheme.dimens.screenPadding),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        RepsBackButton(onClick = onBack)
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.width(260.dp),
+            ) {
+                Text(
+                    text = stringResource(R.string.exercise_not_found_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = RepsTheme.colors.textPrimary,
+                )
+                Text(
+                    text = stringResource(R.string.exercise_not_found_body),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = RepsTheme.colors.textSecondary,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(top = 6.dp),
+                )
+            }
+        }
     }
 }

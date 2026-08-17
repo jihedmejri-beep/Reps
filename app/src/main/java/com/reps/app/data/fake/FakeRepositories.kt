@@ -1,15 +1,12 @@
 package com.reps.app.data.fake
 
-import com.reps.app.domain.model.Exercise
 import com.reps.app.domain.model.Meal
-import com.reps.app.domain.model.MuscleGroup
 import com.reps.app.domain.model.User
 import com.reps.app.domain.model.WeightEntry
 import com.reps.app.domain.model.Workout
 import com.reps.app.domain.model.WorkoutSession
 import com.reps.app.domain.repository.AuthRepository
 import com.reps.app.domain.repository.AuthResult
-import com.reps.app.domain.repository.ExerciseRepository
 import com.reps.app.domain.repository.MealRepository
 import com.reps.app.domain.repository.UserRepository
 import com.reps.app.domain.repository.WeightRepository
@@ -79,27 +76,6 @@ class FakeUserRepository @Inject constructor() : UserRepository {
 
     override suspend fun updateUser(user: User) {
         this.user.value = user
-    }
-}
-
-@Singleton
-class FakeExerciseRepository @Inject constructor() : ExerciseRepository {
-
-    private val exercises = MutableStateFlow(SampleData.exercises)
-
-    override fun observeExercises(muscleGroup: MuscleGroup?): Flow<List<Exercise>> =
-        exercises.map { list ->
-            if (muscleGroup == null) list else list.filter { it.muscleGroup == muscleGroup }
-        }
-
-    override fun observeExercise(exerciseId: String): Flow<Exercise?> =
-        exercises.map { list -> list.firstOrNull { it.id == exerciseId } }
-
-    override suspend fun getByIds(ids: List<String>): List<Exercise> {
-        val byId = exercises.value.associateBy { it.id }
-        // Preserve the caller's order: a session must play back in the order
-        // the user built, not in library order.
-        return ids.mapNotNull { byId[it] }
     }
 }
 

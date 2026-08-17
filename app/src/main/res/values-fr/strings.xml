@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- REPS is the brand name and stays untranslated. -->
 
@@ -145,7 +145,6 @@
     <string name="workouts_title">Exercices</string>
     <string name="workouts_filter_all">Tous</string>
     <string name="workouts_search">Rechercher un exercice</string>
-    <string name="workouts_common_mistakes">Erreurs fréquentes</string>
     <string name="workouts_description">Description</string>
     <string name="workouts_builder_eyebrow">Créer</string>
     <string name="workouts_builder_title">Nouvelle séance</string>
@@ -167,9 +166,23 @@
     <string name="workouts_no_matches_subtitle">Essaie une autre recherche ou un autre filtre.</string>
     <string name="exercise_media_cd">Démonstration de %1$s</string>
     <string name="exercise_tab_muscles">Muscles</string>
-    <string name="exercise_tab_howto">Technique</string>
-    <string name="exercise_howto_placeholder">Photos étape par étape à venir.</string>
+    <string name="exercise_tab_demo">Démo</string>
     <string name="muscle_map_cd">Schéma corporel mettant en évidence : %1$s</string>
+    <string name="exercise_body_front">Face</string>
+    <string name="exercise_body_back">Dos</string>
+    <string name="exercise_no_muscle_data">Aucune donnée musculaire pour cet exercice.</string>
+    <string name="exercise_media_none">Aucune image de démonstration disponible.</string>
+    <string name="exercise_media_unavailable">Démonstration indisponible hors ligne.</string>
+    <string name="exercise_section_muscles">Muscles ciblés</string>
+    <string name="exercise_section_starting_position">Position de départ</string>
+    <string name="exercise_section_steps">Comment faire</string>
+    <string name="exercise_section_tips">Conseils</string>
+    <string name="exercise_section_notes">Remarques</string>
+    <string name="exercise_section_aliases">Aussi appelé</string>
+    <string name="exercise_no_instructions">Aucune instruction enregistrée pour cet exercice.</string>
+    <string name="exercise_license">Données d\'exercice : %1$s</string>
+    <string name="exercise_not_found_title">Exercice indisponible</string>
+    <string name="exercise_not_found_body">Cet exercice ne figure pas dans le catalogue de cet appareil.</string>
     <string name="workouts_builder_selected">%1$d sélectionné(s)</string>
     <string name="workouts_builder_remove_cd">Retirer l\'exercice</string>
     <string name="workouts_builder_empty">Aucun exercice ajouté pour l\'instant.</string>
@@ -191,6 +204,7 @@
     <string name="muscle_arms">Bras</string>
     <string name="muscle_abs">Abdos</string>
     <string name="muscle_glutes">Fessiers</string>
+    <string name="muscle_calves">Mollets</string>
     <string name="muscle_cardio">Cardio</string>
 
     <!-- Difficulty -->

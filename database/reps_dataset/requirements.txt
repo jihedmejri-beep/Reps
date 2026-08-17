@@ -1,0 +1,10 @@
+requests>=2.31,<3
+urllib3>=2.0,<3
+tqdm>=4.66,<5
+pytest>=7.4,<9
+Pillow>=10.0,<11
+# Pure-Python Postgres driver: psycopg2 requires a C build toolchain /
+# libpq that isn't guaranteed to be present on every deployment target;
+# pg8000 installs from a wheel everywhere and speaks the same DB-API 2.0
+# interface (connect/cursor/execute/commit), which is all db/*.py uses.
+pg8000>=1.31,<2
