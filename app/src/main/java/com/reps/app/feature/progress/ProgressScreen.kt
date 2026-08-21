@@ -37,6 +37,7 @@ import com.reps.app.R
 import com.reps.app.core.components.DeltaDirection
 import com.reps.app.core.components.SectionHeader
 import com.reps.app.core.components.StatCard
+import com.reps.app.core.theme.RepsCaution
 import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.util.UnitConverter
@@ -101,10 +102,6 @@ fun ProgressScreen(viewModel: ProgressViewModel = hiltViewModel()) {
         }
 
         item { AchievementsSection(state.sessions.size, state.streakCount, prs.size) }
-
-        if (state.sessions.isNotEmpty()) {
-            item { RecentActivitySection(state.sessions, state.exercisesById) }
-        }
     }
 
     if (showAddWeight) {
@@ -236,6 +233,7 @@ private fun AnalyticsSection(state: ProgressUiState) {
                     label = stringResource(R.string.progress_last_month),
                     selected = showLastMonth,
                     onClick = { showLastMonth = true },
+                    tintColor = RepsCaution,
                 )
             }
         }
