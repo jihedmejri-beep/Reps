@@ -253,6 +253,22 @@
     <string name="nutrition_water_remove_cd">إزالة كوب ماء</string>
     <string name="nutrition_ingredient_required">أضف اسماً وكمية بالغرام.</string>
 
+    <!-- Meal action menu -->
+    <string name="nutrition_meal_options_cd">خيارات %1$s</string>
+    <string name="nutrition_meal_edit">تعديل الوجبة</string>
+    <string name="nutrition_meal_delete">حذف الوجبة</string>
+    <string name="nutrition_edit_meal">تعديل الوجبة</string>
+    <string name="nutrition_delete_meal_title">حذف الوجبة؟</string>
+    <string name="nutrition_delete_meal_body">هل أنت متأكد أنك تريد حذف هذه الوجبة؟ لا يمكن التراجع عن هذا الإجراء.</string>
+    <string name="nutrition_delete_meal_confirm">حذف</string>
+    <string name="nutrition_delete_meal_cancel">إلغاء</string>
+    <string name="nutrition_ingredient_edit">تعديل المكوّن</string>
+    <string name="nutrition_ingredient_delete">حذف المكوّن</string>
+    <string name="nutrition_edit_ingredient">تعديل المكوّن</string>
+    <string name="nutrition_save_ingredient">حفظ المكوّن</string>
+    <string name="nutrition_delete_ingredient_title">حذف المكوّن؟</string>
+    <string name="nutrition_delete_ingredient_body">هل أنت متأكد أنك تريد حذف %1$s؟ لا يمكن التراجع عن هذا الإجراء.</string>
+
     <!-- Nutrition assistant -->
     <string name="assistant_title">مساعد التغذية</string>
     <string name="assistant_badge">AI</string>

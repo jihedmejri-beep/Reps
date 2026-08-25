@@ -58,13 +58,33 @@ class NutritionViewModel @Inject constructor(
         waterGlasses.update { (it - 1).coerceAtLeast(0) }
     }
 
-    /** Caller (the screen) is responsible for ensuring [name] is non-blank before calling this. */
-    fun logMeal(name: String, items: List<FoodItem>) {
+    /**
+     * Caller (the screen) is responsible for ensuring [name] is non-blank before
+     * calling this. [mealId] is null when logging a new meal; passing an
+     * existing meal's id turns this into an edit, since [MealRepository.logMeal]
+     * upserts by id.
+     */
+    fun logMeal(name: String, items: List<FoodItem>, mealId: String? = null) {
         if (items.isEmpty() || name.isBlank()) return
         viewModelScope.launch {
             mealRepository.logMeal(
-                Meal(id = UUID.randomUUID().toString(), name = name, date = today, foodItems = items),
+                Meal(id = mealId ?: UUID.randomUUID().toString(), name = name, date = today, foodItems = items),
             )
         }
+    }
+
+    fun deleteMeal(mealId: String) {
+        viewModelScope.launch { mealRepository.deleteMeal(mealId) }
+    }
+
+    /**
+     * Edits and removals of a single ingredient go through here: the repository
+     * stores whole meals, so the change is persisted as an upsert of [meal] with
+     * a new item list. The meal itself always survives - removing its last
+     * ingredient leaves an empty meal, never deletes it; that stays an explicit
+     * meal-level action.
+     */
+    fun updateMealItems(meal: Meal, items: List<FoodItem>) {
+        viewModelScope.launch { mealRepository.logMeal(meal.copy(foodItems = items)) }
     }
 }

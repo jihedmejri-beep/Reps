@@ -253,6 +253,22 @@
     <string name="nutrition_water_remove_cd">Remove a glass of water</string>
     <string name="nutrition_ingredient_required">Add a name and gram amount.</string>
 
+    <!-- Meal action menu -->
+    <string name="nutrition_meal_options_cd">Options for %1$s</string>
+    <string name="nutrition_meal_edit">Edit Meal</string>
+    <string name="nutrition_meal_delete">Delete Meal</string>
+    <string name="nutrition_edit_meal">Edit meal</string>
+    <string name="nutrition_delete_meal_title">Delete meal?</string>
+    <string name="nutrition_delete_meal_body">Are you sure you want to delete this meal? This action cannot be undone.</string>
+    <string name="nutrition_delete_meal_confirm">Delete</string>
+    <string name="nutrition_delete_meal_cancel">Cancel</string>
+    <string name="nutrition_ingredient_edit">Edit Ingredient</string>
+    <string name="nutrition_ingredient_delete">Delete Ingredient</string>
+    <string name="nutrition_edit_ingredient">Edit ingredient</string>
+    <string name="nutrition_save_ingredient">Save ingredient</string>
+    <string name="nutrition_delete_ingredient_title">Delete ingredient?</string>
+    <string name="nutrition_delete_ingredient_body">Are you sure you want to delete %1$s? This action cannot be undone.</string>
+
     <!-- Nutrition assistant -->
     <string name="assistant_title">Nutrition Assistant</string>
     <string name="assistant_badge">AI</string>

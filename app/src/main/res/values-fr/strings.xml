@@ -253,6 +253,22 @@
     <string name="nutrition_water_remove_cd">Retirer un verre d\'eau</string>
     <string name="nutrition_ingredient_required">Ajoute un nom et une quantité en grammes.</string>
 
+    <!-- Meal action menu -->
+    <string name="nutrition_meal_options_cd">Options pour %1$s</string>
+    <string name="nutrition_meal_edit">Modifier le repas</string>
+    <string name="nutrition_meal_delete">Supprimer le repas</string>
+    <string name="nutrition_edit_meal">Modifier le repas</string>
+    <string name="nutrition_delete_meal_title">Supprimer le repas ?</string>
+    <string name="nutrition_delete_meal_body">Voulez-vous vraiment supprimer ce repas ? Cette action est irréversible.</string>
+    <string name="nutrition_delete_meal_confirm">Supprimer</string>
+    <string name="nutrition_delete_meal_cancel">Annuler</string>
+    <string name="nutrition_ingredient_edit">Modifier l\'ingrédient</string>
+    <string name="nutrition_ingredient_delete">Supprimer l\'ingrédient</string>
+    <string name="nutrition_edit_ingredient">Modifier l\'ingrédient</string>
+    <string name="nutrition_save_ingredient">Enregistrer l\'ingrédient</string>
+    <string name="nutrition_delete_ingredient_title">Supprimer l\'ingrédient ?</string>
+    <string name="nutrition_delete_ingredient_body">Voulez-vous vraiment supprimer %1$s ? Cette action est irréversible.</string>
+
     <!-- Nutrition assistant -->
     <string name="assistant_title">Assistant Nutrition</string>
     <string name="assistant_badge">IA</string>
