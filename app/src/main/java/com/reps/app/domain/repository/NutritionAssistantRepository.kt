@@ -6,12 +6,20 @@ import com.reps.app.domain.model.MealDraft
 import com.reps.app.domain.model.NutritionAnalysis
 
 /**
- * The app's view of the two-agent assistant. Each method is one hop in the
- * documented flow, which keeps the pipeline inspectable: a failure belongs to
- * a named stage rather than to one opaque "ask the AI" call.
+ * The app's view of the AI agent - this is the seam to implement when plugging
+ * a real assistant in. Everything above it (ViewModel, screens, history) is
+ * already written against these three methods.
  *
- * Adding an agent later (photo analysis, barcode, weekly report) means adding a
- * method here and a handler in the backend registry - no existing call changes.
+ * Each method is one hop in the documented flow, which keeps the pipeline
+ * inspectable: a failure belongs to a named stage rather than to one opaque
+ * "ask the AI" call. The ViewModel drives the hops in order - [understand]
+ * until the draft reports ready, then [analyseAndCoach]; [ask] handles
+ * everything outside meal logging.
+ *
+ * To go live: deploy /functions, write an implementation backed by its
+ * callables, and swap the binding in `RepositoryModule`. Adding an agent later
+ * (photo analysis, barcode, weekly report) means adding a method here and a
+ * handler in the backend registry - no existing call changes.
  */
 interface NutritionAssistantRepository {
 

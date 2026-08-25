@@ -21,7 +21,6 @@ data class LoginUiState(
     val formError: String? = null,
     val loading: Boolean = false,
     val signedIn: Boolean = false,
-    val resetEmailSent: Boolean = false,
 )
 
 @HiltViewModel
@@ -85,12 +84,7 @@ class LoginViewModel @Inject constructor(
             return
         }
         viewModelScope.launch {
-            when (authRepository.sendPasswordReset(email.trim())) {
-                is AuthResult.Success -> _uiState.update { it.copy(resetEmailSent = true) }
-                is AuthResult.Failure -> Unit
-            }
+            authRepository.sendPasswordReset(email.trim())
         }
     }
-
-    fun consumeResetSent() = _uiState.update { it.copy(resetEmailSent = false) }
 }

@@ -254,11 +254,11 @@ internal fun PersonalRecordsSection(prs: List<PersonalRecord>, exercisesById: Ma
                         .padding(14.dp),
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Icon(Icons.Outlined.EmojiEvents, contentDescription = null, tint = RepsGreen, modifier = Modifier.size(12.dp))
+                        Icon(Icons.Outlined.EmojiEvents, contentDescription = null, tint = RepsAchievement, modifier = Modifier.size(12.dp))
                         Text(
                             text = stringResource(R.string.workouts_new_pr).uppercase(),
                             style = MaterialTheme.typography.labelSmall,
-                            color = RepsGreen,
+                            color = RepsAchievement,
                         )
                     }
                     Text(
@@ -350,49 +350,4 @@ private fun achievementMeta(id: AchievementId) = when (id) {
     AchievementId.FIRST_PR -> Icons.Outlined.EmojiEvents to R.string.ach_first_pr_title
 }
 
-@Composable
-internal fun RecentActivitySection(sessions: List<WorkoutSession>, exercisesById: Map<String, Exercise>) {
-    val recent = remember(sessions) { sessions.sortedByDescending { it.date }.take(8) }
-    Column {
-        Text(
-            text = stringResource(R.string.progress_recent_activity),
-            style = MaterialTheme.typography.titleSmall,
-            color = RepsTheme.colors.textPrimary,
-            modifier = Modifier.padding(bottom = 10.dp),
-        )
-        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            recent.forEach { session ->
-                val volume = session.exercises.flatMap { it.sets }.filter { it.completed }.sumOf { it.volume }
-                Column(
-                    Modifier
-                        .fillMaxWidth()
-                        .background(RepsTheme.colors.surface, MaterialTheme.shapes.medium)
-                        .padding(14.dp),
-                ) {
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text(session.name, style = MaterialTheme.typography.bodyLarge, color = RepsTheme.colors.textPrimary)
-                        Text(session.date.toString(), style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textTertiary)
-                    }
-                    Row(Modifier.padding(top = 6.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                        Text("${session.durationMin} min", style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textSecondary)
-                        Text("${volume.roundToInt()} kg", style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textSecondary)
-                    }
-                    if (session.prsHit.isNotEmpty()) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
-                            modifier = Modifier.padding(top = 8.dp),
-                        ) {
-                            Icon(Icons.Outlined.EmojiEvents, contentDescription = null, tint = RepsGreen, modifier = Modifier.size(12.dp))
-                            Text(
-                                text = stringResource(R.string.workouts_new_pr),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = RepsGreen,
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
+

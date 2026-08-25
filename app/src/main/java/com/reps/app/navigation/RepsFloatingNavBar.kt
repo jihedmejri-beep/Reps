@@ -40,7 +40,11 @@ import androidx.compose.ui.unit.dp
 import com.reps.app.core.components.BackdropState
 import com.reps.app.core.components.backdropBlur
 import com.reps.app.core.components.rememberBackdropState
+import com.reps.app.core.theme.RepsCarbs
+import com.reps.app.core.theme.RepsFat
 import com.reps.app.core.theme.RepsGreen
+import com.reps.app.core.theme.RepsNavNutrition
+import com.reps.app.core.theme.RepsProtein
 import com.reps.app.core.theme.RepsOffWhite
 import com.reps.app.core.theme.RepsTheme
 
@@ -130,6 +134,12 @@ fun RepsFloatingNavBar(
             label = "indicatorX",
         )
 
+        val indicatorColor by animateColorAsState(
+            targetValue = selected.accentColor(),
+            animationSpec = tween(TintMs),
+            label = "indicatorColor",
+        )
+
         Box(
             Modifier
                 .height(dimens.navHeight)
@@ -150,7 +160,8 @@ fun RepsFloatingNavBar(
                     .fillMaxHeight()
                     .padding(horizontal = IndicatorInsetX, vertical = IndicatorInsetY)
                     .background(RepsTheme.colors.surfaceElevated, PillShape)
-                    .border(1.dp, IndicatorBorder, PillShape),
+                    .background(indicatorColor.copy(alpha = 0.08f), PillShape)
+                    .border(1.dp, indicatorColor.copy(alpha = 0.12f), PillShape),
             )
 
             Row(Modifier.fillMaxSize()) {
@@ -167,6 +178,18 @@ fun RepsFloatingNavBar(
     }
 }
 
+/**
+ * Each tab gets its own accent so the icon tint identifies the section at a
+ * glance. The hues are drawn from the existing palette to stay harmonious.
+ */
+private fun TopLevelTab.accentColor() = when (this) {
+    TopLevelTab.HOME      -> RepsGreen       // brand green  – home base
+    TopLevelTab.PROGRESS  -> RepsCarbs       // golden amber – charts, growth
+    TopLevelTab.WORKOUTS  -> RepsProtein     // warm coral   – energy, intensity
+    TopLevelTab.NUTRITION -> RepsNavNutrition // fresh teal   – food, health
+    TopLevelTab.PROFILE   -> RepsFat         // calm blue    – personal, identity
+}
+
 @Composable
 private fun NavIconTab(
     tab: TopLevelTab,
@@ -176,7 +199,7 @@ private fun NavIconTab(
 ) {
     val dimens = RepsTheme.dimens
     val tint by animateColorAsState(
-        targetValue = if (isSelected) RepsGreen else RepsTheme.colors.textTertiary,
+        targetValue = if (isSelected) tab.accentColor() else RepsTheme.colors.textTertiary,
         animationSpec = tween(TintMs),
         label = "navTint",
     )

@@ -15,6 +15,7 @@ import com.reps.app.domain.repository.WorkoutRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -37,21 +38,31 @@ data class ProgressUiState(
 class ProgressViewModel @Inject constructor(
     private val weightRepository: WeightRepository,
     workoutRepository: WorkoutRepository,
-    exerciseRepository: ExerciseRepository,
+    private val exerciseRepository: ExerciseRepository,
     userRepository: UserRepository,
 ) : ViewModel() {
+
+    /**
+     * Only the exercises the logged sessions actually reference. The muscle
+     * distribution chart needs a group per exercise it has volume for, which is
+     * a few dozen - not the whole 828-row catalogue.
+     */
+    private val sessionExercises = workoutRepository.observeSessions().map { sessions ->
+        val ids = sessions.flatMap { session -> session.exercises.map { it.exerciseId } }
+        exerciseRepository.getByIds(ids.distinct()).associateBy { it.id }
+    }
 
     val uiState = combine(
         workoutRepository.observeSessions(),
         workoutRepository.observeTemplates(),
-        exerciseRepository.observeExercises(),
+        sessionExercises,
         weightRepository.observeEntries(),
         userRepository.observeUser(),
-    ) { sessions, templates, exercises, weights, user ->
+    ) { sessions, templates, exercisesById, weights, user ->
         ProgressUiState(
             sessions = sessions.sortedBy { it.date },
             templates = templates,
-            exercisesById = exercises.associateBy { it.id },
+            exercisesById = exercisesById,
             weightEntries = weights,
             currentWeightKg = weights.maxByOrNull { it.date }?.weightKg,
             units = user?.units ?: UnitSystem.METRIC,

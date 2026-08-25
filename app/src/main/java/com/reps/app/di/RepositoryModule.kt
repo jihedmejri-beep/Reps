@@ -1,15 +1,19 @@
 package com.reps.app.di
 
+import com.reps.app.data.assistant.InMemoryAssistantConversationRepository
+import com.reps.app.data.exercise.CatalogExerciseRepository
+import com.reps.app.data.exercise.CatalogMuscleSvgRepository
 import com.reps.app.data.fake.FakeAuthRepository
-import com.reps.app.data.fake.FakeExerciseRepository
 import com.reps.app.data.fake.FakeMealRepository
 import com.reps.app.data.fake.FakeNutritionAssistantRepository
 import com.reps.app.data.fake.FakeUserRepository
 import com.reps.app.data.fake.FakeWeightRepository
 import com.reps.app.data.fake.FakeWorkoutRepository
+import com.reps.app.domain.repository.AssistantConversationRepository
 import com.reps.app.domain.repository.AuthRepository
 import com.reps.app.domain.repository.ExerciseRepository
 import com.reps.app.domain.repository.MealRepository
+import com.reps.app.domain.repository.MuscleSvgRepository
 import com.reps.app.domain.repository.NutritionAssistantRepository
 import com.reps.app.domain.repository.UserRepository
 import com.reps.app.domain.repository.WeightRepository
@@ -21,10 +25,13 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 /**
- * The frontend is being built ahead of the backend, so every repository is
- * bound to an in-memory fake. Pointing the app at Firebase is a matter of
- * swapping the right-hand side of each binding for its *RepositoryImpl - no
- * ViewModel or screen changes.
+ * The user's own data (workouts, weight, meals) is still bound to in-memory
+ * fakes while the backend is built; pointing those at Firebase is a matter of
+ * swapping the right-hand side of each binding - no ViewModel or screen changes.
+ *
+ * The exercise catalogue is the exception: it is real, shipped in the APK and
+ * read through Room. It was never user data, so it had no reason to wait for a
+ * backend.
  */
 @Module
 @InstallIn(SingletonComponent::class)
@@ -40,7 +47,11 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindExerciseRepository(impl: FakeExerciseRepository): ExerciseRepository
+    abstract fun bindExerciseRepository(impl: CatalogExerciseRepository): ExerciseRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindMuscleSvgRepository(impl: CatalogMuscleSvgRepository): MuscleSvgRepository
 
     @Binds
     @Singleton
@@ -55,16 +66,25 @@ abstract class RepositoryModule {
     abstract fun bindMealRepository(impl: FakeMealRepository): MealRepository
 
     /**
-     * The assistant follows the same rule as everything above: the fake ships
-     * until the backend is deployed, so the screen runs today without a Groq
-     * key, a USDA key, or any functions in the project.
-     *
-     * To point it at the real agents, deploy /functions and swap this for
-     * FunctionsNutritionAssistantRepository - nothing else changes.
+     * The assistant's AI brain. The fake answers locally so the screen runs
+     * today without a Groq key, a USDA key, or any deployed functions. To go
+     * live: deploy /functions, implement [NutritionAssistantRepository] on top
+     * of its callables, and swap the right-hand side here - nothing else
+     * changes.
      */
     @Binds
     @Singleton
     abstract fun bindNutritionAssistantRepository(
         impl: FakeNutritionAssistantRepository,
     ): NutritionAssistantRepository
+
+    /**
+     * Where past chats are kept. In-memory for now; binding a durable store
+     * (Room, Firestore) later is a one-line swap here.
+     */
+    @Binds
+    @Singleton
+    abstract fun bindAssistantConversationRepository(
+        impl: InMemoryAssistantConversationRepository,
+    ): AssistantConversationRepository
 }

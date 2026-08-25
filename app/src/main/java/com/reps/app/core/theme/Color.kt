@@ -10,7 +10,6 @@ val RepsOffWhite = Color(0xFFF4F2EA)
 val RepsDarkGray = Color(0xFF3D3C37)
 val RepsNearBlack = Color(0xFF0B0B0A)
 
-val RepsGreenPressed = Color(0xFF63C503)
 // Text/icons sitting on a green fill. Green is light and acid, so near-black
 // reads on it in both themes - this stays constant on purpose.
 val RepsOnGreen = RepsNearBlack
@@ -36,6 +35,12 @@ val RepsFat = Color(0xFF4F9DDE)
 // amber family so they sit apart from the brand green without inventing a new
 // hue. Named for the reward, not overloaded onto the caution amber.
 val RepsAchievement = Color(0xFFF2A93B)
+
+// Per-tab nav accent - a fresh teal reserved for the Nutrition tab icon. The
+// brand green is too close in hue to read as a second colour at icon scale,
+// so this sits on the opposite side of the colour wheel from the coral and
+// amber used by Workouts and Progress.
+val RepsNavNutrition = Color(0xFF2DD4A8)
 
 // ---------------------------------------------------------------------------
 // Dark palette - the original brand surfaces. Kept as named constants so the

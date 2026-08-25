@@ -10,12 +10,12 @@
     <string name="nav_profile">Profile</string>
 
     <!-- Splash -->
-    <string name="splash_tagline">PUSH · TRACK · REPEAT</string>
+    <string name="splash_tagline">PUSH Â· TRACK Â· REPEAT</string>
     <string name="splash_tap_to_continue">TAP TO CONTINUE</string>
 
     <!-- Onboarding -->
     <string name="onboarding_headline">Train like you mean it.</string>
-    <string name="onboarding_subtext">Your training, nutrition and progress — engineered into one disciplined system.</string>
+    <string name="onboarding_subtext">Your training, nutrition and progress â€” engineered into one disciplined system.</string>
     <string name="onboarding_get_started">Get Started</string>
     <string name="onboarding_have_account">I already have an account</string>
 
@@ -26,7 +26,6 @@
     <string name="auth_or">OR</string>
     <string name="auth_show_password">Show password</string>
     <string name="auth_hide_password">Hide password</string>
-    <string name="auth_back">Back</string>
 
     <!-- Auth: login -->
     <string name="login_headline">Welcome back</string>
@@ -54,23 +53,21 @@
     <string name="error_password_empty">Password is required.</string>
     <string name="error_password_short">Password must be at least 8 characters.</string>
     <string name="error_name_empty">Name is required.</string>
-    <string name="error_generic">Something went wrong. Try again.</string>
 
     <!-- Home -->
     <string name="home_greeting_morning">Good morning</string>
     <string name="home_greeting_afternoon">Good afternoon</string>
     <string name="home_greeting_evening">Good evening</string>
     <string name="home_notifications">Notifications</string>
-    <string name="home_open_profile">Open profile</string>
     <string name="home_streak_count">%1$d day streak</string>
-    <string name="home_streak_nudge">Keep it alive — train today to hit %1$d.</string>
-    <string name="home_today_workout">Today · Workout</string>
+    <string name="home_streak_nudge">Keep it alive â€” train today to hit %1$d.</string>
+    <string name="home_today_workout">Today Â· Workout</string>
     <string name="home_start_workout">Start Workout</string>
     <string name="home_exercise_count">%1$d exercises</string>
     <string name="home_duration_min">%1$d min</string>
     <string name="home_set_count">%1$d sets</string>
     <string name="home_exercises_label">Exercises</string>
-    <string name="home_set_scheme">%1$d × %2$d</string>
+    <string name="home_set_scheme">%1$d Ã— %2$d</string>
     <string name="home_more_exercises">+%1$d more</string>
     <string name="home_rest_day">Rest day</string>
     <string name="home_rest_day_subtext">Nothing scheduled. Recovery is part of the plan.</string>
@@ -89,10 +86,8 @@
     <string name="progress_last_month">Last month</string>
     <string name="progress_add_weight">Add weight</string>
     <string name="progress_save">Save</string>
-    <string name="progress_cancel">Cancel</string>
     <string name="progress_bmr">BMR</string>
     <string name="progress_bmi">BMI</string>
-    <string name="progress_bmr_caption">Calories burned at rest per day</string>
     <string name="progress_bmi_underweight">Underweight</string>
     <string name="progress_bmi_healthy">Healthy</string>
     <string name="progress_bmi_overweight">Overweight</string>
@@ -113,39 +108,24 @@
     <string name="progress_muscle_distribution">Muscle Group Distribution</string>
     <string name="progress_muscle_distribution_caption">By training volume</string>
     <string name="progress_personal_records">Personal Records</string>
-    <string name="progress_streak">Streak</string>
-    <string name="progress_streak_current">Current</string>
     <string name="progress_achievements">Achievements</string>
-    <string name="progress_recent_activity">Recent Activity</string>
-    <string name="progress_per_week">Per week</string>
-    <string name="progress_avg_length">Avg length</string>
-    <string name="progress_prs_hit">PRs hit</string>
-    <string name="progress_no_history">No workouts logged yet. Finish one to see it here.</string>
     <string name="progress_pr_beat">Beat your previous best by %1$s kg</string>
     <string name="progress_pr_first">First recorded set</string>
     <string name="progress_hero_rest_day_sub">Nothing scheduled. Recovery is part of the plan.</string>
     <string name="progress_hero_planned">%1$s planned</string>
-    <string name="progress_hero_planned_sub">Not started yet — Home has the start button.</string>
+    <string name="progress_hero_planned_sub">Not started yet â€” Home has the start button.</string>
     <string name="progress_hero_logged">%1$s logged</string>
-    <string name="progress_hero_logged_sub">%1$d min · %2$s kg lifted</string>
-    <string name="progress_today">Today</string>
+    <string name="progress_hero_logged_sub">%1$d min Â· %2$s kg lifted</string>
     <string name="ach_first_workout_title">First Rep</string>
-    <string name="ach_first_workout_desc">Log your first workout.</string>
     <string name="ach_streak7_title">On a Roll</string>
-    <string name="ach_streak7_desc">Hit a 7-day streak.</string>
     <string name="ach_ten_workouts_title">Regular</string>
-    <string name="ach_ten_workouts_desc">Log 10 workouts.</string>
     <string name="ach_first_pr_title">Record Breaker</string>
-    <string name="ach_first_pr_desc">Hit your first PR.</string>
-    <string name="ach_locked_progress">%1$d%% of the way there</string>
-    <string name="ach_unlocked">Unlocked</string>
 
     <!-- Workouts -->
     <string name="workouts_eyebrow">Workout Library</string>
     <string name="workouts_title">Exercises</string>
     <string name="workouts_filter_all">All</string>
     <string name="workouts_search">Search exercises</string>
-    <string name="workouts_common_mistakes">Common mistakes</string>
     <string name="workouts_description">Description</string>
     <string name="workouts_builder_eyebrow">Build</string>
     <string name="workouts_builder_title">New Workout</string>
@@ -161,26 +141,39 @@
     <string name="workouts_lb">lb</string>
     <string name="workouts_reps">Reps</string>
     <string name="workouts_new_pr">New PR</string>
-    <string name="workouts_pr_message">%1$s — %2$s beat your previous best.</string>
     <string name="workouts_my_workouts">My Workouts</string>
     <string name="workouts_no_matches_title">No matches</string>
     <string name="workouts_no_matches_subtitle">Try a different search or filter.</string>
     <string name="exercise_media_cd">%1$s demonstration</string>
     <string name="exercise_tab_muscles">Muscles</string>
-    <string name="exercise_tab_howto">How-to</string>
-    <string name="exercise_howto_placeholder">Step-by-step photos coming soon.</string>
+    <string name="exercise_tab_demo">Demo</string>
     <string name="muscle_map_cd">Body map highlighting the %1$s</string>
+    <string name="exercise_body_front">Front</string>
+    <string name="exercise_body_back">Back</string>
+    <string name="exercise_no_muscle_data">No muscle data for this exercise.</string>
+    <string name="exercise_media_none">No demonstration image available.</string>
+    <string name="exercise_media_unavailable">Demonstration unavailable offline.</string>
+    <string name="exercise_section_muscles">Target muscles</string>
+    <string name="exercise_section_starting_position">Starting position</string>
+    <string name="exercise_section_steps">How to perform</string>
+    <string name="exercise_section_tips">Tips</string>
+    <string name="exercise_section_notes">Notes</string>
+    <string name="exercise_section_aliases">Also known as</string>
+    <string name="exercise_no_instructions">No instructions recorded for this exercise yet.</string>
+    <string name="exercise_license">Exercise data: %1$s</string>
+    <string name="exercise_not_found_title">Exercise unavailable</string>
+    <string name="exercise_not_found_body">This exercise is not in the catalogue on this device.</string>
     <string name="workouts_builder_selected">%1$d selected</string>
     <string name="workouts_builder_remove_cd">Remove exercise</string>
     <string name="workouts_builder_empty">No exercises added yet.</string>
-    <string name="workouts_session_finish_with_count">Finish workout · %1$d/%2$d sets</string>
+    <string name="workouts_session_finish_with_count">Finish workout Â· %1$d/%2$d sets</string>
     <string name="workouts_session_volume_so_far">Volume so far</string>
     <string name="workouts_session_no_sets_title">No sets logged yet</string>
     <string name="workouts_session_no_sets_body">Check off at least one set before finishing, or cancel to keep training.</string>
     <string name="workouts_session_keep_training">Keep training</string>
     <string name="workouts_session_finish_anyway">Finish anyway</string>
     <string name="workouts_session_complete_title">Workout complete</string>
-    <string name="workouts_session_complete_body">%1$s kg lifted across %2$d sets. Nice work — that’s logged in Progress.</string>
+    <string name="workouts_session_complete_body">%1$s kg lifted across %2$d sets. Nice work â€” thatâ€™s logged in Progress.</string>
     <string name="workouts_session_done">Done</string>
 
     <!-- Muscle groups -->
@@ -191,6 +184,7 @@
     <string name="muscle_arms">Arms</string>
     <string name="muscle_abs">Abs</string>
     <string name="muscle_glutes">Glutes</string>
+    <string name="muscle_calves">Calves</string>
     <string name="muscle_cardio">Cardio</string>
 
     <!-- Difficulty -->
@@ -199,19 +193,6 @@
     <string name="difficulty_advanced">Advanced</string>
 
     <!-- Timer -->
-    <string name="timer_eyebrow">Fitness Timer</string>
-    <string name="timer_title">Timer</string>
-    <string name="timer_start">Start</string>
-    <string name="timer_pause">Pause</string>
-    <string name="timer_resume">Resume</string>
-    <string name="timer_cancel">Cancel</string>
-    <string name="timer_hours">hours</string>
-    <string name="timer_minutes">min</string>
-    <string name="timer_seconds">sec</string>
-    <string name="timer_running">Timer running</string>
-    <string name="timer_done">Time is up</string>
-    <string name="timer_notification_channel">Workout timer</string>
-    <string name="timer_notification_channel_desc">Shows the countdown while a timer is running.</string>
 
     <!-- Floating rest timer (shown during an active workout, between sets) -->
     <string name="rest_timer_eyebrow">Rest</string>
@@ -219,7 +200,7 @@
     <string name="rest_timer_resting">Resting</string>
     <string name="rest_timer_paused">Paused</string>
     <string name="rest_timer_complete">Rest complete</string>
-    <string name="rest_timer_minus15">−15</string>
+    <string name="rest_timer_minus15">âˆ’15</string>
     <string name="rest_timer_plus15">+15</string>
     <string name="rest_timer_restart_cd">Restart rest timer</string>
     <string name="rest_timer_skip_cd">Skip rest</string>
@@ -235,14 +216,10 @@
     <string name="nutrition_add_food">Add ingredient</string>
     <string name="nutrition_food_name">Ingredient</string>
     <string name="nutrition_grams">Grams</string>
-    <string name="nutrition_calories">Calories</string>
     <string name="nutrition_protein">Protein</string>
     <string name="nutrition_carbs">Carbs</string>
     <string name="nutrition_fat">Fat</string>
     <string name="nutrition_kcal">kcal</string>
-    <string name="nutrition_today">Today</string>
-    <string name="nutrition_target">Target</string>
-    <string name="nutrition_advice">Guidance</string>
     <string name="nutrition_empty">No meals logged today.</string>
     <string name="nutrition_water">Water</string>
     <string name="nutrition_water_glasses">%1$d/%2$d glasses</string>
@@ -281,44 +258,32 @@
     <string name="assistant_suggestion_calories">Calculate calories</string>
     <string name="assistant_suggestion_protein">Check my protein intake</string>
     <string name="assistant_suggestion_eat">What should I eat?</string>
-    <string name="assistant_composer_hint">Message Nutrition Assistant…</string>
+    <string name="assistant_composer_hint">Message Nutrition Assistantâ€¦</string>
     <string name="assistant_send_cd">Send message</string>
     <string name="assistant_typing_cd">Assistant is typing</string>
     <string name="assistant_history_eyebrow">Assistant</string>
     <string name="assistant_history_title">History</string>
     <string name="assistant_history_empty">No conversations yet.</string>
+<string name="assistant_error_network">You seem offline. Check your connection and try again.</string>
+<string name="assistant_error_generic">Something went wrong. Please try again.</string>
+<string name="assistant_delete_cd">Delete conversation</string>
+<string name="assistant_delete_title">Delete conversation?</string>
+<string name="assistant_delete_body">This conversation will be removed from your history.</string>
+<string name="assistant_delete_confirm">Delete</string>
+<string name="assistant_delete_cancel">Cancel</string>
 
     <!--
       Placeholder assistant replies. These are demo copy for the interface only -
       they are replaced wholesale once the real assistant is connected, so nothing
       here should be read as a nutrition figure.
     -->
-    <string name="assistant_reply_meal">Tell me what was on the plate and roughly how much of each — I\'ll break the meal down into calories and macros.</string>
-    <string name="assistant_reply_calories">Give me the foods and their portions and I\'ll add them up. Portions matter more than anything else here, so estimate them as best you can.</string>
-    <string name="assistant_reply_protein">Protein is the target most people fall short on. Log what you\'ve eaten so far and I\'ll tell you how much is left to hit today\'s number.</string>
-    <string name="assistant_reply_eat">Something protein-led with a decent carb portion would suit the calories you have left — grilled chicken with rice and a green vegetable is a solid default.</string>
-    <string name="assistant_reply_meal_estimate">From what you\'ve described that looks like roughly 520 kcal. Confirm the portions and I can tighten that up.</string>
-    <string name="assistant_reply_balance">That fits your day well. Protein is the one worth watching — the rest of your targets have room in them.</string>
-    <string name="assistant_reply_more_detail">Good question. Tell me a little more about the portions and I can be more precise.</string>
 
-    <string name="assistant_conv_breakfast">Breakfast calories</string>
-    <string name="assistant_conv_protein">My protein intake</string>
-    <string name="assistant_conv_dinner">Healthy dinner ideas</string>
-    <string name="assistant_conv_postworkout">Post-workout meal</string>
-    <string name="assistant_conv_breakfast_q">How many calories were in my breakfast?</string>
-    <string name="assistant_conv_breakfast_a">Three eggs, two slices of toast and a banana comes to about 520 kcal, with roughly 27g of protein.</string>
-    <string name="assistant_conv_postworkout_q">What should I eat after training?</string>
-    <string name="assistant_conv_postworkout_a">Protein and carbs together, within an hour or two. A shake with a banana works, but a real meal works just as well.</string>
     <string name="assistant_time_today">Today</string>
     <string name="assistant_time_yesterday">Yesterday</string>
-    <string name="assistant_time_this_week">Earlier this week</string>
-    <string name="assistant_time_last_week">Last week</string>
 
     <!-- Profile -->
     <string name="profile_eyebrow">Account</string>
     <string name="profile_title">Profile</string>
-    <string name="profile_details">Your details</string>
-    <string name="profile_name">Name</string>
     <string name="profile_height">Height</string>
     <string name="profile_weight">Weight</string>
     <string name="profile_age">Age</string>
@@ -335,7 +300,7 @@
     <string name="profile_units_imperial">Imperial (lb, in)</string>
     <string name="profile_settings">Account settings</string>
     <string name="profile_credits_title">Credits &amp; Licenses</string>
-    <string name="profile_credits_muscle_map">Muscle diagram adapted from “Muscles front and back” by %1$s, via Wikimedia Commons, licensed under CC BY-SA 4.0 (creativecommons.org/licenses/by-sa/4.0). Modified for use in Reps.</string>
+    <string name="profile_credits_muscle_map">Muscle diagram adapted from â€œMuscles front and backâ€ by %1$s, via Wikimedia Commons, licensed under CC BY-SA 4.0 (creativecommons.org/licenses/by-sa/4.0). Modified for use in Reps.</string>
     <string name="profile_sign_out">Sign out</string>
     <string name="profile_save">Save changes</string>
     <string name="profile_notifications">Notifications</string>
@@ -346,25 +311,20 @@
     <string name="profile_theme_system">System</string>
     <string name="profile_account_settings_body">Password, email and connected sign-in methods will live here once accounts are backed by Firebase.</string>
     <string name="profile_sign_out_confirm_title">Sign out?</string>
-    <string name="profile_sign_out_confirm_body">You can sign back in any time — your data stays on this device.</string>
-    <string name="profile_language_english_only">This build ships English only; other languages are saved as a preference for now.</string>
+    <string name="profile_sign_out_confirm_body">You can sign back in any time â€” your data stays on this device.</string>
     <string name="profile_preferences">Preferences</string>
     <string name="profile_your_details">Your details</string>
     <string name="language_english">English</string>
-    <string name="language_arabic">العربية</string>
-    <string name="language_french">Français</string>
+    <string name="language_arabic">Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©</string>
+    <string name="language_french">FranÃ§ais</string>
 
     <!-- Notifications -->
     <string name="notifications_eyebrow">Activity</string>
     <string name="notifications_title">Notifications</string>
     <string name="notifications_empty">Nothing new.</string>
-    <string name="notification_channel_reminders">Workout reminders</string>
-    <string name="notification_channel_reminders_desc">Reminds you when a workout is scheduled.</string>
     <string name="notification_workout_today">%1$s today</string>
     <string name="notification_workout_today_body">Your session is scheduled. Keep the streak alive.</string>
 
     <!-- Content descriptions -->
-    <string name="cd_logo">REPS logo</string>
     <string name="cd_back">Navigate back</string>
-    <string name="cd_close">Close</string>
 </resources>

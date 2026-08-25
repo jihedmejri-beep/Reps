@@ -27,6 +27,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,7 +43,6 @@ import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsOnGreen
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.util.DateUtils
-import com.reps.app.domain.model.Difficulty
 import com.reps.app.domain.model.Streak
 import com.reps.app.domain.model.UnitSystem
 import com.reps.app.navigation.OnTabReselected
@@ -85,7 +86,21 @@ private fun HomeContent(
         // it, so content scrolls up to the status bar and stops rather than
         // sliding underneath the clock. Mirrors the prototype's status-spacer,
         // which is a sibling of the scroll area rather than part of it.
-        modifier = Modifier.fillMaxSize().background(RepsTheme.colors.background).statusBarsPadding(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(RepsTheme.colors.background)
+            // A gentle green wash fading down from the top gives the home tab
+            // a warm, welcoming ambient glow without overwhelming the cards.
+            .background(
+                Brush.verticalGradient(
+                    colorStops = arrayOf(
+                        0f to RepsGreen.copy(alpha = 0.06f),
+                        0.3f to Color.Transparent,
+                        1f to Color.Transparent,
+                    ),
+                ),
+            )
+            .statusBarsPadding(),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(
             start = dimens.screenPadding,
             end = dimens.screenPadding,
@@ -206,6 +221,15 @@ private fun RestDayCard() {
         Modifier
             .fillMaxWidth()
             .background(RepsTheme.colors.surface, MaterialTheme.shapes.large)
+            .background(
+                Brush.linearGradient(
+                    colors = listOf(
+                        RepsGreen.copy(alpha = 0.05f),
+                        Color.Transparent,
+                    ),
+                ),
+                shape = MaterialTheme.shapes.large,
+            )
             .padding(16.dp),
     ) {
         Text(

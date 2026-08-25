@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,11 +21,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.reps.app.R
 import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsTheme
@@ -55,15 +59,28 @@ fun ExerciseRow(
         Box(
             Modifier
                 .size(40.dp)
-                .background(RepsTheme.colors.surfaceElevated, MaterialTheme.shapes.small),
+                .clip(MaterialTheme.shapes.small)
+                .background(RepsTheme.colors.surfaceElevated),
             contentAlignment = Alignment.Center,
         ) {
+            // The dumbbell glyph is the resting state, not a spinner: two thirds
+            // of the catalogue has no photo, and a row that flickers through a
+            // loading state on every scroll reads worse than one that simply
+            // shows the icon until a thumbnail arrives.
             Icon(
                 painter = painterResource(R.drawable.ic_workouts),
                 contentDescription = null,
                 tint = RepsGreen,
                 modifier = Modifier.size(18.dp),
             )
+            if (exercise.thumbnailUrl.isNotBlank()) {
+                AsyncImage(
+                    model = exercise.thumbnailUrl,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
         }
         Column(Modifier.weight(1f)) {
             Text(
@@ -74,7 +91,12 @@ fun ExerciseRow(
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = "${stringResource(exercise.muscleGroup.labelRes)} · ${exercise.equipment}",
+                // 181 catalogue exercises record no equipment, so the separator
+                // is only drawn when there is something on the other side of it.
+                text = listOf(
+                    stringResource(exercise.muscleGroup.labelRes),
+                    exercise.equipment,
+                ).filter { it.isNotBlank() }.joinToString(" · "),
                 style = MaterialTheme.typography.labelSmall,
                 color = RepsTheme.colors.textSecondary,
                 maxLines = 1,
@@ -82,12 +104,17 @@ fun ExerciseRow(
                 modifier = Modifier.padding(top = 1.dp),
             )
         }
+        // Difficulty is null for everything in the catalogue - it records none -
+        // so the trailing slot stays empty rather than claiming a level.
+        val difficulty = exercise.difficulty
         if (selected == null) {
-            Text(
-                text = stringResource(exercise.difficulty.labelRes),
-                style = MaterialTheme.typography.labelSmall,
-                color = RepsTheme.colors.textSecondary,
-            )
+            if (difficulty != null) {
+                Text(
+                    text = stringResource(difficulty.labelRes),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = RepsTheme.colors.textSecondary,
+                )
+            }
         } else {
             Box(
                 Modifier

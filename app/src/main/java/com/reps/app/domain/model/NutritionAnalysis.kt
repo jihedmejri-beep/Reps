@@ -16,12 +16,6 @@ data class NutritionAnalysis(
 ) {
     val macros: Macros
         get() = items.fold(Macros()) { acc, item -> acc + item.macros }
-
-    /**
-     * Totals cover only what USDA matched. A partial result is still worth
-     * showing, but the UI has to be able to say so.
-     */
-    val isPartial: Boolean get() = unmatched.isNotEmpty()
 }
 
 /**

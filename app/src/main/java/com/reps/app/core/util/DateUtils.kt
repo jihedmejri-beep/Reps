@@ -2,9 +2,7 @@ package com.reps.app.core.util
 
 import androidx.annotation.StringRes
 import com.reps.app.R
-import java.time.LocalDate
 import java.time.LocalTime
-import java.time.YearMonth
 import java.util.Locale
 
 object DateUtils {
@@ -16,12 +14,6 @@ object DateUtils {
         in 12..17 -> R.string.home_greeting_afternoon
         else -> R.string.home_greeting_evening
     }
-
-    fun daysInMonth(month: YearMonth): List<LocalDate> =
-        (1..month.lengthOfMonth()).map { month.atDay(it) }
-
-    fun isSameMonth(date: LocalDate, month: YearMonth): Boolean =
-        YearMonth.from(date) == month
 
     /** `m:ss`, e.g. 90 -> "1:30". Locale-fixed so digits never localise to non-Latin numerals. */
     fun formatClock(totalSeconds: Int): String {

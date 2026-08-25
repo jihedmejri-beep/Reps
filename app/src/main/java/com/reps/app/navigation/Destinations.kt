@@ -36,7 +36,6 @@ object Routes {
     const val EXERCISE_DETAIL = "exercise/{exerciseId}"
     const val WORKOUT_BUILDER = "workout/builder"
     const val WORKOUT_SESSION = "workout/session/{workoutId}"
-    const val TIMER = "timer"
     const val NOTIFICATIONS = "notifications"
 
     fun exerciseDetail(exerciseId: String) = "exercise/$exerciseId"
@@ -44,13 +43,9 @@ object Routes {
 }
 
 /**
- * Optional argument on [Routes.PROGRESS] and [Routes.NUTRITION]. The Home quick
- * actions deep-link into a tab with an input already open, so the tab needs to
- * know it was entered that way.
+ * Argument on the exercise-detail and workout-session routes.
  */
 object NavArgs {
-    const val OPEN_ADD_WEIGHT = "openAddWeight"
-    const val OPEN_ADD_MEAL = "openAddMeal"
     const val EXERCISE_ID = "exerciseId"
     const val WORKOUT_ID = "workoutId"
 }

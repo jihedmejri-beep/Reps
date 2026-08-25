@@ -1,0 +1,63 @@
+=== id 1000 Floor dips ===
+{
+  "summary": "",
+  "startingPosition": "Sit with your arms behind you, supporting your back.Your fingers should point forward.Your knees should be bent, feet together.",
+  "steps": [
+    "Raise your hips off the ground, straightening your arms.",
+    "Bend your elbows, bringing your hips down.",
+    "Straighten your arms, returning to the previous position.",
+    "Repeat steps 2 and 3."
+  ],
+  "tips": [],
+  "notes": [
+    "The exercise's difficulty depends on how high you bring your hips."
+  ]
+}
+
+=== id 1027 Elevated prayer stretch ===
+{
+  "summary": "",
+  "startingPosition": "Kneel in front of a bench, far enough so that your torso can fit between your knees and the bench. With your back straight, place your elbows on the bench, with palms together, hands pointing up.",
+  "steps": [
+    "On exhale, stretch your chest down toward the floor without moving your lower back. At the same time, bring your hands toward your shoulders, keeping palms together and elbows on the bench.",
+    "Hold for a few seconds.",
+    "On inhale, relax your back to return to the starting position.",
+    "Repeat."
+  ],
+  "tips": [],
+  "notes": []
+}
+
+=== id 173 Crunches With Cable ===
+{
+  "summary": "Take the cable on your hands and hold it next to your temples. Knee down and hold your upper body straight and bend forward. Go down with a fast movement, rolling your back in (your ellbows point to your knees). Once down, go slowly back to the initial position.",
+  "startingPosition": "",
+  "steps": [],
+  "tips": [],
+  "notes": []
+}
+
+=== id 1114 Rest (for timed workouts) ===
+{
+  "summary": "When creating a workout based on time, add this to add rest time in the program",
+  "startingPosition": "",
+  "steps": [],
+  "tips": [],
+  "notes": []
+}
+
+=== id 1962 Step Jack ===
+{
+  "summary": "The Step Jack is a low-impact plyometric-style move that provides cardiovascular benefits without the joint stress of jumping. It works the entire body, specifically targeting the legs, core, and shoulders. This move is ideal for beginners, individuals with joint sensitivities, or as a dynamic warm-up to gradually elevate the heart rate. Notes (Instructions):",
+  "startingPosition": "",
+  "steps": [
+    "Stand upright with your feet together and arms at your sides.",
+    "Step your right foot out to the side while simultaneously swinging both arms up above your head.",
+    "Bring your right foot back to the center and lower your arms.",
+    "Immediately repeat the movement, stepping out with your left foot.",
+    "Continue alternating sides at a steady, rhythmic pace."
+  ],
+  "tips": [],
+  "notes": []
+}
+

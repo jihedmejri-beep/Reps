@@ -19,7 +19,10 @@ import com.reps.app.core.theme.PillShape
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsOnGreen
+import com.reps.app.core.theme.RepsGreen
+import com.reps.app.core.theme.RepsOnGreen
 import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.graphics.Color
 
 /**
  * The filter/selector pill used for muscle groups, lift pickers and similar
@@ -31,14 +34,15 @@ fun RepsChip(
     selected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    tintColor: Color = RepsGreen,
 ) {
     val background by animateColorAsState(
-        targetValue = if (selected) RepsGreen else RepsTheme.colors.surface,
+        targetValue = if (selected) tintColor else RepsTheme.colors.surface,
         animationSpec = tween(180),
         label = "chipBackground",
     )
     val border by animateColorAsState(
-        targetValue = if (selected) RepsGreen else RepsTheme.colors.outline,
+        targetValue = if (selected) tintColor else RepsTheme.colors.outline,
         animationSpec = tween(180),
         label = "chipBorder",
     )

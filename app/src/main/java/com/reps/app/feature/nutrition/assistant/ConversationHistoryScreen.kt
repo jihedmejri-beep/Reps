@@ -8,12 +8,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DeleteOutline
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,13 +34,18 @@ import com.reps.app.core.components.RepsBackButton
 import com.reps.app.core.components.RepsListRow
 import com.reps.app.core.components.SectionHeader
 import com.reps.app.core.theme.RepsTheme
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 /**
  * Past conversations, opened from the assistant's overflow menu.
  *
- * Backed by the same in-memory list the chat holds, so picking one hands it
- * straight back to the transcript. Replacing that list with stored history is a
- * change to the ViewModel alone.
+ * Backed by the history repository through the shared ViewModel: every row is
+ * a chat that actually happened, newest first. Tapping reopens it in the
+ * transcript; long-pressing offers to delete it.
  */
 @Composable
 fun ConversationHistoryScreen(
@@ -40,6 +55,7 @@ fun ConversationHistoryScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val dimens = RepsTheme.dimens
+    var pendingDelete by remember { mutableStateOf<String?>(null) }
 
     LazyColumn(
         modifier = Modifier
@@ -89,14 +105,65 @@ fun ConversationHistoryScreen(
                 ) {
                     state.conversations.forEachIndexed { index, conversation ->
                         RepsListRow(
-                            label = stringResource(conversation.titleRes),
-                            sub = stringResource(conversation.timeRes),
+                            label = conversation.title,
+                            sub = relativeDate(conversation.updatedAt),
                             showDivider = index > 0,
                             onClick = { onOpen(conversation.id) },
+                            trailing = {
+                                IconButton(
+                                    onClick = { pendingDelete = conversation.id },
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.DeleteOutline,
+                                        contentDescription =
+                                            stringResource(R.string.assistant_delete_cd),
+                                        tint = RepsTheme.colors.textTertiary,
+                                        modifier = Modifier.size(20.dp),
+                                    )
+                                }
+                            },
                         )
                     }
                 }
             }
         }
+    }
+
+    pendingDelete?.let { id ->
+        AlertDialog(
+            onDismissRequest = { pendingDelete = null },
+            title = { Text(stringResource(R.string.assistant_delete_title)) },
+            text = { Text(stringResource(R.string.assistant_delete_body)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.deleteConversation(id)
+                        pendingDelete = null
+                    },
+                ) {
+                    Text(
+                        stringResource(R.string.assistant_delete_confirm),
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { pendingDelete = null }) {
+                    Text(stringResource(R.string.assistant_delete_cancel))
+                }
+            },
+        )
+    }
+}
+
+/** Today / Yesterday, otherwise a localised short date - the row's only clock. */
+@Composable
+private fun relativeDate(epochMilli: Long): String {
+    val day = Instant.ofEpochMilli(epochMilli).atZone(ZoneId.systemDefault()).toLocalDate()
+    val today = LocalDate.now()
+    return when (day) {
+        today -> stringResource(R.string.assistant_time_today)
+        today.minusDays(1) -> stringResource(R.string.assistant_time_yesterday)
+        else -> day.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
     }
 }

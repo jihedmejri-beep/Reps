@@ -1,6 +1,7 @@
 package com.reps.app.core.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -55,15 +56,16 @@ fun TodayWorkoutCard(
             .fillMaxWidth()
             .background(RepsTheme.colors.surface, MaterialTheme.shapes.large)
             .background(
-                // A faint green wash from the top-right lifts the card off the
-                // page without resorting to a border.
+                // A green wash from the top-right lifts the card off the page
+                // and signals that this is the hero element on the home tab.
                 brush = Brush.radialGradient(
-                    colors = listOf(RepsGreen.copy(alpha = 0.10f), androidx.compose.ui.graphics.Color.Transparent),
+                    colors = listOf(RepsGreen.copy(alpha = 0.14f), androidx.compose.ui.graphics.Color.Transparent),
                     center = Offset(Float.POSITIVE_INFINITY, 0f),
                     radius = 620f,
                 ),
                 shape = MaterialTheme.shapes.large,
-            ),
+            )
+            .border(1.dp, RepsGreen.copy(alpha = 0.10f), MaterialTheme.shapes.large),
     ) {
         Column(Modifier.padding(RepsTheme.dimens.cardPadding)) {
             Row(

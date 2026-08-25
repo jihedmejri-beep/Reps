@@ -34,6 +34,4 @@ data class DraftIngredient(
     /** The user's own phrasing of the amount, e.g. "two cups". */
     val quantityText: String? = null,
     val cookingMethod: String? = null,
-) {
-    val hasQuantity: Boolean get() = grams != null && grams > 0.0
-}
+)
