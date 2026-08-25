@@ -327,4 +327,5 @@
 
     <!-- Content descriptions -->
     <string name="cd_back">Navigate back</string>
+    <string name="cd_close">Close</string>
 </resources>
