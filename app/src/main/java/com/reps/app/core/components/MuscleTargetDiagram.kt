@@ -44,8 +44,7 @@ import kotlinx.coroutines.withContext
  *
  * The overlays arrive filled wger red (`#fc0000`). Rather than ship a recoloured
  * copy - which would mean modifying the source artwork - the fill is rewritten
- * on the way to the renderer, the same technique [MuscleMapDiagram] already uses
- * for the bundled full-body map: primary muscles take brand green, secondary
+ * on the way to the renderer: primary muscles take brand green, secondary
  * ones a muted variant, so the distinction survives even in greyscale.
  *
  * Both sides are drawn whenever the exercise works muscles on both, because
@@ -148,7 +147,7 @@ private fun BodySide(
  * if present: a stale file would survive an app update and keep serving a tint
  * baked from an older palette. Rewriting also bumps `lastModified`, which is
  * part of Coil's cache key for file models, so its bitmap cache invalidates
- * along with it - the same reasoning as [MuscleMapDiagram].
+ * along with it.
  */
 @Composable
 private fun MuscleOverlay(assetPath: String, tint: Color, targetAlpha: Float) {

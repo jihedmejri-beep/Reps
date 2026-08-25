@@ -43,7 +43,6 @@ import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsOnGreen
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.util.DateUtils
-import com.reps.app.domain.model.Difficulty
 import com.reps.app.domain.model.Streak
 import com.reps.app.domain.model.UnitSystem
 import com.reps.app.navigation.OnTabReselected

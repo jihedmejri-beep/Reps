@@ -10,7 +10,6 @@ val RepsOffWhite = Color(0xFFF4F2EA)
 val RepsDarkGray = Color(0xFF3D3C37)
 val RepsNearBlack = Color(0xFF0B0B0A)
 
-val RepsGreenPressed = Color(0xFF63C503)
 // Text/icons sitting on a green fill. Green is light and acid, so near-black
 // reads on it in both themes - this stays constant on purpose.
 val RepsOnGreen = RepsNearBlack

@@ -7,7 +7,7 @@ let cached: Groq | null = null;
  * Built lazily and reused across warm invocations. Constructing it at module
  * scope would read the secret at deploy-analysis time, when it is not bound.
  */
-export function groq(): Groq {
+function groq(): Groq {
   if (cached === null) {
     cached = new Groq({ apiKey: GROQ_API_KEY.value(), maxRetries: 2 });
   }
@@ -72,13 +72,12 @@ export async function completeText(options: {
   model: string;
   messages: ChatTurn[];
   temperature?: number;
-  maxTokens?: number;
 }): Promise<string> {
   const response = await createCompletion({
     model: options.model,
     messages: options.messages,
     temperature: options.temperature ?? 0.6,
-    max_tokens: options.maxTokens ?? 700,
+    max_tokens: 700,
   });
 
   return extractContent(response).trim();

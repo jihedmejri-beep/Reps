@@ -7,7 +7,6 @@ import com.reps.app.data.exercise.db.ExerciseImageEntity
 import com.reps.app.data.exercise.db.ExerciseListRow
 import com.reps.app.data.exercise.db.ExerciseMuscleEntity
 import com.reps.app.data.exercise.db.TextFolding
-import com.reps.app.domain.model.AppLanguage
 import com.reps.app.domain.model.Exercise
 import com.reps.app.domain.model.ExerciseDetail
 import com.reps.app.domain.model.ExerciseMedia

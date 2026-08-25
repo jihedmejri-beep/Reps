@@ -4,13 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <!-- Runtime-requested on Android 13+; needed for workout reminders and the timer. -->
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".RepsApplication"
@@ -36,41 +29,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!--
-          The countdown timer must keep running and stay visible in the shade while
-          the user is mid-plank, which outlives the 3-minute shortService budget.
-          specialUse requires a justification in the Play Console at submission.
-        -->
-        <service
-            android:name=".feature.workouts.timer.TimerForegroundService"
-            android:exported="false"
-            android:foregroundServiceType="specialUse">
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="A user-started fitness countdown timer that must remain
-                    visible and accurate while the screen is off during an exercise." />
-        </service>
-
-        <!--
-          Play Games needs:
-            <meta-data android:name="com.google.android.gms.games.APP_ID"
-                       android:value="@string/play_games_app_id" />
-          It is deliberately absent until the Play Games project exists - the SDK
-          hard-crashes on launch if this ID is present but not a real one. Add it
-          together with the PR achievement wiring.
-        -->
-
-        <!-- WorkManager is initialised by Hilt, so the default initialiser is removed. -->
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="${applicationId}.androidx-startup"
-            android:exported="false"
-            tools:node="merge">
-            <meta-data
-                android:name="androidx.work.WorkManagerInitializer"
-                android:value="androidx.startup"
-                tools:node="remove" />
-        </provider>
     </application>
 </manifest>

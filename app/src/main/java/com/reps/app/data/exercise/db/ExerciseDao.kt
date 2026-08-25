@@ -167,10 +167,6 @@ interface ExerciseDao {
     )
     fun observeImages(exerciseId: String): Flow<List<ExerciseImageEntity>>
 
-    /** Distinct categories actually present, for the filter row. */
-    @Query("SELECT DISTINCT category FROM exercises WHERE category IS NOT NULL ORDER BY category")
-    fun observeCategories(): Flow<List<String>>
-
     @Query("SELECT * FROM muscle_svg_assets")
     suspend fun muscleSvgAssets(): List<MuscleSvgAssetEntity>
 

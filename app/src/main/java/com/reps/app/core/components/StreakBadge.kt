@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.reps.app.R
 import com.reps.app.core.theme.RepsAchievement
-import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.domain.model.Streak
 

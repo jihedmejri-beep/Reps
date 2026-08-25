@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">REPS</string>
 
@@ -26,7 +26,6 @@
     <string name="auth_or">OR</string>
     <string name="auth_show_password">Show password</string>
     <string name="auth_hide_password">Hide password</string>
-    <string name="auth_back">Back</string>
 
     <!-- Auth: login -->
     <string name="login_headline">Welcome back</string>
@@ -54,14 +53,12 @@
     <string name="error_password_empty">Password is required.</string>
     <string name="error_password_short">Password must be at least 8 characters.</string>
     <string name="error_name_empty">Name is required.</string>
-    <string name="error_generic">Something went wrong. Try again.</string>
 
     <!-- Home -->
     <string name="home_greeting_morning">Good morning</string>
     <string name="home_greeting_afternoon">Good afternoon</string>
     <string name="home_greeting_evening">Good evening</string>
     <string name="home_notifications">Notifications</string>
-    <string name="home_open_profile">Open profile</string>
     <string name="home_streak_count">%1$d day streak</string>
     <string name="home_streak_nudge">Keep it alive — train today to hit %1$d.</string>
     <string name="home_today_workout">Today · Workout</string>
@@ -89,10 +86,8 @@
     <string name="progress_last_month">Last month</string>
     <string name="progress_add_weight">Add weight</string>
     <string name="progress_save">Save</string>
-    <string name="progress_cancel">Cancel</string>
     <string name="progress_bmr">BMR</string>
     <string name="progress_bmi">BMI</string>
-    <string name="progress_bmr_caption">Calories burned at rest per day</string>
     <string name="progress_bmi_underweight">Underweight</string>
     <string name="progress_bmi_healthy">Healthy</string>
     <string name="progress_bmi_overweight">Overweight</string>
@@ -113,14 +108,7 @@
     <string name="progress_muscle_distribution">Muscle Group Distribution</string>
     <string name="progress_muscle_distribution_caption">By training volume</string>
     <string name="progress_personal_records">Personal Records</string>
-    <string name="progress_streak">Streak</string>
-    <string name="progress_streak_current">Current</string>
     <string name="progress_achievements">Achievements</string>
-    <string name="progress_recent_activity">Recent Activity</string>
-    <string name="progress_per_week">Per week</string>
-    <string name="progress_avg_length">Avg length</string>
-    <string name="progress_prs_hit">PRs hit</string>
-    <string name="progress_no_history">No workouts logged yet. Finish one to see it here.</string>
     <string name="progress_pr_beat">Beat your previous best by %1$s kg</string>
     <string name="progress_pr_first">First recorded set</string>
     <string name="progress_hero_rest_day_sub">Nothing scheduled. Recovery is part of the plan.</string>
@@ -128,17 +116,10 @@
     <string name="progress_hero_planned_sub">Not started yet — Home has the start button.</string>
     <string name="progress_hero_logged">%1$s logged</string>
     <string name="progress_hero_logged_sub">%1$d min · %2$s kg lifted</string>
-    <string name="progress_today">Today</string>
     <string name="ach_first_workout_title">First Rep</string>
-    <string name="ach_first_workout_desc">Log your first workout.</string>
     <string name="ach_streak7_title">On a Roll</string>
-    <string name="ach_streak7_desc">Hit a 7-day streak.</string>
     <string name="ach_ten_workouts_title">Regular</string>
-    <string name="ach_ten_workouts_desc">Log 10 workouts.</string>
     <string name="ach_first_pr_title">Record Breaker</string>
-    <string name="ach_first_pr_desc">Hit your first PR.</string>
-    <string name="ach_locked_progress">%1$d%% of the way there</string>
-    <string name="ach_unlocked">Unlocked</string>
 
     <!-- Workouts -->
     <string name="workouts_eyebrow">Workout Library</string>
@@ -160,7 +141,6 @@
     <string name="workouts_lb">lb</string>
     <string name="workouts_reps">Reps</string>
     <string name="workouts_new_pr">New PR</string>
-    <string name="workouts_pr_message">%1$s — %2$s beat your previous best.</string>
     <string name="workouts_my_workouts">My Workouts</string>
     <string name="workouts_no_matches_title">No matches</string>
     <string name="workouts_no_matches_subtitle">Try a different search or filter.</string>
@@ -213,19 +193,6 @@
     <string name="difficulty_advanced">Advanced</string>
 
     <!-- Timer -->
-    <string name="timer_eyebrow">Fitness Timer</string>
-    <string name="timer_title">Timer</string>
-    <string name="timer_start">Start</string>
-    <string name="timer_pause">Pause</string>
-    <string name="timer_resume">Resume</string>
-    <string name="timer_cancel">Cancel</string>
-    <string name="timer_hours">hours</string>
-    <string name="timer_minutes">min</string>
-    <string name="timer_seconds">sec</string>
-    <string name="timer_running">Timer running</string>
-    <string name="timer_done">Time is up</string>
-    <string name="timer_notification_channel">Workout timer</string>
-    <string name="timer_notification_channel_desc">Shows the countdown while a timer is running.</string>
 
     <!-- Floating rest timer (shown during an active workout, between sets) -->
     <string name="rest_timer_eyebrow">Rest</string>
@@ -249,14 +216,10 @@
     <string name="nutrition_add_food">Add ingredient</string>
     <string name="nutrition_food_name">Ingredient</string>
     <string name="nutrition_grams">Grams</string>
-    <string name="nutrition_calories">Calories</string>
     <string name="nutrition_protein">Protein</string>
     <string name="nutrition_carbs">Carbs</string>
     <string name="nutrition_fat">Fat</string>
     <string name="nutrition_kcal">kcal</string>
-    <string name="nutrition_today">Today</string>
-    <string name="nutrition_target">Target</string>
-    <string name="nutrition_advice">Guidance</string>
     <string name="nutrition_empty">No meals logged today.</string>
     <string name="nutrition_water">Water</string>
     <string name="nutrition_water_glasses">%1$d/%2$d glasses</string>
@@ -315,8 +278,6 @@
     <!-- Profile -->
     <string name="profile_eyebrow">Account</string>
     <string name="profile_title">Profile</string>
-    <string name="profile_details">Your details</string>
-    <string name="profile_name">Name</string>
     <string name="profile_height">Height</string>
     <string name="profile_weight">Weight</string>
     <string name="profile_age">Age</string>
@@ -345,7 +306,6 @@
     <string name="profile_account_settings_body">Password, email and connected sign-in methods will live here once accounts are backed by Firebase.</string>
     <string name="profile_sign_out_confirm_title">Sign out?</string>
     <string name="profile_sign_out_confirm_body">You can sign back in any time — your data stays on this device.</string>
-    <string name="profile_language_english_only">This build ships English only; other languages are saved as a preference for now.</string>
     <string name="profile_preferences">Preferences</string>
     <string name="profile_your_details">Your details</string>
     <string name="language_english">English</string>
@@ -356,13 +316,9 @@
     <string name="notifications_eyebrow">Activity</string>
     <string name="notifications_title">Notifications</string>
     <string name="notifications_empty">Nothing new.</string>
-    <string name="notification_channel_reminders">Workout reminders</string>
-    <string name="notification_channel_reminders_desc">Reminds you when a workout is scheduled.</string>
     <string name="notification_workout_today">%1$s today</string>
     <string name="notification_workout_today_body">Your session is scheduled. Keep the streak alive.</string>
 
     <!-- Content descriptions -->
-    <string name="cd_logo">REPS logo</string>
     <string name="cd_back">Navigate back</string>
-    <string name="cd_close">Close</string>
 </resources>

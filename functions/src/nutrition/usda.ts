@@ -31,7 +31,7 @@ export const NutrientNumber = {
   CHOLESTEROL: "601",
 } as const;
 
-export interface UsdaNutrient {
+interface UsdaNutrient {
   nutrientNumber?: string;
   nutrientId?: number;
   nutrientName?: string;

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- REPS is the brand name and stays in Latin script across all locales. -->
 
@@ -26,7 +26,6 @@
     <string name="auth_or">أو</string>
     <string name="auth_show_password">إظهار كلمة المرور</string>
     <string name="auth_hide_password">إخفاء كلمة المرور</string>
-    <string name="auth_back">رجوع</string>
 
     <!-- Auth: login -->
     <string name="login_headline">مرحباً بعودتك</string>
@@ -54,14 +53,12 @@
     <string name="error_password_empty">كلمة المرور مطلوبة.</string>
     <string name="error_password_short">يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.</string>
     <string name="error_name_empty">الاسم مطلوب.</string>
-    <string name="error_generic">حدث خطأ ما. حاول مرة أخرى.</string>
 
     <!-- Home -->
     <string name="home_greeting_morning">صباح الخير</string>
     <string name="home_greeting_afternoon">طاب يومك</string>
     <string name="home_greeting_evening">مساء الخير</string>
     <string name="home_notifications">الإشعارات</string>
-    <string name="home_open_profile">فتح الملف الشخصي</string>
     <string name="home_streak_count">سلسلة %1$d يوم</string>
     <string name="home_streak_nudge">حافظ عليها — تدرّب اليوم لتصل إلى %1$d.</string>
     <string name="home_today_workout">اليوم · تمرين</string>
@@ -89,10 +86,8 @@
     <string name="progress_last_month">الشهر الماضي</string>
     <string name="progress_add_weight">إضافة وزن</string>
     <string name="progress_save">حفظ</string>
-    <string name="progress_cancel">إلغاء</string>
     <string name="progress_bmr">معدل الأيض الأساسي</string>
     <string name="progress_bmi">مؤشر كتلة الجسم</string>
-    <string name="progress_bmr_caption">السعرات المحروقة أثناء الراحة يومياً</string>
     <string name="progress_bmi_underweight">نقص الوزن</string>
     <string name="progress_bmi_healthy">وزن صحي</string>
     <string name="progress_bmi_overweight">زيادة الوزن</string>
@@ -113,14 +108,7 @@
     <string name="progress_muscle_distribution">توزيع المجموعات العضلية</string>
     <string name="progress_muscle_distribution_caption">حسب حجم التدريب</string>
     <string name="progress_personal_records">الأرقام القياسية الشخصية</string>
-    <string name="progress_streak">السلسلة</string>
-    <string name="progress_streak_current">الحالية</string>
     <string name="progress_achievements">الإنجازات</string>
-    <string name="progress_recent_activity">النشاط الأخير</string>
-    <string name="progress_per_week">أسبوعياً</string>
-    <string name="progress_avg_length">متوسط المدة</string>
-    <string name="progress_prs_hit">أرقام قياسية محققة</string>
-    <string name="progress_no_history">لم تُسجَّل أي تمارين بعد. أنهِ تمريناً لتراه هنا.</string>
     <string name="progress_pr_beat">تجاوز رقمك السابق بمقدار %1$s كجم</string>
     <string name="progress_pr_first">أول مجموعة مسجّلة</string>
     <string name="progress_hero_rest_day_sub">لا يوجد جدول. الراحة جزء من الخطة.</string>
@@ -128,17 +116,10 @@
     <string name="progress_hero_planned_sub">لم يبدأ بعد — زر البدء موجود في الرئيسية.</string>
     <string name="progress_hero_logged">تم تسجيل %1$s</string>
     <string name="progress_hero_logged_sub">%1$d دقيقة · %2$s كجم مرفوعة</string>
-    <string name="progress_today">اليوم</string>
     <string name="ach_first_workout_title">أول عدة</string>
-    <string name="ach_first_workout_desc">سجّل تمرينك الأول.</string>
     <string name="ach_streak7_title">في تصاعد</string>
-    <string name="ach_streak7_desc">حقق سلسلة 7 أيام.</string>
     <string name="ach_ten_workouts_title">منتظم</string>
-    <string name="ach_ten_workouts_desc">سجّل 10 تمارين.</string>
     <string name="ach_first_pr_title">محطم الأرقام</string>
-    <string name="ach_first_pr_desc">حقق أول رقم قياسي لك.</string>
-    <string name="ach_locked_progress">%1$d%% من الطريق</string>
-    <string name="ach_unlocked">مفتوح</string>
 
     <!-- Workouts -->
     <string name="workouts_eyebrow">مكتبة التمارين</string>
@@ -160,7 +141,6 @@
     <string name="workouts_lb">رطل</string>
     <string name="workouts_reps">تكرارات</string>
     <string name="workouts_new_pr">رقم قياسي جديد</string>
-    <string name="workouts_pr_message">%1$s — %2$s تجاوز أفضل رقم سابق لك.</string>
     <string name="workouts_my_workouts">تمارينـي</string>
     <string name="workouts_no_matches_title">لا توجد نتائج</string>
     <string name="workouts_no_matches_subtitle">جرّب بحثًا أو تصفية مختلفة.</string>
@@ -213,19 +193,6 @@
     <string name="difficulty_advanced">متقدم</string>
 
     <!-- Timer -->
-    <string name="timer_eyebrow">مؤقت اللياقة</string>
-    <string name="timer_title">المؤقت</string>
-    <string name="timer_start">ابدأ</string>
-    <string name="timer_pause">إيقاف مؤقت</string>
-    <string name="timer_resume">استئناف</string>
-    <string name="timer_cancel">إلغاء</string>
-    <string name="timer_hours">ساعات</string>
-    <string name="timer_minutes">دقيقة</string>
-    <string name="timer_seconds">ثانية</string>
-    <string name="timer_running">المؤقت قيد التشغيل</string>
-    <string name="timer_done">انتهى الوقت</string>
-    <string name="timer_notification_channel">مؤقت التمرين</string>
-    <string name="timer_notification_channel_desc">يعرض العد التنازلي أثناء تشغيل المؤقت.</string>
 
     <!-- Floating rest timer (shown during an active workout, between sets) -->
     <string name="rest_timer_eyebrow">راحة</string>
@@ -249,14 +216,10 @@
     <string name="nutrition_add_food">إضافة مكوّن</string>
     <string name="nutrition_food_name">المكوّن</string>
     <string name="nutrition_grams">غرام</string>
-    <string name="nutrition_calories">السعرات</string>
     <string name="nutrition_protein">البروتين</string>
     <string name="nutrition_carbs">الكربوهيدرات</string>
     <string name="nutrition_fat">الدهون</string>
     <string name="nutrition_kcal">سعرة</string>
-    <string name="nutrition_today">اليوم</string>
-    <string name="nutrition_target">الهدف</string>
-    <string name="nutrition_advice">إرشادات</string>
     <string name="nutrition_empty">لم تسجّل أي وجبة اليوم.</string>
     <string name="nutrition_water">الماء</string>
     <string name="nutrition_water_glasses">%1$d/%2$d أكواب</string>
@@ -315,8 +278,6 @@
     <!-- Profile -->
     <string name="profile_eyebrow">الحساب</string>
     <string name="profile_title">الملف الشخصي</string>
-    <string name="profile_details">بياناتك</string>
-    <string name="profile_name">الاسم</string>
     <string name="profile_height">الطول</string>
     <string name="profile_weight">الوزن</string>
     <string name="profile_age">العمر</string>
@@ -345,7 +306,6 @@
     <string name="profile_account_settings_body">ستتوفر هنا كلمة المرور والبريد الإلكتروني وطرق تسجيل الدخول المرتبطة بمجرد ربط الحسابات بـ Firebase.</string>
     <string name="profile_sign_out_confirm_title">تسجيل الخروج؟</string>
     <string name="profile_sign_out_confirm_body">يمكنك تسجيل الدخول مرة أخرى في أي وقت — تبقى بياناتك على هذا الجهاز.</string>
-    <string name="profile_language_english_only">يتوفر هذا الإصدار باللغة الإنجليزية فقط؛ يتم حفظ اللغات الأخرى كتفضيل حالياً.</string>
     <string name="profile_preferences">التفضيلات</string>
     <string name="profile_your_details">بياناتك</string>
 
@@ -353,13 +313,9 @@
     <string name="notifications_eyebrow">النشاط</string>
     <string name="notifications_title">الإشعارات</string>
     <string name="notifications_empty">لا يوجد جديد.</string>
-    <string name="notification_channel_reminders">تذكيرات التمرين</string>
-    <string name="notification_channel_reminders_desc">يذكّرك عند وجود تمرين مجدول.</string>
     <string name="notification_workout_today">%1$s اليوم</string>
     <string name="notification_workout_today_body">جلستك مجدولة. حافظ على السلسلة.</string>
 
     <!-- Content descriptions -->
-    <string name="cd_logo">شعار REPS</string>
     <string name="cd_back">الرجوع للخلف</string>
-    <string name="cd_close">إغلاق</string>
 </resources>

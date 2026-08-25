@@ -66,10 +66,9 @@ abstract class RepositoryModule {
     /**
      * The assistant follows the same rule as everything above: the fake ships
      * until the backend is deployed, so the screen runs today without a Groq
-     * key, a USDA key, or any functions in the project.
-     *
-     * To point it at the real agents, deploy /functions and swap this for
-     * FunctionsNutritionAssistantRepository - nothing else changes.
+     * key, a USDA key, or any functions in the project. When the backend goes
+     * live, bind an implementation that calls the deployed callables here -
+     * nothing else changes.
      */
     @Binds
     @Singleton

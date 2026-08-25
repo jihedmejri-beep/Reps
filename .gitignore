@@ -15,3 +15,7 @@ build/
 .externalNativeBuild
 .cxx
 local.properties
+
+# Cloud Functions build output and installed dependencies.
+functions/lib/
+functions/node_modules/

@@ -7,8 +7,9 @@ package com.reps.app.data.exercise
  *
  *  - `asset_path` - the pipeline's CDN-relative key, e.g.
  *    `assets/exercises/1000/main.png`. This is the intended long-term home:
- *    `db/generate_upload_manifest.py` produces an upload manifest for the whole
- *    208 MB asset tree, and `docs/deployment.md` ends with an `aws s3 sync`
+ *    `database/reps_dataset/db/generate_upload_manifest.py` produces an upload
+ *    manifest for the whole 208 MB asset tree, and
+ *    `database/reps_dataset/docs/deployment.md` ends with an `aws s3 sync`
  *    step. That bucket does not exist yet, so the key resolves to nothing.
  *  - `remote_url` - the live upstream URL the pipeline downloaded from, e.g.
  *    `https://wger.de/media/exercise-images/1000/<uuid>.png`. This works today.

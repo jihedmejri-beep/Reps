@@ -2,8 +2,6 @@ package com.reps.app
 
 import android.app.Application
 import android.os.Build
-import androidx.hilt.work.HiltWorkerFactory
-import androidx.work.Configuration
 import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.SingletonImageLoader
@@ -15,18 +13,9 @@ import coil3.request.crossfade
 import coil3.svg.SvgDecoder
 import dagger.hilt.android.HiltAndroidApp
 import okio.Path.Companion.toOkioPath
-import javax.inject.Inject
 
 @HiltAndroidApp
-class RepsApplication : Application(), Configuration.Provider, SingletonImageLoader.Factory {
-
-    @Inject
-    lateinit var workerFactory: HiltWorkerFactory
-
-    override val workManagerConfiguration: Configuration
-        get() = Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .build()
+class RepsApplication : Application(), SingletonImageLoader.Factory {
 
     /**
      * One loader for every image in the app, so call sites stay format-agnostic.
