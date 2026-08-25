@@ -28,10 +28,10 @@ import com.reps.app.core.theme.RepsTheme
 /**
  * The full-screen conversation with the nutrition assistant.
  *
- * Everything on this screen is presentation: the transcript, the typing state
- * and the seeded history all come from [NutritionAssistantViewModel], which
- * answers from local mock content. No nutrition figure shown here is calculated
- * by the app.
+ * The screen is pure presentation: the transcript, the typing state and the
+ * saved history all come from [NutritionAssistantViewModel], which drives the
+ * assistant through its repository. No nutrition figure shown here is
+ * calculated by the app.
  *
  * [viewModel] is passed in rather than resolved here because the history screen
  * shares this instance - see how the two destinations are wired in the nav host.
@@ -76,7 +76,7 @@ fun NutritionAssistantScreen(
         Box(Modifier.weight(1f).fillMaxWidth()) {
             if (state.showWelcome) {
                 AssistantWelcome(
-                    onSuggestion = viewModel::send,
+                    onPrompt = viewModel::send,
                     modifier = Modifier.align(Alignment.Center),
                 )
             } else {

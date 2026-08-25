@@ -188,11 +188,14 @@ private fun MenuRow(labelRes: Int, onClick: () -> Unit) {
 /**
  * What the screen shows before the first message: the assistant's name, one
  * line of invitation, and prompts that can be tapped instead of typed.
+ *
+ * [onPrompt] receives the already-localised label, so a tapped suggestion
+ * travels through the ViewModel exactly like typed text.
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AssistantWelcome(
-    onSuggestion: (Suggestion) -> Unit,
+    onPrompt: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -223,10 +226,11 @@ fun AssistantWelcome(
             horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            MockAssistantData.suggestions.forEach { suggestion ->
+            AssistantSuggestions.forEach { suggestion ->
+                val label = stringResource(suggestion.labelRes)
                 SuggestionPill(
-                    label = stringResource(suggestion.labelRes),
-                    onClick = { onSuggestion(suggestion) },
+                    label = label,
+                    onClick = { onPrompt(label) },
                 )
             }
         }

@@ -10,12 +10,12 @@
     <string name="nav_profile">Profile</string>
 
     <!-- Splash -->
-    <string name="splash_tagline">PUSH · TRACK · REPEAT</string>
+    <string name="splash_tagline">PUSH Â· TRACK Â· REPEAT</string>
     <string name="splash_tap_to_continue">TAP TO CONTINUE</string>
 
     <!-- Onboarding -->
     <string name="onboarding_headline">Train like you mean it.</string>
-    <string name="onboarding_subtext">Your training, nutrition and progress — engineered into one disciplined system.</string>
+    <string name="onboarding_subtext">Your training, nutrition and progress â€” engineered into one disciplined system.</string>
     <string name="onboarding_get_started">Get Started</string>
     <string name="onboarding_have_account">I already have an account</string>
 
@@ -60,14 +60,14 @@
     <string name="home_greeting_evening">Good evening</string>
     <string name="home_notifications">Notifications</string>
     <string name="home_streak_count">%1$d day streak</string>
-    <string name="home_streak_nudge">Keep it alive — train today to hit %1$d.</string>
-    <string name="home_today_workout">Today · Workout</string>
+    <string name="home_streak_nudge">Keep it alive â€” train today to hit %1$d.</string>
+    <string name="home_today_workout">Today Â· Workout</string>
     <string name="home_start_workout">Start Workout</string>
     <string name="home_exercise_count">%1$d exercises</string>
     <string name="home_duration_min">%1$d min</string>
     <string name="home_set_count">%1$d sets</string>
     <string name="home_exercises_label">Exercises</string>
-    <string name="home_set_scheme">%1$d × %2$d</string>
+    <string name="home_set_scheme">%1$d Ã— %2$d</string>
     <string name="home_more_exercises">+%1$d more</string>
     <string name="home_rest_day">Rest day</string>
     <string name="home_rest_day_subtext">Nothing scheduled. Recovery is part of the plan.</string>
@@ -113,9 +113,9 @@
     <string name="progress_pr_first">First recorded set</string>
     <string name="progress_hero_rest_day_sub">Nothing scheduled. Recovery is part of the plan.</string>
     <string name="progress_hero_planned">%1$s planned</string>
-    <string name="progress_hero_planned_sub">Not started yet — Home has the start button.</string>
+    <string name="progress_hero_planned_sub">Not started yet â€” Home has the start button.</string>
     <string name="progress_hero_logged">%1$s logged</string>
-    <string name="progress_hero_logged_sub">%1$d min · %2$s kg lifted</string>
+    <string name="progress_hero_logged_sub">%1$d min Â· %2$s kg lifted</string>
     <string name="ach_first_workout_title">First Rep</string>
     <string name="ach_streak7_title">On a Roll</string>
     <string name="ach_ten_workouts_title">Regular</string>
@@ -166,14 +166,14 @@
     <string name="workouts_builder_selected">%1$d selected</string>
     <string name="workouts_builder_remove_cd">Remove exercise</string>
     <string name="workouts_builder_empty">No exercises added yet.</string>
-    <string name="workouts_session_finish_with_count">Finish workout · %1$d/%2$d sets</string>
+    <string name="workouts_session_finish_with_count">Finish workout Â· %1$d/%2$d sets</string>
     <string name="workouts_session_volume_so_far">Volume so far</string>
     <string name="workouts_session_no_sets_title">No sets logged yet</string>
     <string name="workouts_session_no_sets_body">Check off at least one set before finishing, or cancel to keep training.</string>
     <string name="workouts_session_keep_training">Keep training</string>
     <string name="workouts_session_finish_anyway">Finish anyway</string>
     <string name="workouts_session_complete_title">Workout complete</string>
-    <string name="workouts_session_complete_body">%1$s kg lifted across %2$d sets. Nice work — that’s logged in Progress.</string>
+    <string name="workouts_session_complete_body">%1$s kg lifted across %2$d sets. Nice work â€” thatâ€™s logged in Progress.</string>
     <string name="workouts_session_done">Done</string>
 
     <!-- Muscle groups -->
@@ -200,7 +200,7 @@
     <string name="rest_timer_resting">Resting</string>
     <string name="rest_timer_paused">Paused</string>
     <string name="rest_timer_complete">Rest complete</string>
-    <string name="rest_timer_minus15">−15</string>
+    <string name="rest_timer_minus15">âˆ’15</string>
     <string name="rest_timer_plus15">+15</string>
     <string name="rest_timer_restart_cd">Restart rest timer</string>
     <string name="rest_timer_skip_cd">Skip rest</string>
@@ -242,38 +242,28 @@
     <string name="assistant_suggestion_calories">Calculate calories</string>
     <string name="assistant_suggestion_protein">Check my protein intake</string>
     <string name="assistant_suggestion_eat">What should I eat?</string>
-    <string name="assistant_composer_hint">Message Nutrition Assistant…</string>
+    <string name="assistant_composer_hint">Message Nutrition Assistantâ€¦</string>
     <string name="assistant_send_cd">Send message</string>
     <string name="assistant_typing_cd">Assistant is typing</string>
     <string name="assistant_history_eyebrow">Assistant</string>
     <string name="assistant_history_title">History</string>
     <string name="assistant_history_empty">No conversations yet.</string>
+<string name="assistant_error_network">You seem offline. Check your connection and try again.</string>
+<string name="assistant_error_generic">Something went wrong. Please try again.</string>
+<string name="assistant_delete_cd">Delete conversation</string>
+<string name="assistant_delete_title">Delete conversation?</string>
+<string name="assistant_delete_body">This conversation will be removed from your history.</string>
+<string name="assistant_delete_confirm">Delete</string>
+<string name="assistant_delete_cancel">Cancel</string>
 
     <!--
       Placeholder assistant replies. These are demo copy for the interface only -
       they are replaced wholesale once the real assistant is connected, so nothing
       here should be read as a nutrition figure.
     -->
-    <string name="assistant_reply_meal">Tell me what was on the plate and roughly how much of each — I\'ll break the meal down into calories and macros.</string>
-    <string name="assistant_reply_calories">Give me the foods and their portions and I\'ll add them up. Portions matter more than anything else here, so estimate them as best you can.</string>
-    <string name="assistant_reply_protein">Protein is the target most people fall short on. Log what you\'ve eaten so far and I\'ll tell you how much is left to hit today\'s number.</string>
-    <string name="assistant_reply_eat">Something protein-led with a decent carb portion would suit the calories you have left — grilled chicken with rice and a green vegetable is a solid default.</string>
-    <string name="assistant_reply_meal_estimate">From what you\'ve described that looks like roughly 520 kcal. Confirm the portions and I can tighten that up.</string>
-    <string name="assistant_reply_balance">That fits your day well. Protein is the one worth watching — the rest of your targets have room in them.</string>
-    <string name="assistant_reply_more_detail">Good question. Tell me a little more about the portions and I can be more precise.</string>
 
-    <string name="assistant_conv_breakfast">Breakfast calories</string>
-    <string name="assistant_conv_protein">My protein intake</string>
-    <string name="assistant_conv_dinner">Healthy dinner ideas</string>
-    <string name="assistant_conv_postworkout">Post-workout meal</string>
-    <string name="assistant_conv_breakfast_q">How many calories were in my breakfast?</string>
-    <string name="assistant_conv_breakfast_a">Three eggs, two slices of toast and a banana comes to about 520 kcal, with roughly 27g of protein.</string>
-    <string name="assistant_conv_postworkout_q">What should I eat after training?</string>
-    <string name="assistant_conv_postworkout_a">Protein and carbs together, within an hour or two. A shake with a banana works, but a real meal works just as well.</string>
     <string name="assistant_time_today">Today</string>
     <string name="assistant_time_yesterday">Yesterday</string>
-    <string name="assistant_time_this_week">Earlier this week</string>
-    <string name="assistant_time_last_week">Last week</string>
 
     <!-- Profile -->
     <string name="profile_eyebrow">Account</string>
@@ -294,7 +284,7 @@
     <string name="profile_units_imperial">Imperial (lb, in)</string>
     <string name="profile_settings">Account settings</string>
     <string name="profile_credits_title">Credits &amp; Licenses</string>
-    <string name="profile_credits_muscle_map">Muscle diagram adapted from “Muscles front and back” by %1$s, via Wikimedia Commons, licensed under CC BY-SA 4.0 (creativecommons.org/licenses/by-sa/4.0). Modified for use in Reps.</string>
+    <string name="profile_credits_muscle_map">Muscle diagram adapted from â€œMuscles front and backâ€ by %1$s, via Wikimedia Commons, licensed under CC BY-SA 4.0 (creativecommons.org/licenses/by-sa/4.0). Modified for use in Reps.</string>
     <string name="profile_sign_out">Sign out</string>
     <string name="profile_save">Save changes</string>
     <string name="profile_notifications">Notifications</string>
@@ -305,12 +295,12 @@
     <string name="profile_theme_system">System</string>
     <string name="profile_account_settings_body">Password, email and connected sign-in methods will live here once accounts are backed by Firebase.</string>
     <string name="profile_sign_out_confirm_title">Sign out?</string>
-    <string name="profile_sign_out_confirm_body">You can sign back in any time — your data stays on this device.</string>
+    <string name="profile_sign_out_confirm_body">You can sign back in any time â€” your data stays on this device.</string>
     <string name="profile_preferences">Preferences</string>
     <string name="profile_your_details">Your details</string>
     <string name="language_english">English</string>
-    <string name="language_arabic">العربية</string>
-    <string name="language_french">Français</string>
+    <string name="language_arabic">Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©</string>
+    <string name="language_french">FranÃ§ais</string>
 
     <!-- Notifications -->
     <string name="notifications_eyebrow">Activity</string>

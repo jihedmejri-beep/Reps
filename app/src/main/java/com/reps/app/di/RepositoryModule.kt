@@ -1,5 +1,6 @@
 package com.reps.app.di
 
+import com.reps.app.data.assistant.InMemoryAssistantConversationRepository
 import com.reps.app.data.exercise.CatalogExerciseRepository
 import com.reps.app.data.exercise.CatalogMuscleSvgRepository
 import com.reps.app.data.fake.FakeAuthRepository
@@ -8,6 +9,7 @@ import com.reps.app.data.fake.FakeNutritionAssistantRepository
 import com.reps.app.data.fake.FakeUserRepository
 import com.reps.app.data.fake.FakeWeightRepository
 import com.reps.app.data.fake.FakeWorkoutRepository
+import com.reps.app.domain.repository.AssistantConversationRepository
 import com.reps.app.domain.repository.AuthRepository
 import com.reps.app.domain.repository.ExerciseRepository
 import com.reps.app.domain.repository.MealRepository
@@ -64,15 +66,25 @@ abstract class RepositoryModule {
     abstract fun bindMealRepository(impl: FakeMealRepository): MealRepository
 
     /**
-     * The assistant follows the same rule as everything above: the fake ships
-     * until the backend is deployed, so the screen runs today without a Groq
-     * key, a USDA key, or any functions in the project. When the backend goes
-     * live, bind an implementation that calls the deployed callables here -
-     * nothing else changes.
+     * The assistant's AI brain. The fake answers locally so the screen runs
+     * today without a Groq key, a USDA key, or any deployed functions. To go
+     * live: deploy /functions, implement [NutritionAssistantRepository] on top
+     * of its callables, and swap the right-hand side here - nothing else
+     * changes.
      */
     @Binds
     @Singleton
     abstract fun bindNutritionAssistantRepository(
         impl: FakeNutritionAssistantRepository,
     ): NutritionAssistantRepository
+
+    /**
+     * Where past chats are kept. In-memory for now; binding a durable store
+     * (Room, Firestore) later is a one-line swap here.
+     */
+    @Binds
+    @Singleton
+    abstract fun bindAssistantConversationRepository(
+        impl: InMemoryAssistantConversationRepository,
+    ): AssistantConversationRepository
 }
