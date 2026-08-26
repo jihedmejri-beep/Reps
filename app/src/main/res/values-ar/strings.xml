@@ -54,6 +54,16 @@
     <string name="error_password_short">ÙŠØ¬Ø¨ Ø£Ù† ØªØªÙƒÙˆÙ† ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ± Ù…Ù† 8 Ø£Ø­Ø±Ù Ø¹Ù„Ù‰ Ø§Ù„Ø£Ù‚Ù„.</string>
     <string name="error_name_empty">Ø§Ù„Ø§Ø³Ù… Ù…Ø·Ù„ÙˆØ¨.</string>
 
+    <string name="error_auth_invalid_credentials">البريد الإلكتروني أو كلمة المرور غير صحيحة.</string>
+    <string name="error_email_taken">يوجد حساب مسجَّل بهذا البريد الإلكتروني بالفعل.</string>
+    <string name="error_google_signin_unavailable">تسجيل الدخول عبر Google يتطلب خدمة حسابات عبر الإنترنت وهي غير متاحة في هذه النسخة بعد.</string>
+    <string name="error_password_reset_unavailable">إعادة تعيين كلمة المرور غير متاحة في هذه النسخة بعد.</string>
+
+    <!-- Workout reminders -->
+    <string name="reminder_channel_name">تذكيرات التمرين</string>
+    <string name="reminder_notification_title">وقت التمرين</string>
+    <string name="reminder_notification_body">%1$s ضمن جدول اليوم. هيّا نتحرك.</string>
+
     <!-- Home -->
     <string name="home_greeting_morning">ØµØ¨Ø§Ø­ Ø§Ù„Ø®ÙŠØ±</string>
     <string name="home_greeting_afternoon">Ø·Ø§Ø¨ ÙŠÙˆÙ…Ùƒ</string>

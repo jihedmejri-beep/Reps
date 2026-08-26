@@ -1,5 +1,10 @@
 package com.reps.app.feature.profile
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,7 +47,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.core.content.ContextCompat
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -84,6 +91,21 @@ fun ProfileScreen(
     var showAccountInfo by remember { mutableStateOf(false) }
     var showSignOutConfirm by remember { mutableStateOf(false) }
     var showThemePicker by remember { mutableStateOf(false) }
+
+    // Android 13+ gates notifications behind a runtime permission. The toggle
+    // still flips either way - the reminder worker stays quiet if it was denied.
+    val context = LocalContext.current
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { }
+    val requestNotificationPermissionIfNeeded: () -> Unit = {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
 
     val user = state.user
     val dimens = RepsTheme.dimens
@@ -137,7 +159,10 @@ fun ProfileScreen(
                     notificationsEnabled = state.notificationsEnabled,
                     themeMode = state.themeMode,
                     onToggleUnits = { viewModel.updateUnits(if (user.units == UnitSystem.METRIC) UnitSystem.IMPERIAL else UnitSystem.METRIC) },
-                    onToggleNotifications = viewModel::toggleNotifications,
+                    onToggleNotifications = {
+                        if (!state.notificationsEnabled) requestNotificationPermissionIfNeeded()
+                        viewModel.toggleNotifications()
+                    },
                     onEditTheme = { showThemePicker = true },
                     onEditLanguage = { editingField = ProfileField.LANGUAGE },
                     onAccountSettings = { showAccountInfo = true },

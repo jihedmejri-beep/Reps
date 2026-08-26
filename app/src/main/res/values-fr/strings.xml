@@ -54,6 +54,16 @@
     <string name="error_password_short">Le mot de passe doit contenir au moins 8 caractÃ¨res.</string>
     <string name="error_name_empty">Le nom est obligatoire.</string>
 
+    <string name="error_auth_invalid_credentials">E-mail ou mot de passe incorrect.</string>
+    <string name="error_email_taken">Un compte avec cet e-mail existe déjà.</string>
+    <string name="error_google_signin_unavailable">La connexion Google nécessite un service de comptes en ligne et n\'est pas encore disponible dans cette version.</string>
+    <string name="error_password_reset_unavailable">La réinitialisation du mot de passe n\'est pas encore disponible dans cette version.</string>
+
+    <!-- Workout reminders -->
+    <string name="reminder_channel_name">Rappels d\'entraînement</string>
+    <string name="reminder_notification_title">C\'est l\'heure de s\'entraîner</string>
+    <string name="reminder_notification_body">%1$s est au programme aujourd\'hui. On s\'y met.</string>
+
     <!-- Home -->
     <string name="home_greeting_morning">Bonjour</string>
     <string name="home_greeting_afternoon">Bon aprÃ¨s-midi</string>

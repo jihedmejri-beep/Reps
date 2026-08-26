@@ -2,7 +2,7 @@ package com.reps.app.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.reps.app.data.fake.SampleData
+import com.reps.app.core.content.MotivationQuotes
 import com.reps.app.domain.model.MuscleGroup
 import com.reps.app.domain.model.Streak
 import com.reps.app.domain.model.UnitSystem
@@ -119,7 +119,7 @@ class HomeViewModel @Inject constructor(
             currentWeightKg = weights.maxByOrNull { it.date }?.weightKg,
             weeklyDeltaKg = weeklyDelta(weights),
             units = user?.units ?: UnitSystem.METRIC,
-            quote = SampleData.motivationQuoteForToday(today),
+            quote = MotivationQuotes.forToday(today),
             loading = false,
         )
     }.stateIn(

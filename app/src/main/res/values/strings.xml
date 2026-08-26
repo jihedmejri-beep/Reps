@@ -53,6 +53,16 @@
     <string name="error_password_empty">Password is required.</string>
     <string name="error_password_short">Password must be at least 8 characters.</string>
     <string name="error_name_empty">Name is required.</string>
+    <!-- Auth: account errors -->
+    <string name="error_auth_invalid_credentials">Incorrect email or password.</string>
+    <string name="error_email_taken">An account with this email already exists.</string>
+    <string name="error_google_signin_unavailable">Google sign-in needs an online account service and isn\'t available in this build yet.</string>
+    <string name="error_password_reset_unavailable">Password reset isn\'t available in this build yet.</string>
+
+    <!-- Workout reminders -->
+    <string name="reminder_channel_name">Workout reminders</string>
+    <string name="reminder_notification_title">Time to train</string>
+    <string name="reminder_notification_body">%1$s is on today\'s schedule. Let\'s get moving.</string>
 
     <!-- Home -->
     <string name="home_greeting_morning">Good morning</string>

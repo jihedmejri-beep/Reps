@@ -2,7 +2,7 @@ package com.reps.app.feature.progress
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.reps.app.data.fake.SampleData
+import com.reps.app.core.content.MotivationQuotes
 import com.reps.app.domain.model.Exercise
 import com.reps.app.domain.model.UnitSystem
 import com.reps.app.domain.model.WeightEntry
@@ -67,7 +67,7 @@ class ProgressViewModel @Inject constructor(
             currentWeightKg = weights.maxByOrNull { it.date }?.weightKg,
             units = user?.units ?: UnitSystem.METRIC,
             streakCount = user?.streakCount ?: 0,
-            quote = SampleData.motivationQuoteForToday(),
+            quote = MotivationQuotes.forToday(),
             loading = false,
         )
     }.stateIn(

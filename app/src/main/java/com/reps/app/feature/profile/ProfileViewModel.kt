@@ -3,6 +3,7 @@ package com.reps.app.feature.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.reps.app.data.datastore.UserPreferencesDataStore
+import com.reps.app.data.notifications.WorkoutReminderScheduler
 import com.reps.app.domain.model.AppLanguage
 import com.reps.app.domain.model.Goal
 import com.reps.app.domain.model.Sex
@@ -14,12 +15,10 @@ import com.reps.app.domain.repository.AuthRepository
 import com.reps.app.domain.repository.UserRepository
 import com.reps.app.domain.repository.WeightRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.UUID
@@ -39,14 +38,13 @@ class ProfileViewModel @Inject constructor(
     private val weightRepository: WeightRepository,
     private val authRepository: AuthRepository,
     private val preferences: UserPreferencesDataStore,
+    private val reminderScheduler: WorkoutReminderScheduler,
 ) : ViewModel() {
-
-    private val notificationsEnabled = MutableStateFlow(true)
 
     val uiState = combine(
         userRepository.observeUser(),
         weightRepository.observeEntries(),
-        notificationsEnabled,
+        preferences.notificationsEnabled,
         preferences.themeMode,
     ) { user, weights, notifsOn, themeMode ->
         ProfileUiState(
@@ -67,10 +65,21 @@ class ProfileViewModel @Inject constructor(
     fun updateSex(sex: Sex) = updateUser { it.copy(sex = sex) }
     fun updateGoal(goal: Goal) = updateUser { it.copy(goal = goal) }
     fun updateUnits(units: UnitSystem) = updateUser { it.copy(units = units) }
+
+    /**
+     * Language is written to both the profile and DataStore: the catalogue
+     * reads its language from the latter, so switching re-localises exercise
+     * content immediately.
+     */
     fun updateLanguage(language: AppLanguage) = updateUser { it.copy(language = language) }
 
+    /** Persists the toggle and arms/cancels the daily reminder work to match. */
     fun toggleNotifications() {
-        notificationsEnabled.update { !it }
+        viewModelScope.launch {
+            val newValue = !preferences.notificationsEnabled.first()
+            preferences.setNotificationsEnabled(newValue)
+            reminderScheduler.setEnabled(newValue)
+        }
     }
 
     fun updateThemeMode(mode: ThemeMode) {
