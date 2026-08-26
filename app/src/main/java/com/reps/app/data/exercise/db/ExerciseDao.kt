@@ -24,6 +24,18 @@ data class ExerciseListRow(
     @ColumnInfo(name = "asset_path") val assetPath: String?,
 )
 
+/**
+ * One row per muscle in the catalogue, collapsed across every exercise that
+ * uses it. `name_en` and `is_front` are functionally dependent on
+ * `muscle_name`, so MAX() over the group just picks the one value they all
+ * share.
+ */
+data class MuscleAnatomyRow(
+    @ColumnInfo(name = "muscle_name") val muscleName: String,
+    @ColumnInfo(name = "name_en") val nameEn: String?,
+    @ColumnInfo(name = "is_front") val isFront: Boolean?,
+)
+
 /** The single-language text block for one exercise. */
 data class ExerciseTextRow(
     @ColumnInfo(name = "name") val name: String,
@@ -167,11 +179,61 @@ interface ExerciseDao {
     )
     fun observeImages(exerciseId: String): Flow<List<ExerciseImageEntity>>
 
+    /** Same projection as the library, restricted to one muscle in any role. */
+    @Query(
+        """
+        SELECT e.id                AS id,
+               e.external_id       AS external_id,
+               t.name              AS name,
+               e.category          AS category,
+               (SELECT group_concat(q.equipment_name, ', ')
+                  FROM exercise_equipment q
+                 WHERE q.exercise_id = e.id)                     AS equipment,
+               (SELECT m.muscle_name FROM exercise_muscles m
+                 WHERE m.exercise_id = e.id AND m.role = 'primary'
+                 ORDER BY m.muscle_name LIMIT 1)                 AS primary_muscle,
+               (SELECT m.name_en FROM exercise_muscles m
+                 WHERE m.exercise_id = e.id AND m.role = 'primary'
+                 ORDER BY m.muscle_name LIMIT 1)                 AS primary_muscle_en,
+               (SELECT i.thumb_medium_url FROM exercise_images i
+                 WHERE i.exercise_id = e.id
+                 ORDER BY i.is_main DESC, i.sort_order ASC LIMIT 1) AS thumb_url,
+               (SELECT i.remote_url FROM exercise_images i
+                 WHERE i.exercise_id = e.id
+                 ORDER BY i.is_main DESC, i.sort_order ASC LIMIT 1) AS image_url,
+               (SELECT i.asset_path FROM exercise_images i
+                 WHERE i.exercise_id = e.id
+                 ORDER BY i.is_main DESC, i.sort_order ASC LIMIT 1) AS asset_path
+          FROM exercises e
+          JOIN exercise_translations t
+            ON t.exercise_id = e.id AND t.language_code = :language
+         WHERE EXISTS (
+                  SELECT 1 FROM exercise_muscles pm
+                   WHERE pm.exercise_id = e.id
+                     AND pm.muscle_name = :muscle)
+         ORDER BY t.name COLLATE NOCASE
+        """,
+    )
+    fun observeByMuscle(language: String, muscle: String): Flow<List<ExerciseListRow>>
+
     @Query("SELECT * FROM muscle_svg_assets")
     suspend fun muscleSvgAssets(): List<MuscleSvgAssetEntity>
 
     @Query("SELECT * FROM body_diagrams")
     suspend fun bodyDiagrams(): List<BodyDiagramEntity>
+
+    /** The catalogue's full muscle vocabulary with the side each is drawn on. */
+    @Query(
+        """
+        SELECT muscle_name        AS muscle_name,
+               MAX(name_en)       AS name_en,
+               MAX(is_front)      AS is_front
+          FROM exercise_muscles
+         GROUP BY muscle_name
+         ORDER BY muscle_name
+        """,
+    )
+    suspend fun muscleAnatomy(): List<MuscleAnatomyRow>
 
     @Query("SELECT COUNT(*) FROM exercises")
     suspend fun exerciseCount(): Int

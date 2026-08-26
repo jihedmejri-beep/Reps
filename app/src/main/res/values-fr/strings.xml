@@ -197,6 +197,31 @@
     <string name="muscle_calves">Mollets</string>
     <string name="muscle_cardio">Cardio</string>
 
+    <!-- Body map -->
+    <string name="body_map_eyebrow">Anatomie</string>
+    <string name="body_map_title">Carte musculaire</string>
+    <string name="body_map_hint">Touche un muscle pour voir tous les exercices qui le travaillent.</string>
+    <string name="body_map_pick_prompt">Choisis un muscle sur le schÃ©ma.</string>
+    <string name="body_map_exercise_count">%1$d exercices</string>
+
+    <!-- Anatomical muscle display names. The catalogue stores these in English
+         only, so the localization lives here, keyed by muscle_name. -->
+    <string name="anatomy_biceps_brachii">Biceps</string>
+    <string name="anatomy_anterior_deltoid">DeltoÃ¯de antÃ©rieur</string>
+    <string name="anatomy_serratus_anterior">DentelÃ© antÃ©rieur</string>
+    <string name="anatomy_pectoralis_major">Pectoraux</string>
+    <string name="anatomy_triceps_brachii">Triceps</string>
+    <string name="anatomy_rectus_abdominis">Abdominaux</string>
+    <string name="anatomy_gastrocnemius">Mollets</string>
+    <string name="anatomy_gluteus_maximus">Fessiers</string>
+    <string name="anatomy_trapezius">TrapÃ¨zes</string>
+    <string name="anatomy_quadriceps_femoris">Quadriceps</string>
+    <string name="anatomy_biceps_femoris">Ischio-jambiers</string>
+    <string name="anatomy_latissimus_dorsi">Grand dorsal</string>
+    <string name="anatomy_brachialis">Brachial</string>
+    <string name="anatomy_obliquus_externus">Obliques</string>
+    <string name="anatomy_soleus">SolÃ©aire</string>
+
     <!-- Difficulty -->
     <string name="difficulty_beginner">DÃ©butant</string>
     <string name="difficulty_intermediate">IntermÃ©diaire</string>

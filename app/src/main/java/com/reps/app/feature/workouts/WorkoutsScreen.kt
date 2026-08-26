@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.Accessibility
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material3.Icon
@@ -51,6 +52,7 @@ fun WorkoutsScreen(
     onOpenExercise: (String) -> Unit,
     onStartWorkout: (String) -> Unit,
     onOpenBuilder: () -> Unit,
+    onOpenBodyMap: () -> Unit,
     viewModel: WorkoutsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -111,14 +113,34 @@ fun WorkoutsScreen(
         }
 
         item {
-            RepsTextField(
-                value = state.query,
-                onValueChange = viewModel::onQueryChange,
-                placeholder = stringResource(R.string.workouts_search),
-                leadingIcon = rememberVectorPainter(Icons.Outlined.Search),
-                imeAction = ImeAction.Search,
-                keyboardType = androidx.compose.ui.text.input.KeyboardType.Text,
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                RepsTextField(
+                    value = state.query,
+                    onValueChange = viewModel::onQueryChange,
+                    placeholder = stringResource(R.string.workouts_search),
+                    leadingIcon = rememberVectorPainter(Icons.Outlined.Search),
+                    imeAction = ImeAction.Search,
+                    keyboardType = androidx.compose.ui.text.input.KeyboardType.Text,
+                    modifier = Modifier.weight(1f),
+                )
+                Box(
+                    Modifier
+                        .size(34.dp)
+                        .background(RepsGreen, MaterialTheme.shapes.small)
+                        .clickable(role = Role.Button, onClick = onOpenBodyMap),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        Icons.Outlined.Accessibility,
+                        contentDescription = stringResource(R.string.body_map_title),
+                        tint = RepsOnGreen,
+                        modifier = Modifier.size(20.dp),
+                    )
+                }
+            }
         }
         item {
             LazyRow(

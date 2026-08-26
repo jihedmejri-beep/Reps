@@ -35,6 +35,7 @@ object Routes {
 
     const val EXERCISE_DETAIL = "exercise/{exerciseId}"
     const val WORKOUT_BUILDER = "workout/builder"
+    const val BODY_MAP = "workouts/bodymap"
     const val WORKOUT_SESSION = "workout/session/{workoutId}"
     const val NOTIFICATIONS = "notifications"
 

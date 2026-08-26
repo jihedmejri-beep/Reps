@@ -2,6 +2,8 @@ package com.reps.app.data.exercise
 
 import android.util.Log
 import com.reps.app.data.exercise.db.ExerciseDao
+import com.reps.app.domain.model.BodyMap
+import com.reps.app.domain.model.BodyMuscle
 import com.reps.app.domain.model.MuscleDiagram
 import com.reps.app.domain.model.MuscleTarget
 import com.reps.app.domain.repository.MuscleSvgRepository
@@ -24,6 +26,7 @@ class CatalogMuscleSvgRepository @Inject constructor(
 
     private val mutex = Mutex()
     private var index: Index? = null
+    private var bodyMap: BodyMap? = null
 
     override suspend fun diagramFor(muscles: List<MuscleTarget>): MuscleDiagram {
         val loaded = index() ?: return MuscleDiagram()
@@ -56,6 +59,53 @@ class CatalogMuscleSvgRepository @Inject constructor(
             backPrimary = backPrimary,
             backSecondary = backSecondary,
         )
+    }
+
+    override suspend fun bodyMap(): BodyMap {
+        bodyMap?.let { return it }
+        return mutex.withLock {
+            bodyMap ?: runCatching {
+                // The index loader is inlined rather than called through
+                // index(): that helper takes the same mutex and Kotlin's Mutex
+                // is not reentrant.
+                val loaded = index ?: runCatching {
+                    val overlays = dao.muscleSvgAssets()
+                        .associate { (it.muscleName to it.variant) to it.assetPath }
+                    val bodies = dao.bodyDiagrams().associate { it.side to it.assetPath }
+                    Index(
+                        overlays = overlays,
+                        frontBody = bodies[SIDE_FRONT],
+                        backBody = bodies[SIDE_BACK],
+                    )
+                }.getOrNull()?.also { index = it }
+
+                val muscles = if (loaded == null) {
+                    emptyList()
+                } else {
+                    dao.muscleAnatomy().mapNotNull { row ->
+                        // A side is mandatory - there is no diagram to place a
+                        // muscle on without one. The primary-muscle variant is
+                        // the artwork the map taps through to.
+                        val onFront = row.isFront ?: return@mapNotNull null
+                        val asset = loaded.overlays[row.muscleName to VARIANT_MAIN]
+                            ?: return@mapNotNull null
+                        BodyMuscle(
+                            name = row.muscleName,
+                            commonName = row.nameEn?.takeIf { it.isNotBlank() },
+                            isFront = onFront,
+                            overlayAsset = asset,
+                        )
+                    }
+                }
+                BodyMap(
+                    frontBodyAsset = loaded?.frontBody,
+                    backBodyAsset = loaded?.backBody,
+                    muscles = muscles,
+                )
+            }.onFailure {
+                Log.e(TAG, "body map unavailable; diagram will be empty", it)
+            }.getOrNull()?.also { bodyMap = it } ?: BodyMap(null, null)
+        }
     }
 
     private suspend fun index(): Index? = index ?: mutex.withLock {

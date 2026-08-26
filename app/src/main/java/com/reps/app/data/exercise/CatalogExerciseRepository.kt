@@ -71,6 +71,12 @@ class CatalogExerciseRepository @Inject constructor(
     override fun observeExercise(exerciseId: String): Flow<Exercise?> =
         observeExerciseDetail(exerciseId).map { it?.exercise }
 
+    override fun observeExercisesByMuscle(muscleName: String): Flow<List<Exercise>> =
+        language.flatMapLatest { tag ->
+            dao.observeByMuscle(language = tag, muscle = muscleName)
+                .map { rows -> rows.map(::toExercise) }
+        }.safeCatch("observeExercisesByMuscle", emptyList())
+
     override fun observeExerciseDetail(exerciseId: String): Flow<ExerciseDetail?> =
         language.flatMapLatest { tag ->
             combine(

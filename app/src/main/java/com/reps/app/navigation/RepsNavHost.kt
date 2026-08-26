@@ -51,6 +51,7 @@ import com.reps.app.feature.profile.ProfileScreen
 import com.reps.app.feature.progress.ProgressScreen
 import com.reps.app.feature.splash.SplashDestination
 import com.reps.app.feature.splash.SplashScreen
+import com.reps.app.feature.bodymap.BodyMapScreen
 import com.reps.app.feature.workouts.ExerciseDetailScreen
 import com.reps.app.feature.workouts.WorkoutsScreen
 import com.reps.app.feature.workouts.builder.WorkoutBuilderScreen
@@ -210,6 +211,7 @@ private fun TabPager(
                 onOpenExercise = { navController.navigate(Routes.exerciseDetail(it)) },
                 onStartWorkout = { navController.navigate(Routes.workoutSession(it)) },
                 onOpenBuilder = { navController.navigate(Routes.WORKOUT_BUILDER) },
+                onOpenBodyMap = { navController.navigate(Routes.BODY_MAP) },
             )
 
             TopLevelTab.NUTRITION -> NutritionScreen(
@@ -301,6 +303,12 @@ private fun NavGraphBuilder.repsGraph(
 
     composable(Routes.EXERCISE_DETAIL) {
         ExerciseDetailScreen(onBack = { navController.popBackStack() })
+    }
+    composable(Routes.BODY_MAP) {
+        BodyMapScreen(
+            onBack = { navController.popBackStack() },
+            onOpenExercise = { navController.navigate(Routes.exerciseDetail(it)) },
+        )
     }
     composable(Routes.WORKOUT_BUILDER) {
         WorkoutBuilderScreen(

@@ -197,6 +197,31 @@
     <string name="muscle_calves">Ø§Ù„Ø³Ù…Ø§Ù†Ø©</string>
     <string name="muscle_cardio">Ø§Ù„ÙƒØ§Ø±Ø¯ÙŠÙˆ</string>
 
+    <!-- Body map -->
+    <string name="body_map_eyebrow">Ø§Ù„ØªØ´Ø±ÙŠØ­</string>
+    <string name="body_map_title">Ø®Ø±ÙŠØ·Ø© Ø§Ù„Ø¬Ø³Ù…</string>
+    <string name="body_map_hint">Ø§Ù„Ù…Ø³ Ø¹Ø¶Ù„Ø© Ù„Ø¹Ø±Ø¶ Ø¬Ù…ÙŠØ¹ Ø§Ù„ØªÙ…Ø§Ø±ÙŠÙ† Ø§Ù„ØªÙŠ ØªØ³ØªÙ‡Ø¯Ù�Ù‡Ø§.</string>
+    <string name="body_map_pick_prompt">Ø§Ø®ØªØ± Ø¹Ø¶Ù„Ø© Ù…Ù† Ø§Ù„Ù…Ø®Ø·Ø·.</string>
+    <string name="body_map_exercise_count">%1$d ØªÙ…Ø±ÙŠÙ†</string>
+
+    <!-- Anatomical muscle display names. The catalogue stores these in English
+         only, so the localization lives here, keyed by muscle_name. -->
+    <string name="anatomy_biceps_brachii">Ø§Ù„Ø¨Ø§ÙŠØ³Ø¨Ø³</string>
+    <string name="anatomy_anterior_deltoid">Ø§Ù„ÙƒØªÙ� Ø§Ù„Ø£Ù…Ø§Ù…ÙŠ</string>
+    <string name="anatomy_serratus_anterior">Ø§Ù„Ù…Ù†Ø´Ø§Ø±ÙŠØ©</string>
+    <string name="anatomy_pectoralis_major">Ø§Ù„ØµØ¯Ø±</string>
+    <string name="anatomy_triceps_brachii">Ø§Ù„ØªØ±Ø§ÙŠØ³Ø¨Ø³</string>
+    <string name="anatomy_rectus_abdominis">Ø§Ù„Ø¨Ø·Ù†</string>
+    <string name="anatomy_gastrocnemius">Ø§Ù„Ø³Ù…Ø§Ù†Ø©</string>
+    <string name="anatomy_gluteus_maximus">Ø§Ù„Ù…Ø¤Ø®Ø±Ø©</string>
+    <string name="anatomy_trapezius">Ø§Ù„ØªØ±Ø§Ø¨ÙŠØ³</string>
+    <string name="anatomy_quadriceps_femoris">Ø£Ù…Ø§Ù… Ø§Ù„Ù�Ø®Ø°</string>
+    <string name="anatomy_biceps_femoris">Ø®Ù„Ù� Ø§Ù„Ù�Ø®Ø°</string>
+    <string name="anatomy_latissimus_dorsi">Ø§Ù„Ù„Ø§ØªØ³</string>
+    <string name="anatomy_brachialis">Ø§Ù„Ø¹Ø¶Ø¯ÙŠØ©</string>
+    <string name="anatomy_obliquus_externus">Ø§Ù„Ù…Ø§Ø¦Ù„Ø©</string>
+    <string name="anatomy_soleus">Ø§Ù„Ù†Ø¹Ù„ÙŠØ©</string>
+
     <!-- Difficulty -->
     <string name="difficulty_beginner">Ù…Ø¨ØªØ¯Ø¦</string>
     <string name="difficulty_intermediate">Ù…ØªÙˆØ³Ø·</string>

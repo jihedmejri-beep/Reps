@@ -1,5 +1,6 @@
 package com.reps.app.domain.repository
 
+import com.reps.app.domain.model.BodyMap
 import com.reps.app.domain.model.MuscleDiagram
 import com.reps.app.domain.model.MuscleTarget
 
@@ -9,4 +10,11 @@ import com.reps.app.domain.model.MuscleTarget
  */
 interface MuscleSvgRepository {
     suspend fun diagramFor(muscles: List<MuscleTarget>): MuscleDiagram
+
+    /**
+     * The interactive body map's full inventory: both body illustrations and
+     * every muscle that has artwork, with its side. Empty muscles list when the
+     * artwork index is unavailable.
+     */
+    suspend fun bodyMap(): BodyMap
 }

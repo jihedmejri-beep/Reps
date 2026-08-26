@@ -197,6 +197,31 @@
     <string name="muscle_calves">Calves</string>
     <string name="muscle_cardio">Cardio</string>
 
+    <!-- Body map -->
+    <string name="body_map_eyebrow">Anatomy</string>
+    <string name="body_map_title">Body Map</string>
+    <string name="body_map_hint">Tap a muscle to see every exercise that works it.</string>
+    <string name="body_map_pick_prompt">Pick a muscle on the diagram.</string>
+    <string name="body_map_exercise_count">%1$d exercises</string>
+
+    <!-- Anatomical muscle display names. The catalogue stores these in English
+         only, so the localization lives here, keyed by muscle_name. -->
+    <string name="anatomy_biceps_brachii">Biceps</string>
+    <string name="anatomy_anterior_deltoid">Front delts</string>
+    <string name="anatomy_serratus_anterior">Serratus</string>
+    <string name="anatomy_pectoralis_major">Chest</string>
+    <string name="anatomy_triceps_brachii">Triceps</string>
+    <string name="anatomy_rectus_abdominis">Abs</string>
+    <string name="anatomy_gastrocnemius">Calves</string>
+    <string name="anatomy_gluteus_maximus">Glutes</string>
+    <string name="anatomy_trapezius">Traps</string>
+    <string name="anatomy_quadriceps_femoris">Quads</string>
+    <string name="anatomy_biceps_femoris">Hamstrings</string>
+    <string name="anatomy_latissimus_dorsi">Lats</string>
+    <string name="anatomy_brachialis">Brachialis</string>
+    <string name="anatomy_obliquus_externus">Obliques</string>
+    <string name="anatomy_soleus">Soleus</string>
+
     <!-- Difficulty -->
     <string name="difficulty_beginner">Beginner</string>
     <string name="difficulty_intermediate">Intermediate</string>

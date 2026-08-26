@@ -28,6 +28,12 @@ interface ExerciseRepository {
 
     fun observeExercise(exerciseId: String): Flow<Exercise?>
 
+    /**
+     * Every exercise that works [muscleName] as a primary or secondary target,
+     * in the user's language, alphabetical.
+     */
+    fun observeExercisesByMuscle(muscleName: String): Flow<List<Exercise>>
+
     /** The full record - instructions, muscles, equipment, media, aliases. */
     fun observeExerciseDetail(exerciseId: String): Flow<ExerciseDetail?>
 
