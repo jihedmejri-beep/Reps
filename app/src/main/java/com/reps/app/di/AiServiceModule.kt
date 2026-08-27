@@ -3,7 +3,7 @@ package com.reps.app.di
 import com.reps.app.ai.RepsAiApiService
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.android.InstallIn
+import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 

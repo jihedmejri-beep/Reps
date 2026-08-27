@@ -1,59 +1,49 @@
 package com.reps.app.ai
 
-import com.reps.app.domain.model.AssistantError
-import com.reps.app.domain.model.AssistantResult
 import com.reps.app.domain.model.Goal
-import com.reps.app.domain.model.NutritionAnalysis
-import com.reps.app.domain.repository.NutritionAssistantRepository
 import kotlinx.coroutines.suspendCancellableCoroutine
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
 import java.io.IOException
 import java.util.concurrent.TimeUnit
-import okhttp3.*
 import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
-import kotlin.math.abs
-import kotlin.math.significantDigits
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
-class RepsAiApiService @Inject constructor() {
+class RepsAiApiService {
     companion object {
         const val DEFAULT_BASE_URL = "http://127.0.0.1:8000"
         const val HEALTH_ENDPOINT = "/health"
         const val CHAT_ENDPOINT = "/api/v1/chat"
-        const val CONNECT_TIMEOUT_SECONDS = 10
-        const val READ_TIMEOUT_SECONDS = 30
+        const val CONNECT_TIMEOUT_SECONDS = 10L
+        const val READ_TIMEOUT_SECONDS = 30L
     }
 
     @Volatile
     var baseUrl: String = DEFAULT_BASE_URL
-        get() = _baseUrl
-        set(value) {
-            _baseUrl = value
-            client.baseUrl(value)
-        }
 
-    private var _baseUrl: String = DEFAULT_BASE_URL
     private val client: OkHttpClient
 
     private val GSON = com.google.gson.Gson()
 
-    @Inject
     init {
-        // Trust all SSL certificates for local development testing
-        val trustAllManager = object : X509TrustManager() {
-            override fun checkClientCertificate(x509Certificate: java.security.certificate.X509Certificate?) {}
-            override fun checkServerTrusted(
-                chain: java.security.certificate.X509Certificate[],
-                authType: String,
-            ) {}
-            override fun checkServerTrusted(chain: Array<java.security.certificate.X509Certificate>, authType: String) {}
+        val trustAllManager = object : X509TrustManager {
+            override fun checkClientTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {}
+            override fun checkServerTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {}
+            override fun getAcceptedIssuers(): Array<java.security.cert.X509Certificate> = emptyArray()
         }
 
         val sslContext = try {
-            val sslContext = SSLContext.getInstance("TLS")
-            sslContext.init(null, arrayOf<TrustManager>(trustAllManager), null)
-            sslContext
+            SSLContext.getInstance("TLS").also {
+                it.init(null, arrayOf<TrustManager>(trustAllManager), null)
+            }
         } catch (e: Exception) {
             throw RuntimeException("Failed to initialize SSL context", e)
         }
@@ -71,19 +61,17 @@ class RepsAiApiService @Inject constructor() {
             .get()
             .build()
 
-        suspendCancellableCoroutine { cont ->
-            client.newCall(request).enqueue(object : Callback {
+        return suspendCancellableCoroutine { cont ->
+            val call = client.newCall(request)
+            cont.invokeOnCancellation { call.cancel() }
+            call.enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    cont.resumeWithException(
-                        IOException("AI service unreachable: ${e.message}")
-                    )
+                    cont.resumeWithException(IOException("AI service unreachable: ${e.message}"))
                 }
 
                 override fun onResponse(call: Call, response: Response) {
                     if (!response.isSuccessful) {
-                        cont.resumeWithException(
-                            IOException("AI service returned ${response.code}")
-                        )
+                        cont.resumeWithException(IOException("AI service returned ${response.code}"))
                         return
                     }
                     val body = response.body?.string()
@@ -92,8 +80,7 @@ class RepsAiApiService @Inject constructor() {
                         return
                     }
                     try {
-                        val health = GSON.fromJson(body, HealthResponse::class.java)
-                        cont.resume(health)
+                        cont.resume(GSON.fromJson(body, HealthResponse::class.java))
                     } catch (e: Exception) {
                         cont.resumeWithException(e)
                     }
@@ -110,23 +97,18 @@ class RepsAiApiService @Inject constructor() {
 
     suspend fun sendMessage(request: ChatRequest): ChatResponse {
         val json = GSON.toJson(request)
-        val body = RequestBody.create(
-            json,
-            MediaType.get("application/json; charset=utf-8")
-        )
-
-        val chatRequestUrl = baseUrl + CHAT_ENDPOINT
-        val request = Request.Builder()
-            .url(chatRequestUrl)
+        val body = json.toRequestBody("application/json; charset=utf-8".toMediaType())
+        val httpRequest = Request.Builder()
+            .url(baseUrl + CHAT_ENDPOINT)
             .post(body)
             .build()
 
-        suspendCancellableCoroutine { cont ->
-            client.newCall(request).enqueue(object : Callback {
+        return suspendCancellableCoroutine { cont ->
+            val call = client.newCall(httpRequest)
+            cont.invokeOnCancellation { call.cancel() }
+            call.enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    cont.resumeWithException(
-                        IOException("Network error contacting AI service: ${e.message}")
-                    )
+                    cont.resumeWithException(IOException("Network error contacting AI service: ${e.message}"))
                 }
 
                 override fun onResponse(call: Call, response: Response) {
@@ -138,39 +120,12 @@ class RepsAiApiService @Inject constructor() {
                             return
                         }
                         try {
-                            val chatResponse = GSON.fromJson(responseBody, ChatResponse::class.java)
-                            cont.resume(chatResponse)
+                            cont.resume(GSON.fromJson(responseBody, ChatResponse::class.java))
                         } catch (e: Exception) {
                             cont.resumeWithException(e)
                         }
-                    } else if (code == 413) {
-                        cont.resumeWithException(
-                            AssistantResult.Failure(
-                                AssistantError.ModelUnavailable
-                            )
-                        )
-                    } else if (code == 422) {
-                        cont.resumeWithException(
-                            AssistantResult.Failure(
-                                AssistantError.Unknown
-                            )
-                        )
-                    } else if (code == 429) {
-                        cont.resumeWithException(
-                            AssistantResult.Failure(
-                                AssistantError.RateLimited
-                            )
-                        )
-                    } else if (code in 502..503) {
-                        cont.resumeWithException(
-                            AssistantResult.Failure(
-                                AssistantError.ModelUnavailable
-                            )
-                        )
                     } else {
-                        cont.resumeWithException(
-                            IOException("AI service error: $code")
-                        )
+                        cont.resumeWithException(IOException("AI service error: $code"))
                     }
                 }
             })
@@ -201,18 +156,19 @@ class RepsAiApiService @Inject constructor() {
         conversationId: String? = null,
         userContext: UserContext? = null,
     ): ChatResponse {
-        val request = ChatRequest(
-            message = message,
-            conversationId = conversationId,
-            userContext = userContext,
+        return sendMessage(
+            ChatRequest(
+                message = message,
+                conversationId = conversationId,
+                userContext = userContext,
+            )
         )
-        return sendMessage(request)
     }
 
     data class ChatResponse(
         val conversationId: String,
         val message: String,
-        val `type`: String = "general",
+        val type: String = "general",
         val data: Map<String, Any> = emptyMap(),
         val sources: List<SourceRef> = emptyList(),
     )

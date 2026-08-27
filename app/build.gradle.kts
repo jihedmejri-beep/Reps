@@ -121,4 +121,5 @@ dependencies {
 
     testImplementation(libs.junit)
     implementation(libs.gson)
+    implementation(libs.okhttp)
 }
