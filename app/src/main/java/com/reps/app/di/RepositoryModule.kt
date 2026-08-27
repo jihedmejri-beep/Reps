@@ -2,7 +2,7 @@ package com.reps.app.di
 
 import com.reps.app.data.exercise.CatalogExerciseRepository
 import com.reps.app.data.exercise.CatalogMuscleSvgRepository
-import com.reps.app.data.fake.FakeNutritionAssistantRepository
+import com.reps.app.data.ai.RepsAiNutritionAssistantRepository
 import com.reps.app.data.user.LocalAuthRepository
 import com.reps.app.data.user.LocalMealRepository
 import com.reps.app.data.user.LocalUserRepository
@@ -70,14 +70,14 @@ abstract class RepositoryModule {
     abstract fun bindMealRepository(impl: LocalMealRepository): MealRepository
 
     /**
-     * The assistant's AI brain (deliberately still local). Swapping in your own
-     * agent is a change to this binding alone; history storage is separate and
-     * already durable.
+     * The assistant's AI brain connected to the REPS AI backend.
+     * Swapping in your own agent is a change to this binding alone; history
+     * storage is separate and already durable.
      */
     @Binds
     @Singleton
     abstract fun bindNutritionAssistantRepository(
-        impl: FakeNutritionAssistantRepository,
+        impl: RepsAiNutritionAssistantRepository,
     ): NutritionAssistantRepository
 
     /** Where past chats are kept: Room-backed, scoped to the signed-in account. */
