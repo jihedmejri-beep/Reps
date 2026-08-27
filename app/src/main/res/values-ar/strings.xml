@@ -64,6 +64,16 @@
     <string name="reminder_notification_title">وقت التمرين</string>
     <string name="reminder_notification_body">%1$s ضمن جدول اليوم. هيّا نتحرك.</string>
 
+    <!-- Hydration reminders -->
+    <string name="hydration_channel_name">تذكيرات الترطيب</string>
+    <string name="hydration_notification_title">فحص الترطيب</string>
+    <string name="hydration_notification_body">حافظ على ترطيبك ! اشرب الماء.</string>
+
+    <!-- PR celebrations -->
+    <string name="pr_channel_name">ال recordsالشخصية</string>
+    <string name="pr_notification_title">record جديد !</string>
+    <string name="pr_notification_body">لتوّك سجّلت recordاً جديداً في %1$s !</string>
+
     <!-- Home -->
     <string name="home_greeting_morning">ØµØ¨Ø§Ø­ Ø§Ù„Ø®ÙŠØ±</string>
     <string name="home_greeting_afternoon">Ø·Ø§Ø¨ ÙŠÙˆÙ…Ùƒ</string>

@@ -64,6 +64,16 @@
     <string name="reminder_notification_title">C\'est l\'heure de s\'entraîner</string>
     <string name="reminder_notification_body">%1$s est au programme aujourd\'hui. On s\'y met.</string>
 
+    <!-- Hydration reminders -->
+    <string name="hydration_channel_name">Rappels d\'hydratation</string>
+    <string name="hydration_notification_title">Point hydratation</string>
+    <string name="hydration_notification_body">Reste hydraté ! Bois de l\'eau.</string>
+
+    <!-- PR celebrations -->
+    <string name="pr_channel_name">Records personnels</string>
+    <string name="pr_notification_title">Nouveau record !</string>
+    <string name="pr_notification_body">Tu viens de battre un record sur %1$s !</string>
+
     <!-- Home -->
     <string name="home_greeting_morning">Bonjour</string>
     <string name="home_greeting_afternoon">Bon aprÃ¨s-midi</string>

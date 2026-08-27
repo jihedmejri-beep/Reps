@@ -3,6 +3,7 @@ package com.reps.app.feature.workouts.session
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.reps.app.data.notifications.NotificationHelper
 import com.reps.app.domain.model.Exercise
 import com.reps.app.domain.model.ExerciseSet
 import com.reps.app.domain.model.UnitSystem
@@ -61,6 +62,7 @@ class WorkoutSessionViewModel @Inject constructor(
     private val workoutRepository: WorkoutRepository,
     exerciseRepository: ExerciseRepository,
     userRepository: UserRepository,
+    private val notificationHelper: NotificationHelper,
 ) : ViewModel() {
 
     private val workoutId: String = checkNotNull(savedStateHandle[NavArgs.WORKOUT_ID])
@@ -201,6 +203,12 @@ class WorkoutSessionViewModel @Inject constructor(
                 prsHit = prIds,
             ),
         )
+
+        for (id in prIds) {
+            val name = exercisesById.value[id]?.name ?: continue
+            notificationHelper.postPrNotification(name)
+        }
+
         return SessionCompletionResult(volume, completedSets, prIds)
     }
 }

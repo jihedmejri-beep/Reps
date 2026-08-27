@@ -3,6 +3,7 @@ package com.reps.app.feature.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.reps.app.data.datastore.UserPreferencesDataStore
+import com.reps.app.data.notifications.HydrationReminderScheduler
 import com.reps.app.data.notifications.WorkoutReminderScheduler
 import com.reps.app.domain.model.AppLanguage
 import com.reps.app.domain.model.Goal
@@ -39,6 +40,7 @@ class ProfileViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val preferences: UserPreferencesDataStore,
     private val reminderScheduler: WorkoutReminderScheduler,
+    private val hydrationScheduler: HydrationReminderScheduler,
 ) : ViewModel() {
 
     val uiState = combine(
@@ -79,6 +81,7 @@ class ProfileViewModel @Inject constructor(
             val newValue = !preferences.notificationsEnabled.first()
             preferences.setNotificationsEnabled(newValue)
             reminderScheduler.setEnabled(newValue)
+            hydrationScheduler.setEnabled(newValue)
         }
     }
 

@@ -64,6 +64,16 @@
     <string name="reminder_notification_title">Time to train</string>
     <string name="reminder_notification_body">%1$s is on today\'s schedule. Let\'s get moving.</string>
 
+    <!-- Hydration reminders -->
+    <string name="hydration_channel_name">Hydration reminders</string>
+    <string name="hydration_notification_title">Hydration check</string>
+    <string name="hydration_notification_body">Stay hydrated! Drink some water.</string>
+
+    <!-- PR celebrations -->
+    <string name="pr_channel_name">Personal records</string>
+    <string name="pr_notification_title">New PR!</string>
+    <string name="pr_notification_body">You just set a new record on %1$s!</string>
+
     <!-- Home -->
     <string name="home_greeting_morning">Good morning</string>
     <string name="home_greeting_afternoon">Good afternoon</string>

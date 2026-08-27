@@ -13,6 +13,7 @@ import coil3.gif.GifDecoder
 import coil3.memory.MemoryCache
 import coil3.request.crossfade
 import coil3.svg.SvgDecoder
+import com.reps.app.data.notifications.NotificationHelper
 import dagger.hilt.android.HiltAndroidApp
 import okio.Path.Companion.toOkioPath
 import javax.inject.Inject
@@ -27,6 +28,14 @@ class RepsApplication : Application(), SingletonImageLoader.Factory, Configurati
 
     @Inject
     lateinit var hiltWorkerFactory: HiltWorkerFactory
+
+    @Inject
+    lateinit var notificationHelper: NotificationHelper
+
+    override fun onCreate() {
+        super.onCreate()
+        notificationHelper.ensureChannels()
+    }
 
     /**
      * One loader for every image in the app, so call sites stay format-agnostic.

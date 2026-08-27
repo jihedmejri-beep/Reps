@@ -1,14 +1,6 @@
 package com.reps.app.data.notifications
 
-import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -33,6 +25,7 @@ class WorkoutReminderWorker @AssistedInject constructor(
     @Assisted params: WorkerParameters,
     private val workoutRepository: WorkoutRepository,
     private val preferences: UserPreferencesDataStore,
+    private val notificationHelper: NotificationHelper,
 ) : CoroutineWorker(appContext, params) {
 
     override suspend fun doWork(): Result {
@@ -41,49 +34,14 @@ class WorkoutReminderWorker @AssistedInject constructor(
         val workout = workoutRepository.observeWorkoutFor(LocalDate.now()).first()
             ?: return Result.success()
 
-        postNotification(
+        notificationHelper.postWorkoutReminder(
             title = applicationContext.getString(R.string.reminder_notification_title),
             body = applicationContext.getString(R.string.reminder_notification_body, workout.name),
         )
         return Result.success()
     }
 
-    private fun postNotification(title: String, body: String) {
-        val context = applicationContext
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
-            // Permission was revoked after the toggle was switched on; stay quiet.
-            return
-        }
-
-        val manager = ContextCompat.getSystemService(context, NotificationManager::class.java)
-            ?: return
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            manager.createNotificationChannel(
-                NotificationChannel(
-                    CHANNEL_ID,
-                    context.getString(R.string.reminder_channel_name),
-                    NotificationManager.IMPORTANCE_DEFAULT,
-                ),
-            )
-        }
-
-        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_stat_reps)
-            .setContentTitle(title)
-            .setContentText(body)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(body))
-            .setAutoCancel(true)
-            .build()
-
-        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification)
-    }
-
     companion object {
         const val UNIQUE_WORK_NAME = "daily_workout_reminder"
-        private const val CHANNEL_ID = "workout_reminders"
-        private const val NOTIFICATION_ID = 4001
     }
 }
