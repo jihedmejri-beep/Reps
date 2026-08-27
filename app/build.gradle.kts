@@ -120,4 +120,5 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     testImplementation(libs.junit)
+    implementation(libs.gson)
 }
