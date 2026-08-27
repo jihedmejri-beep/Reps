@@ -141,7 +141,7 @@ fun NutritionScreen(
                 }
 
                 item { MacroSummaryCard(state) }
-                item { WaterCard(state, onAdd = viewModel::addWater, onRemove = viewModel::removeWater) }
+                // item { WaterCard(state, onAdd = viewModel::addWater, onRemove = viewModel::removeWater) }
 
                 if (state.meals.isEmpty() && !state.loading) {
                     item {
