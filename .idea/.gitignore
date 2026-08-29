@@ -1,3 +1,19 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+
+# Personal IDE state - changes per user, causes merge conflicts
+/deploymentTargetSelector.xml
+/deviceManager.xml
+/planningMode.xml
+/navEditor.xml
+/assetWizardSettings.xml
+/dataSources/
+/dataSources.local.xml
+/dynamic.xml
+/uiDesigner.xml
+/gradle.xml
+/jarRepositories.xml
+/httpRequests/
+/scratches/
+/tasks.xml

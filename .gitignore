@@ -15,3 +15,12 @@ build/
 .externalNativeBuild
 .cxx
 local.properties
+
+# Python cache - never commit bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Generated output files - rebuilt on demand, not source of truth
+tools/exercise_db_report.json
