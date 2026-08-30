@@ -15,22 +15,17 @@ import com.reps.app.domain.model.NutritionAnalysis
  * "ask the AI" call. The ViewModel drives the hops in order - [understand]
  * until the draft reports ready, then [analyseAndCoach]; [ask] handles
  * everything outside meal logging.
- *
- * To go live: deploy /functions, write an implementation backed by its
- * callables, and swap the binding in `RepositoryModule`. Adding an agent later
- * (photo analysis, barcode, weekly report) means adding a method here and a
- * handler in the backend registry - no existing call changes.
  */
 interface NutritionAssistantRepository {
 
     /**
-     * One turn with the Meal Understanding Agent. [history] is the conversation
-     * so far; the agent either answers with more questions or reports
-     * [MealDraft.readyForAnalysis].
+     * One turn with the Meal Understanding / Nutrition Agent. [history] is the conversation
+     * so far; [conversationId] is the backend session identifier if continuing an active chat.
      */
     suspend fun understand(
         history: List<AssistantExchange>,
         message: String,
+        conversationId: String? = null,
     ): AssistantResult<UnderstandingResponse>
 
     /**
@@ -47,6 +42,7 @@ interface NutritionAssistantRepository {
         history: List<AssistantExchange>,
         question: String,
         goal: Goal,
+        conversationId: String? = null,
     ): AssistantResult<String>
 }
 
@@ -58,7 +54,9 @@ data class AssistantExchange(
 
 data class UnderstandingResponse(
     val message: String,
-    val draft: MealDraft,
+    val draft: MealDraft = MealDraft(),
+    val conversationId: String? = null,
+    val responseType: String = "general",
 )
 
 data class CoachedAnalysis(

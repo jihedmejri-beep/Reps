@@ -139,10 +139,11 @@ class NutritionAssistantViewModel @Inject constructor(
 
         replyJob?.cancel()
         replyJob = viewModelScope.launch {
-            when (val result = assistant.understand(exchanges, prompt.literal.orEmpty())) {
+            when (val result = assistant.understand(exchanges, prompt.literal.orEmpty(), conversationId)) {
                 is AssistantResult.Failure -> failWith(result.error)
 
                 is AssistantResult.Success -> {
+                    result.value.conversationId?.let { conversationId = it }
                     finishTurn(prompt.literal.orEmpty(), result.value.message)
 
                     // Draft ready means the understanding agent got everything

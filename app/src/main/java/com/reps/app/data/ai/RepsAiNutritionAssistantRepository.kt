@@ -1,93 +1,74 @@
 package com.reps.app.data.ai
 
+import com.reps.app.ai.RepsAiApiException
 import com.reps.app.ai.RepsAiApiService
+import com.reps.app.ai.toRepsAiGoal
+import com.reps.app.core.util.NutritionTargetsCalculator
 import com.reps.app.domain.model.AssistantError
 import com.reps.app.domain.model.Goal
-import com.reps.app.domain.model.AssistantConversation
+import com.reps.app.domain.model.Macros
 import com.reps.app.domain.model.MealDraft
-import com.reps.app.domain.repository.AssistantConversationRepository
+import com.reps.app.domain.repository.AssistantExchange
 import com.reps.app.domain.repository.AssistantResult
 import com.reps.app.domain.repository.CoachedAnalysis
+import com.reps.app.domain.repository.MealRepository
 import com.reps.app.domain.repository.NutritionAssistantRepository
 import com.reps.app.domain.repository.UnderstandingResponse
 import com.reps.app.domain.repository.UserRepository
-import kotlinx.coroutines.flow.first
+import com.reps.app.domain.repository.WeightRepository
 import kotlinx.coroutines.flow.firstOrNull
 import java.io.IOException
-import java.util.UUID
+import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class RepsAiNutritionAssistantRepository @Inject constructor(
     private val apiService: RepsAiApiService,
-    private val conversationRepository: AssistantConversationRepository,
     private val userRepository: UserRepository,
+    private val weightRepository: WeightRepository,
+    private val mealRepository: MealRepository,
 ) : NutritionAssistantRepository {
-
-    @Volatile
-    private var storedConversationId: String? = null
-
-    private suspend fun loadConversationIdFromStorage(): String {
-        val convos = conversationRepository.observeConversations().first()
-        val id = convos.firstOrNull()?.id
-        storedConversationId = id
-        return id ?: UUID.randomUUID().toString()
-    }
 
     private suspend fun mapUserContext(): RepsAiApiService.UserContext? {
         val user = userRepository.observeUser().firstOrNull() ?: return null
+        val latestWeight = weightRepository.observeEntries().firstOrNull()?.maxByOrNull { it.date }?.weightKg
+        val today = LocalDate.now()
+        val todaysMeals = mealRepository.observeMeals(today).firstOrNull() ?: emptyList()
+        val totals = todaysMeals.fold(Macros()) { acc, meal -> acc + meal.macros }
+
+        val targets = if (user.sex != null && latestWeight != null && user.heightCm != null && user.age != null) {
+            NutritionTargetsCalculator.daily(
+                sex = user.sex,
+                weightKg = latestWeight,
+                heightCm = user.heightCm,
+                age = user.age,
+                goal = user.goal,
+            )
+        } else {
+            null
+        }
 
         return RepsAiApiService.UserContext(
-            goal = user.goal,
+            goal = user.goal.toRepsAiGoal(),
+            weightKg = latestWeight,
             heightCm = user.heightCm,
             ageYears = user.age,
-        )
-    }
-
-    private suspend fun ensureConversationId(): String {
-        if (!storedConversationId.isNullOrEmpty()) {
-            return storedConversationId!!
-        }
-        return loadConversationIdFromStorage()
-    }
-
-    private suspend fun saveConversationId(id: String) {
-        storedConversationId = id
-
-        val convos = conversationRepository.observeConversations().first()
-        if (convos.firstOrNull()?.id != id) {
-            val newConv = AssistantConversation(
-                id = id,
-                title = "",
-                updatedAt = System.currentTimeMillis(),
-                messages = emptyList(),
-            )
-            conversationRepository.upsert(newConv)
-        }
-    }
-
-    private fun parseResponse(
-        response: RepsAiApiService.ChatResponse,
-    ): UnderstandingResponse {
-        return UnderstandingResponse(
-            message = response.message,
-            draft = MealDraft(
-                mealName = null,
-                ingredients = emptyList(),
-                readyForAnalysis = false,
-                confidence = 0.0,
-                followUpQuestions = emptyList(),
-            ),
+            calorieTarget = targets?.calories,
+            proteinTarget = targets?.protein,
+            carbsTarget = targets?.carbs,
+            fatTarget = targets?.fat,
+            caloriesConsumed = totals.calories.takeIf { it > 0.0 },
+            proteinConsumed = totals.protein.takeIf { it > 0.0 },
         )
     }
 
     override suspend fun understand(
-        history: List<com.reps.app.domain.repository.AssistantExchange>,
+        history: List<AssistantExchange>,
         message: String,
+        conversationId: String?,
     ): AssistantResult<UnderstandingResponse> {
         return try {
-            val conversationId = ensureConversationId()
             val userContext = mapUserContext()
 
             val apiResponse = apiService.sendMessageWithContext(
@@ -96,15 +77,15 @@ class RepsAiNutritionAssistantRepository @Inject constructor(
                 userContext = userContext,
             )
 
-            saveConversationId(apiResponse.conversationId)
-            val understanding = parseResponse(apiResponse)
+            val understanding = UnderstandingResponse(
+                message = apiResponse.message,
+                draft = MealDraft(),
+                conversationId = apiResponse.conversationId,
+                responseType = apiResponse.type,
+            )
             AssistantResult.Success(understanding)
         } catch (e: Exception) {
-            val error = when (e) {
-                is IOException -> AssistantError.Network
-                else -> AssistantError.Unknown
-            }
-            AssistantResult.Failure(error)
+            AssistantResult.Failure(mapExceptionToError(e))
         }
     }
 
@@ -116,12 +97,12 @@ class RepsAiNutritionAssistantRepository @Inject constructor(
     }
 
     override suspend fun ask(
-        history: List<com.reps.app.domain.repository.AssistantExchange>,
+        history: List<AssistantExchange>,
         question: String,
         goal: Goal,
+        conversationId: String?,
     ): AssistantResult<String> {
         return try {
-            val conversationId = ensureConversationId()
             val userContext = mapUserContext()
 
             val apiResponse = apiService.sendMessageWithContext(
@@ -131,11 +112,19 @@ class RepsAiNutritionAssistantRepository @Inject constructor(
             )
             AssistantResult.Success(apiResponse.message)
         } catch (e: Exception) {
-            val error = when (e) {
-                is IOException -> AssistantError.Network
-                else -> AssistantError.Unknown
+            AssistantResult.Failure(mapExceptionToError(e))
+        }
+    }
+
+    private fun mapExceptionToError(e: Exception): AssistantError {
+        return when (e) {
+            is RepsAiApiException -> when (e.statusCode) {
+                429 -> AssistantError.RateLimited
+                502, 503 -> AssistantError.ModelUnavailable
+                else -> AssistantError.Network
             }
-            AssistantResult.Failure(error)
+            is IOException -> AssistantError.Network
+            else -> AssistantError.Unknown
         }
     }
 }

@@ -33,6 +33,7 @@ class FakeNutritionAssistantRepository @Inject constructor() : NutritionAssistan
     override suspend fun understand(
         history: List<AssistantExchange>,
         message: String,
+        conversationId: String?,
     ): AssistantResult<UnderstandingResponse> {
         delay(700) // stand in for a model call, so the typing indicator is visible
 
@@ -139,6 +140,7 @@ class FakeNutritionAssistantRepository @Inject constructor() : NutritionAssistan
         history: List<AssistantExchange>,
         question: String,
         goal: Goal,
+        conversationId: String?,
     ): AssistantResult<String> {
         delay(600)
         return AssistantResult.Success(

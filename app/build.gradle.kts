@@ -68,7 +68,7 @@ android {
 // validate against at open time. Without this the generated file drifts.
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
-    arg("room.generateKotlin", "false")
+    arg("room.generateKotlin", "true")
 }
 
 composeCompiler {
@@ -99,6 +99,7 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.work.compiler)
 
     implementation(libs.androidx.work.runtime)
 
