@@ -7,13 +7,20 @@ package com.reps.app.domain.model
  */
 enum class AssistantError {
     Network,
+    Timeout,
     NotSignedIn,
     RateLimited,
     ModelUnavailable,
     FoodDatabaseUnavailable,
+
+    /** This build has no assistant endpoint (e.g. a release with no server deployed yet). */
+    NotConfigured,
+
+    /** The message was rejected before sending, e.g. over the backend's length limit. */
+    MessageTooLong,
     Unknown,
     ;
 
     val isRetryable: Boolean
-        get() = this != NotSignedIn
+        get() = this != NotSignedIn && this != NotConfigured && this != MessageTooLong
 }

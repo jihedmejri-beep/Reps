@@ -107,6 +107,9 @@ interface WorkoutDao {
     @Query("DELETE FROM workout_templates WHERE id = :templateId")
     suspend fun deleteTemplateRow(templateId: String)
 
+    @Query("SELECT createdAtMs FROM workout_templates WHERE id = :templateId AND uid = :uid")
+    suspend fun templateCreatedAt(templateId: String, uid: String): Long?
+
     @Query("DELETE FROM workout_template_exercises WHERE templateId = :templateId")
     suspend fun deleteTemplateExercises(templateId: String)
 
@@ -134,20 +137,30 @@ interface WorkoutDao {
     @Insert
     suspend fun insertSessionSets(sets: List<WorkoutSessionSetEntity>)
 
+    @Transaction
+    @Query("SELECT * FROM workout_sessions WHERE id = :sessionId AND uid = :uid LIMIT 1")
+    fun observeSession(uid: String, sessionId: String): Flow<SessionWithExercises?>
+
     /**
-     * The best completed-set volume ever recorded for an exercise. Volume is
-     * weight x reps, computed in SQL so the scan stays inside SQLite.
+     * The best completed set ever recorded for an exercise, ranked by weight then
+     * reps - the same order as PersonalRecords.setOrder.
      */
     @Query(
         """
-        SELECT MAX(s.weightKg * s.reps)
+        SELECT s.*
         FROM workout_session_sets AS s
         JOIN workout_session_exercises AS e ON e.id = s.sessionExerciseId
         JOIN workout_sessions AS w ON w.id = e.sessionId
-        WHERE e.exerciseId = :exerciseId AND w.uid = :uid AND s.completed = 1
+        WHERE e.exerciseId = :exerciseId AND w.uid = :uid AND s.completed = 1 AND s.reps > 0
+        ORDER BY s.weightKg DESC, s.reps DESC
+        LIMIT 1
         """,
     )
-    suspend fun bestVolume(exerciseId: String, uid: String): Double?
+    suspend fun bestSet(exerciseId: String, uid: String): WorkoutSessionSetEntity?
+
+    @Transaction
+    @Query("SELECT * FROM workout_sessions WHERE uid = :uid ORDER BY dateIso ASC, rowid ASC")
+    suspend fun sessions(uid: String): List<SessionWithExercises>
 
     /** Distinct session dates for the account, ISO strings, ascending. */
     @Query("SELECT DISTINCT dateIso FROM workout_sessions WHERE uid = :uid ORDER BY dateIso ASC")
@@ -226,4 +239,34 @@ interface AssistantConversationDao {
 
     @Insert
     suspend fun insertMessages(messages: List<AssistantMessageEntity>)
+}
+
+@Dao
+interface ActiveSessionDraftDao {
+
+    @Query("SELECT * FROM active_session_drafts WHERE uid = :uid LIMIT 1")
+    suspend fun get(uid: String): ActiveSessionDraftEntity?
+
+    @Query("SELECT * FROM active_session_drafts WHERE uid = :uid LIMIT 1")
+    fun observe(uid: String): Flow<ActiveSessionDraftEntity?>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsert(draft: ActiveSessionDraftEntity)
+
+    @Query("DELETE FROM active_session_drafts WHERE uid = :uid")
+    suspend fun delete(uid: String)
+}
+
+@Dao
+interface AchievementUnlockDao {
+
+    @Query("SELECT * FROM achievement_unlocks WHERE uid = :uid ORDER BY unlockedAtMs ASC")
+    fun observe(uid: String): Flow<List<AchievementUnlockEntity>>
+
+    @Query("SELECT achievementId FROM achievement_unlocks WHERE uid = :uid")
+    suspend fun unlockedIds(uid: String): List<String>
+
+    /** IGNORE, not REPLACE: the first unlock date is the one that counts. */
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAll(unlocks: List<AchievementUnlockEntity>): List<Long>
 }

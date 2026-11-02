@@ -2,6 +2,7 @@ package com.reps.app.feature.nutrition
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.reps.app.core.util.DateTicker
 import com.reps.app.core.util.NutritionTargetsCalculator
 import com.reps.app.data.datastore.UserPreferencesDataStore
 import com.reps.app.domain.model.FoodItem
@@ -11,13 +12,15 @@ import com.reps.app.domain.repository.MealRepository
 import com.reps.app.domain.repository.UserRepository
 import com.reps.app.domain.repository.WeightRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.time.LocalDate
 import java.util.UUID
 import javax.inject.Inject
@@ -27,6 +30,8 @@ private const val WATER_TARGET_GLASSES = 8
 data class NutritionUiState(
     val meals: List<Meal> = emptyList(),
     val target: Macros = NutritionTargetsCalculator.fallback(),
+    /** False while [target] is the generic default because the profile is incomplete. */
+    val targetPersonalised: Boolean = false,
     val waterGlasses: Int = 0,
     val waterTargetGlasses: Int = WATER_TARGET_GLASSES,
     val loading: Boolean = true,
@@ -34,6 +39,7 @@ data class NutritionUiState(
     val totals: Macros get() = meals.fold(Macros()) { acc, meal -> acc + meal.macros }
 }
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class NutritionViewModel @Inject constructor(
     private val mealRepository: MealRepository,
@@ -42,16 +48,14 @@ class NutritionViewModel @Inject constructor(
     private val preferences: UserPreferencesDataStore,
 ) : ViewModel() {
 
-    private val today = LocalDate.now()
+    /** Follows the calendar, so the screen rolls over to a new day at midnight. */
+    private val today = DateTicker.today().stateIn(viewModelScope, SharingStarted.Eagerly, LocalDate.now())
 
-    /** Water is per-day device state in DataStore; the key is the date, so it resets naturally. */
-    private val waterGlasses = MutableStateFlow(0)
+    /** Water is per-day, per-account state in DataStore; a new date is a new key, so it resets naturally. */
+    private val waterGlasses = today.flatMapLatest { preferences.waterGlasses(it) }
 
-    init {
-        viewModelScope.launch {
-            waterGlasses.value = preferences.waterGlasses(today).first()
-        }
-    }
+    /** Serialises water writes so quick taps never read the same stale count. */
+    private val waterLock = Mutex()
 
     /** Targets come from the profile's own numbers; the flat default covers a sparse profile. */
     private val target = combine(
@@ -59,22 +63,22 @@ class NutritionViewModel @Inject constructor(
         weightRepository.observeEntries(),
     ) { user, weights ->
         val weightKg = weights.maxByOrNull { it.date }?.weightKg
-        val sex = user?.sex
-        val heightCm = user?.heightCm
-        val age = user?.age
-        if (user != null && sex != null && heightCm != null && age != null && weightKg != null) {
-            NutritionTargetsCalculator.daily(sex, weightKg, heightCm, age, user.goal)
-        } else {
-            NutritionTargetsCalculator.fallback()
-        }
+        NutritionTargetsCalculator.forUser(user, weightKg)?.let { it to true }
+            ?: (NutritionTargetsCalculator.fallback() to false)
     }
 
     val uiState = combine(
-        mealRepository.observeMeals(today),
+        today.flatMapLatest { mealRepository.observeMeals(it) },
         waterGlasses,
         target,
-    ) { meals, water, dailyTarget ->
-        NutritionUiState(meals = meals, target = dailyTarget, waterGlasses = water, loading = false)
+    ) { meals, water, (dailyTarget, personalised) ->
+        NutritionUiState(
+            meals = meals,
+            target = dailyTarget,
+            targetPersonalised = personalised,
+            waterGlasses = water,
+            loading = false,
+        )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
@@ -99,7 +103,7 @@ class NutritionViewModel @Inject constructor(
         if (items.isEmpty() || name.isBlank()) return
         viewModelScope.launch {
             mealRepository.logMeal(
-                Meal(id = mealId ?: UUID.randomUUID().toString(), name = name, date = today, foodItems = items),
+                Meal(id = mealId ?: UUID.randomUUID().toString(), name = name, date = today.value, foodItems = items),
             )
         }
     }
@@ -120,7 +124,9 @@ class NutritionViewModel @Inject constructor(
     }
 
     private fun updateWater(transform: (Int) -> Int) {
-        waterGlasses.update(transform)
-        viewModelScope.launch { preferences.setWaterGlasses(today, waterGlasses.value) }
+        val day = today.value
+        viewModelScope.launch {
+            waterLock.withLock { preferences.setWaterGlasses(day, transform(preferences.waterGlasses(day).first())) }
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.reps.app.di
 
+import com.reps.app.BuildConfig
 import com.reps.app.ai.RepsAiApiService
 import dagger.Module
 import dagger.Provides
@@ -12,5 +13,5 @@ import javax.inject.Singleton
 object AiServiceModule {
     @Provides
     @Singleton
-    fun provideRepsAiApiService(): RepsAiApiService = RepsAiApiService()
+    fun provideRepsAiApiService(): RepsAiApiService = RepsAiApiService(BuildConfig.REPS_AI_BASE_URL)
 }

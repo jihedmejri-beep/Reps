@@ -15,25 +15,37 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.reps.app.R
+import com.reps.app.core.theme.RepsError
 import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.domain.model.Exercise
 import com.reps.app.domain.model.Workout
+import java.time.DayOfWeek
 
 /**
  * One row in the exercise library, shared by the Workouts tab and the
@@ -136,41 +148,82 @@ fun ExerciseRow(
     }
 }
 
-/** Horizontally-scrolled card for a saved workout template; tapping starts it. */
+/**
+ * Horizontally-scrolled card for a saved workout template. Tapping starts it;
+ * the overflow menu edits, duplicates or deletes it.
+ *
+ * The eyebrow shows the real schedule. It used to show a difficulty, but every
+ * template was saved as "Intermediate" - a label nobody chose.
+ */
 @Composable
 fun MiniWorkoutCard(
     workout: Workout,
     onClick: () -> Unit,
+    onEdit: () -> Unit,
+    onDuplicate: () -> Unit,
+    onDelete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var menuOpen by remember { mutableStateOf(false) }
     Column(
         modifier
-            .width(160.dp)
+            .width(176.dp)
             .clickable(role = Role.Button, onClick = onClick)
             .background(RepsTheme.colors.surface, MaterialTheme.shapes.medium)
-            .padding(14.dp),
+            .padding(start = 14.dp, top = 6.dp, bottom = 14.dp, end = 4.dp),
     ) {
-        Text(
-            text = stringResource(workout.difficulty.labelRes).uppercase(),
-            style = com.reps.app.core.theme.RepsTheme.textStyles.eyebrow,
-            color = RepsGreen,
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = scheduleLabel(workout.scheduledDays).uppercase(),
+                style = RepsTheme.textStyles.eyebrow,
+                color = if (workout.scheduledDays.isEmpty()) RepsTheme.colors.textTertiary else RepsGreen,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f),
+            )
+            Box {
+                IconButton(onClick = { menuOpen = true }) {
+                    Icon(
+                        Icons.Filled.MoreVert,
+                        contentDescription = stringResource(R.string.workouts_template_options_cd, workout.name),
+                        tint = RepsTheme.colors.textTertiary,
+                    )
+                }
+                DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
+                    DropdownMenuItem(text = { Text(stringResource(R.string.workouts_template_start)) }, onClick = { menuOpen = false; onClick() })
+                    DropdownMenuItem(text = { Text(stringResource(R.string.workouts_template_edit)) }, onClick = { menuOpen = false; onEdit() })
+                    DropdownMenuItem(text = { Text(stringResource(R.string.workouts_template_duplicate)) }, onClick = { menuOpen = false; onDuplicate() })
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.workouts_template_delete), color = RepsError) },
+                        onClick = { menuOpen = false; onDelete() },
+                    )
+                }
+            }
+        }
         Text(
             text = workout.name,
             style = MaterialTheme.typography.titleSmall,
             color = RepsTheme.colors.textPrimary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(top = 4.dp),
+            modifier = Modifier.padding(end = 10.dp),
         )
         Text(
-            text = stringResource(R.string.home_exercise_count, workout.exercises.size) +
-                " · " + stringResource(R.string.home_duration_min, workout.estimatedMinutes),
+            text = pluralStringResource(R.plurals.exercise_count, workout.exercises.size, workout.exercises.size) +
+                " · " + stringResource(R.string.workouts_estimated_min, workout.estimatedMinutes),
             style = MaterialTheme.typography.labelSmall,
             color = RepsTheme.colors.textSecondary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(top = 4.dp),
+            modifier = Modifier.padding(top = 4.dp, end = 10.dp),
         )
     }
+}
+
+/** "Mon · Thu" in the app's language, or "Not scheduled". */
+@Composable
+fun scheduleLabel(days: Set<DayOfWeek>): String {
+    if (days.isEmpty()) return stringResource(R.string.workouts_not_scheduled)
+    val locale = LocalConfiguration.current.locales[0]
+    return days.sorted().joinToString(" · ") { it.getDisplayName(java.time.format.TextStyle.SHORT, locale) }
 }

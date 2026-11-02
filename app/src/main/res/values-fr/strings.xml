@@ -4,20 +4,20 @@
 
     <!-- Navigation -->
     <string name="nav_home">Accueil</string>
-    <string name="nav_progress">ProgrÃ¨s</string>
-    <string name="nav_workouts">SÃ©ances</string>
+    <string name="nav_progress">Progrès</string>
+    <string name="nav_workouts">Séances</string>
     <string name="nav_nutrition">Nutrition</string>
     <string name="nav_profile">Profil</string>
 
     <!-- Splash -->
-    <string name="splash_tagline">POUSSE Â· SUIS Â· RÃ‰PÃˆTE</string>
+    <string name="splash_tagline">POUSSE · SUIS · RÉPÈTE</string>
     <string name="splash_tap_to_continue">APPUYEZ POUR CONTINUER</string>
 
     <!-- Onboarding -->
-    <string name="onboarding_headline">EntraÃ®ne-toi sÃ©rieusement.</string>
-    <string name="onboarding_subtext">Ton entraÃ®nement, ta nutrition et tes progrÃ¨s â€” rÃ©unis en un seul systÃ¨me rigoureux.</string>
+    <string name="onboarding_headline">Entraîne-toi sérieusement.</string>
+    <string name="onboarding_subtext">Ton entraînement, ta nutrition et tes progrès — réunis en un seul système rigoureux.</string>
     <string name="onboarding_get_started">Commencer</string>
-    <string name="onboarding_have_account">J\'ai dÃ©jÃ  un compte</string>
+    <string name="onboarding_have_account">J\'ai déjà un compte</string>
 
     <!-- Auth: shared -->
     <string name="auth_email">E-mail</string>
@@ -29,29 +29,29 @@
 
     <!-- Auth: login -->
     <string name="login_headline">Bon retour</string>
-    <string name="login_subtext">Connecte-toi pour reprendre oÃ¹ tu t\'es arrÃªtÃ©.</string>
-    <string name="login_forgot_password">Mot de passe oubliÃ© ?</string>
+    <string name="login_subtext">Connecte-toi pour reprendre où tu t\'es arrêté.</string>
+    <string name="login_forgot_password">Mot de passe oublié ?</string>
     <string name="login_sign_in">Se connecter</string>
     <string name="login_new_here">Nouveau sur REPS ?</string>
-    <string name="login_create_account">CrÃ©er un compte</string>
+    <string name="login_create_account">Créer un compte</string>
 
     <!-- Auth: sign up -->
-    <string name="signup_headline">CrÃ©er un compte</string>
-    <string name="signup_subtext">Commence ta sÃ©rie dÃ¨s aujourd\'hui.</string>
+    <string name="signup_headline">Créer un compte</string>
+    <string name="signup_subtext">Commence ta série dès aujourd\'hui.</string>
     <string name="signup_name">Nom</string>
-    <string name="signup_create_account">CrÃ©er un compte</string>
-    <string name="signup_have_account">Tu as dÃ©jÃ  un compte ?</string>
+    <string name="signup_create_account">Créer un compte</string>
+    <string name="signup_have_account">Tu as déjà un compte ?</string>
     <string name="signup_sign_in">Se connecter</string>
     <string name="signup_terms_prefix">J\'accepte les</string>
     <string name="signup_terms">Conditions d\'utilisation</string>
     <string name="signup_terms_and">et la</string>
-    <string name="signup_privacy">Politique de confidentialitÃ©</string>
+    <string name="signup_privacy">Politique de confidentialité</string>
 
     <!-- Auth: validation -->
     <string name="error_email_invalid">Saisis une adresse e-mail valide.</string>
     <string name="error_email_empty">L\'e-mail est obligatoire.</string>
     <string name="error_password_empty">Le mot de passe est obligatoire.</string>
-    <string name="error_password_short">Le mot de passe doit contenir au moins 8 caractÃ¨res.</string>
+    <string name="error_password_short">Le mot de passe doit contenir au moins 8 caractères.</string>
     <string name="error_name_empty">Le nom est obligatoire.</string>
 
     <string name="error_auth_invalid_credentials">E-mail ou mot de passe incorrect.</string>
@@ -76,131 +76,219 @@
 
     <!-- Home -->
     <string name="home_greeting_morning">Bonjour</string>
-    <string name="home_greeting_afternoon">Bon aprÃ¨s-midi</string>
+    <string name="home_greeting_afternoon">Bon après-midi</string>
     <string name="home_greeting_evening">Bonsoir</string>
     <string name="home_notifications">Notifications</string>
-    <string name="home_streak_count">SÃ©rie de %1$d jours</string>
-    <string name="home_streak_nudge">Garde-la vivante â€” entraÃ®ne-toi aujourd\'hui pour atteindre %1$d.</string>
-    <string name="home_today_workout">Aujourd\'hui Â· SÃ©ance</string>
-    <string name="home_start_workout">DÃ©marrer la sÃ©ance</string>
+    <string name="home_streak_count">Série de %1$d jours</string>
+    <string name="home_streak_nudge">Garde-la vivante — entraîne-toi aujourd\'hui pour atteindre %1$d.</string>
+    <string name="home_resume_eyebrow">Séance en cours</string>
+    <string name="home_resume_body">%1$d séries sur %2$d faites · commencée à %3$s</string>
+    <string name="home_resume_cta">Reprendre</string>
+    <string name="remark_first_workout">Chaque rep compte. Enregistrez votre première séance, tout commence ici.</string>
+    <string name="remark_new_best">Nouveau record sur %1$s aujourd\'hui. Le progrès gagne.</string>
+    <string name="remark_logged_today">%1$s est enregistrée. Plus fort à chaque séance.</string>
+    <string name="remark_planned_today">%1$s est au programme aujourd\'hui. Mérite-le.</string>
+    <plurals name="remark_welcome_back">
+        <item quantity="one">Cela fait %d jour. Une séance suffit pour reprendre le rythme.</item>
+        <item quantity="many">Cela fait %d jours. Une séance suffit pour reprendre le rythme.</item>
+        <item quantity="other">Cela fait %d jours. Une séance suffit pour reprendre le rythme.</item>
+    </plurals>
+    <plurals name="remark_ahead_of_last_week">
+        <item quantity="one">%1$d séance cette semaine, contre %2$d la semaine dernière.</item>
+        <item quantity="many">%1$d séances cette semaine, contre %2$d la semaine dernière.</item>
+        <item quantity="other">%1$d séances cette semaine, contre %2$d la semaine dernière.</item>
+    </plurals>
+    <plurals name="remark_week_streak">
+        <item quantity="one">%d semaine d\'affilée. La régularité fait les champions.</item>
+        <item quantity="many">%d semaines d\'affilée. La régularité fait les champions.</item>
+        <item quantity="other">%d semaines d\'affilée. La régularité fait les champions.</item>
+    </plurals>
+    <string name="home_today_workout">Aujourd\'hui · Séance</string>
+    <string name="home_start_workout">Démarrer la séance</string>
     <string name="home_exercise_count">%1$d exercices</string>
     <string name="home_duration_min">%1$d min</string>
-    <string name="home_set_count">%1$d sÃ©ries</string>
+    <string name="home_set_count">%1$d séries</string>
     <string name="home_exercises_label">Exercices</string>
-    <string name="home_set_scheme">%1$d Ã— %2$d</string>
+    <string name="home_set_scheme">%1$d × %2$d</string>
     <string name="home_more_exercises">+%1$d de plus</string>
     <string name="home_rest_day">Jour de repos</string>
-    <string name="home_rest_day_subtext">Rien de prÃ©vu. La rÃ©cupÃ©ration fait partie du plan.</string>
+    <string name="home_rest_day_subtext">Rien de prévu. La récupération fait partie du plan.</string>
     <string name="home_daily_motivation">Motivation du jour</string>
 
     <!-- Weight widget -->
     <string name="weight_label">Poids</string>
     <string name="weight_delta_up">%1$s cette semaine</string>
     <string name="weight_delta_down">%1$s cette semaine</string>
-    <string name="weight_no_data">Aucune entrÃ©e</string>
+    <string name="weight_no_data">Aucune entrée</string>
 
     <!-- Progress -->
     <string name="progress_eyebrow">Tes chiffres</string>
-    <string name="progress_title">ProgrÃ¨s</string>
+    <string name="progress_title">Progrès</string>
     <string name="progress_this_month">Ce mois-ci</string>
     <string name="progress_last_month">Mois dernier</string>
     <string name="progress_add_weight">Ajouter un poids</string>
     <string name="progress_save">Enregistrer</string>
     <string name="progress_bmr">MB</string>
     <string name="progress_bmi">IMC</string>
-    <string name="progress_bmi_underweight">Insuffisance pondÃ©rale</string>
+    <string name="progress_bmi_underweight">Insuffisance pondérale</string>
     <string name="progress_bmi_healthy">Poids sain</string>
     <string name="progress_bmi_overweight">Surpoids</string>
-    <string name="progress_bmi_obese">ObÃ©sitÃ©</string>
+    <string name="progress_bmi_obese">Obésité</string>
     <string name="progress_chart_empty">Enregistre ton poids pour le voir ici.</string>
-    <string name="progress_bmi_needs_profile">Ajoute ta taille, ton Ã¢ge et ton sexe dans Profil pour voir ceci.</string>
-    <string name="progress_weekly_completion">ComplÃ©tion hebdomadaire</string>
+    <string name="progress_bmi_needs_profile">Ajoute ta taille, ton âge et ton sexe dans Profil pour voir ceci.</string>
+    <string name="progress_weekly_completion">Complétion hebdomadaire</string>
     <string name="progress_this_week">%1$d/%2$d cette semaine</string>
-    <string name="progress_workouts">SÃ©ances</string>
-    <string name="progress_duration">DurÃ©e</string>
-    <string name="progress_volume">Volume soulevÃ©</string>
-    <string name="progress_avg_per_workout">Moy. / sÃ©ance</string>
+    <string name="progress_workouts">Séances</string>
+    <string name="progress_duration">Durée</string>
+    <string name="progress_volume">Volume soulevé</string>
+    <string name="progress_avg_per_workout">Moy. / séance</string>
     <string name="progress_delta_vs_last_month">%1$s%% vs le mois dernier</string>
-    <string name="progress_weight_progression">Ã‰volution du poids</string>
-    <string name="progress_strength_progression">Ã‰volution de la force</string>
-    <string name="progress_frequency">FrÃ©quence d\'entraÃ®nement</string>
-    <string name="progress_frequency_caption">8 derniÃ¨res semaines</string>
-    <string name="progress_muscle_distribution">RÃ©partition musculaire</string>
-    <string name="progress_muscle_distribution_caption">Par volume d\'entraÃ®nement</string>
+    <string name="progress_weight_progression">Évolution du poids</string>
+    <string name="progress_strength_progression">Évolution de la force</string>
+    <string name="progress_frequency">Fréquence d\'entraînement</string>
+    <string name="progress_frequency_caption">8 dernières semaines</string>
+    <string name="progress_muscle_distribution">Répartition musculaire</string>
+    <string name="progress_muscle_distribution_caption">Par séries effectuées</string>
     <string name="progress_personal_records">Records personnels</string>
-    <string name="progress_achievements">SuccÃ¨s</string>
-    <string name="progress_pr_beat">A dÃ©passÃ© ton record prÃ©cÃ©dent de %1$s kg</string>
-    <string name="progress_pr_first">PremiÃ¨re sÃ©rie enregistrÃ©e</string>
-    <string name="progress_hero_rest_day_sub">Rien de prÃ©vu. La rÃ©cupÃ©ration fait partie du plan.</string>
-    <string name="progress_hero_planned">%1$s prÃ©vue</string>
-    <string name="progress_hero_planned_sub">Pas encore commencÃ©e â€” le bouton de dÃ©marrage est sur l\'accueil.</string>
-    <string name="progress_hero_logged">%1$s enregistrÃ©e</string>
-    <string name="progress_hero_logged_sub">%1$d min Â· %2$s kg soulevÃ©s</string>
-    <string name="ach_first_workout_title">PremiÃ¨re rep</string>
-    <string name="ach_streak7_title">En pleine lancÃ©e</string>
-    <string name="ach_ten_workouts_title">RÃ©gulier</string>
+    <string name="progress_achievements">Succès</string>
+    <string name="progress_pr_beat">A dépassé ton record précédent de %1$s kg</string>
+    <string name="progress_pr_first">Première série enregistrée</string>
+    <string name="progress_hero_rest_day_sub">Rien de prévu. La récupération fait partie du plan.</string>
+    <string name="progress_hero_planned">%1$s prévue</string>
+    <string name="progress_hero_planned_sub">Pas encore commencée — le bouton de démarrage est sur l\'accueil.</string>
+    <string name="progress_hero_logged">%1$s enregistrée</string>
+    <string name="progress_hero_logged_sub">%1$d min · %2$s kg soulevés</string>
+    <string name="progress_hero_logged_detail">%1$s · %2$s %3$s soulevés</string>
+    <string name="progress_duration_not_measured">Durée non mesurée</string>
+    <string name="progress_hours_unit">h</string>
+    <plurals name="progress_unmeasured_sessions">
+        <item quantity="one">%d séance non chronométrée</item>
+        <item quantity="many">%d séances non chronométrées</item>
+        <item quantity="other">%d séances non chronométrées</item>
+    </plurals>
+    <plurals name="progress_sessions_this_week">
+        <item quantity="one">%d séance cette semaine</item>
+        <item quantity="many">%d séances cette semaine</item>
+        <item quantity="other">%d séances cette semaine</item>
+    </plurals>
+    <string name="progress_lifetime">Depuis le début</string>
+    <string name="progress_sets_reps">Séries / rép.</string>
+    <string name="progress_add_weight_short">+ Poids</string>
+    <string name="progress_range_days">%1$d j</string>
+    <string name="progress_weight_range_empty">Aucune pesée sur cette période.</string>
+    <string name="progress_strength_by_weight">Série la plus lourde par séance</string>
+    <string name="progress_strength_by_reps">Plus de répétitions par séance (poids du corps)</string>
+    <string name="progress_strength_empty">Faites cet exercice sur deux séances pour voir une tendance.</string>
+    <string name="progress_frequency_bar_cd">Semaine du %1$s : %2$d séances</string>
+    <string name="progress_percent">%1$d %%</string>
+    <string name="progress_first_best">Premier record</string>
+    <string name="progress_record_weighted">%1$s %2$s × %3$d</string>
+    <string name="progress_record_bodyweight">%1$d rép. · poids du corps</string>
+    <string name="progress_pr_beat_weight">+%1$s %2$s par rapport à votre record</string>
+    <string name="progress_pr_beat_reps">+%1$d rép. au même poids</string>
+    <string name="progress_pr_beat_generic">Record précédent battu</string>
+    <string name="progress_achievements_count">%1$d/%2$d débloqués</string>
+    <string name="history_title">Historique des séances</string>
+    <plurals name="history_count">
+        <item quantity="one">%d séance</item>
+        <item quantity="many">%d séances</item>
+        <item quantity="other">%d séances</item>
+    </plurals>
+    <string name="history_empty_title">Aucune séance pour l\'instant</string>
+    <string name="history_empty_body">Terminez une séance : elle apparaîtra ici, série par série.</string>
+    <string name="history_session_meta">%1$s · %2$d séries · %3$s %4$s</string>
+    <string name="history_pr_badge">Record</string>
+    <string name="history_not_done">Non faite</string>
+    <string name="history_bodyweight_set">%1$d rép.</string>
+    <string name="ach_first_workout_title">Première rep</string>
+    <string name="ach_streak7_title">En pleine lancée</string>
+    <string name="ach_ten_workouts_title">Régulier</string>
     <string name="ach_first_pr_title">Recordman</string>
 
     <!-- Workouts -->
-    <string name="workouts_eyebrow">BibliothÃ¨que</string>
+    <string name="workouts_eyebrow">Bibliothèque</string>
     <string name="workouts_title">Exercices</string>
     <string name="workouts_filter_all">Tous</string>
     <string name="workouts_search">Rechercher un exercice</string>
     <string name="workouts_description">Description</string>
-    <string name="workouts_builder_eyebrow">CrÃ©er</string>
-    <string name="workouts_builder_title">Nouvelle sÃ©ance</string>
-    <string name="workouts_builder_name_hint">Nom de la sÃ©ance</string>
+    <string name="workouts_builder_eyebrow">Créer</string>
+    <string name="workouts_builder_title">Nouvelle séance</string>
+    <string name="workouts_builder_name_hint">Nom de la séance</string>
     <string name="workouts_builder_add">Ajouter des exercices</string>
-    <string name="workouts_builder_save">Enregistrer la sÃ©ance</string>
-    <string name="workouts_warn_over_ten">C\'est beaucoup pour une seule sÃ©ance. La plupart des gens progressent mieux avec 10 exercices ou moins.</string>
-    <string name="workouts_cap_reached">20 exercices est la limite stricte par sÃ©ance.</string>
-    <string name="workouts_session_finish">Terminer la sÃ©ance</string>
-    <string name="workouts_add_set">Ajouter une sÃ©rie</string>
-    <string name="workouts_set">SÃ©rie</string>
+    <string name="workouts_builder_save">Enregistrer la séance</string>
+    <string name="workouts_warn_over_ten">C\'est beaucoup pour une seule séance. La plupart des gens progressent mieux avec 10 exercices ou moins.</string>
+    <string name="workouts_cap_reached">20 exercices est la limite stricte par séance.</string>
+    <string name="workouts_session_finish">Terminer la séance</string>
+    <string name="workouts_add_set">Ajouter une série</string>
+    <string name="workouts_set">Série</string>
     <string name="workouts_kg">kg</string>
     <string name="workouts_lb">lb</string>
     <string name="workouts_reps">Reps</string>
     <string name="workouts_new_pr">Nouveau record</string>
-    <string name="workouts_my_workouts">Mes sÃ©ances</string>
-    <string name="workouts_no_matches_title">Aucun rÃ©sultat</string>
+    <string name="workouts_my_workouts">Mes séances</string>
+    <string name="workouts_no_matches_title">Aucun résultat</string>
     <string name="workouts_no_matches_subtitle">Essaie une autre recherche ou un autre filtre.</string>
-    <string name="exercise_media_cd">DÃ©monstration de %1$s</string>
+    <string name="exercise_media_cd">Démonstration de %1$s</string>
     <string name="exercise_tab_muscles">Muscles</string>
-    <string name="exercise_tab_demo">DÃ©mo</string>
-    <string name="muscle_map_cd">SchÃ©ma corporel mettant en Ã©vidence : %1$s</string>
+    <string name="exercise_tab_demo">Démo</string>
+    <string name="muscle_map_cd">Schéma corporel mettant en évidence : %1$s</string>
     <string name="exercise_body_front">Face</string>
     <string name="exercise_body_back">Dos</string>
-    <string name="exercise_no_muscle_data">Aucune donnÃ©e musculaire pour cet exercice.</string>
-    <string name="exercise_media_none">Aucune image de dÃ©monstration disponible.</string>
-    <string name="exercise_media_unavailable">DÃ©monstration indisponible hors ligne.</string>
-    <string name="exercise_section_muscles">Muscles ciblÃ©s</string>
-    <string name="exercise_section_starting_position">Position de dÃ©part</string>
+    <string name="exercise_no_muscle_data">Aucune donnée musculaire pour cet exercice.</string>
+    <string name="exercise_media_none">Aucune image de démonstration disponible.</string>
+    <string name="exercise_media_unavailable">Démonstration indisponible hors ligne.</string>
+    <string name="exercise_section_muscles">Muscles ciblés</string>
+    <string name="exercise_section_starting_position">Position de départ</string>
     <string name="exercise_section_steps">Comment faire</string>
     <string name="exercise_section_tips">Conseils</string>
     <string name="exercise_section_notes">Remarques</string>
-    <string name="exercise_section_aliases">Aussi appelÃ©</string>
-    <string name="exercise_no_instructions">Aucune instruction enregistrÃ©e pour cet exercice.</string>
-    <string name="exercise_license">DonnÃ©es d\'exercice : %1$s</string>
+    <string name="exercise_section_aliases">Aussi appelé</string>
+    <string name="exercise_no_instructions">Aucune instruction enregistrée pour cet exercice.</string>
+    <string name="exercise_license">Données d\'exercice : %1$s</string>
     <string name="exercise_not_found_title">Exercice indisponible</string>
     <string name="exercise_not_found_body">Cet exercice ne figure pas dans le catalogue de cet appareil.</string>
-    <string name="workouts_builder_selected">%1$d sÃ©lectionnÃ©(s)</string>
+    <string name="workouts_builder_selected">%1$d sélectionné(s)</string>
     <string name="workouts_builder_remove_cd">Retirer l\'exercice</string>
-    <string name="workouts_builder_empty">Aucun exercice ajoutÃ© pour l\'instant.</string>
-    <string name="workouts_session_finish_with_count">Terminer la sÃ©ance Â· %1$d/%2$d sÃ©ries</string>
+    <string name="workouts_builder_empty">Aucun exercice ajouté pour l\'instant.</string>
+    <string name="workouts_builder_edit_title">Modifier la séance</string>
+    <string name="workouts_builder_schedule">Planning</string>
+    <string name="workouts_builder_schedule_hint">Choisissez les jours où vous prévoyez cette séance. Rappels et série s\'y basent.</string>
+    <string name="workouts_builder_sets">Séries</string>
+    <string name="workouts_builder_fewer_sets_cd">Une série de moins</string>
+    <string name="workouts_builder_more_sets_cd">Une série de plus</string>
+    <string name="workouts_builder_move_up_cd">Monter %1$s</string>
+    <string name="workouts_builder_move_down_cd">Descendre %1$s</string>
+    <string name="workouts_estimated_min">≈ %1$d min</string>
+    <string name="workouts_not_scheduled">Non planifiée</string>
+    <string name="workouts_my_workouts_empty">Aucune séance enregistrée. Touchez + pour en créer une.</string>
+    <string name="workouts_template_options_cd">Options pour %1$s</string>
+    <string name="workouts_template_start">Commencer</string>
+    <string name="workouts_template_edit">Modifier</string>
+    <string name="workouts_template_duplicate">Dupliquer</string>
+    <string name="workouts_template_delete">Supprimer</string>
+    <string name="workouts_template_delete_title">Supprimer %1$s ?</string>
+    <string name="workouts_template_delete_body">Le plan est supprimé. Les séances déjà enregistrées restent dans l\'historique.</string>
+    <string name="workouts_template_copy_suffix">(copie)</string>
+    <plurals name="exercise_count">
+        <item quantity="one">%d exercice</item>
+        <item quantity="many">%d exercices</item>
+        <item quantity="other">%d exercices</item>
+    </plurals>
+    <string name="workouts_session_finish_with_count">Terminer la séance · %1$d/%2$d séries</string>
     <string name="workouts_session_volume_so_far">Volume jusqu\'ici</string>
-    <string name="workouts_session_no_sets_title">Aucune sÃ©rie enregistrÃ©e</string>
-    <string name="workouts_session_no_sets_body">Coche au moins une sÃ©rie avant de terminer, ou annule pour continuer Ã  t\'entraÃ®ner.</string>
+    <string name="workouts_session_no_sets_title">Aucune série enregistrée</string>
+    <string name="workouts_session_no_sets_body">Coche au moins une série avant de terminer, ou annule pour continuer à t\'entraîner.</string>
     <string name="workouts_session_keep_training">Continuer</string>
-    <string name="workouts_session_finish_anyway">Terminer quand mÃªme</string>
-    <string name="workouts_session_complete_title">SÃ©ance terminÃ©e</string>
-    <string name="workouts_session_complete_body">%1$s kg soulevÃ©s sur %2$d sÃ©ries. Bien jouÃ© â€” c\'est enregistrÃ© dans Progression.</string>
-    <string name="workouts_session_done">TerminÃ©</string>
+    <string name="workouts_session_finish_anyway">Terminer quand même</string>
+    <string name="workouts_session_complete_title">Séance terminée</string>
+    <string name="workouts_session_complete_body">%1$s kg soulevés sur %2$d séries. Bien joué — c\'est enregistré dans Progression.</string>
+    <string name="workouts_session_done">Terminé</string>
 
     <!-- Muscle groups -->
     <string name="muscle_chest">Pectoraux</string>
     <string name="muscle_back">Dos</string>
     <string name="muscle_legs">Jambes</string>
-    <string name="muscle_shoulders">Ã‰paules</string>
+    <string name="muscle_shoulders">Épaules</string>
     <string name="muscle_arms">Bras</string>
     <string name="muscle_abs">Abdos</string>
     <string name="muscle_glutes">Fessiers</string>
@@ -211,69 +299,148 @@
     <string name="body_map_eyebrow">Anatomie</string>
     <string name="body_map_title">Carte musculaire</string>
     <string name="body_map_hint">Touche un muscle pour voir tous les exercices qui le travaillent.</string>
-    <string name="body_map_pick_prompt">Choisis un muscle sur le schÃ©ma.</string>
+    <string name="body_map_pick_prompt">Choisis un muscle sur le schéma.</string>
     <string name="body_map_exercise_count">%1$d exercices</string>
 
     <!-- Anatomical muscle display names. The catalogue stores these in English
          only, so the localization lives here, keyed by muscle_name. -->
     <string name="anatomy_biceps_brachii">Biceps</string>
-    <string name="anatomy_anterior_deltoid">DeltoÃ¯de antÃ©rieur</string>
-    <string name="anatomy_serratus_anterior">DentelÃ© antÃ©rieur</string>
+    <string name="anatomy_anterior_deltoid">Deltoïde antérieur</string>
+    <string name="anatomy_serratus_anterior">Dentelé antérieur</string>
     <string name="anatomy_pectoralis_major">Pectoraux</string>
     <string name="anatomy_triceps_brachii">Triceps</string>
     <string name="anatomy_rectus_abdominis">Abdominaux</string>
     <string name="anatomy_gastrocnemius">Mollets</string>
     <string name="anatomy_gluteus_maximus">Fessiers</string>
-    <string name="anatomy_trapezius">TrapÃ¨zes</string>
+    <string name="anatomy_trapezius">Trapèzes</string>
     <string name="anatomy_quadriceps_femoris">Quadriceps</string>
     <string name="anatomy_biceps_femoris">Ischio-jambiers</string>
     <string name="anatomy_latissimus_dorsi">Grand dorsal</string>
     <string name="anatomy_brachialis">Brachial</string>
     <string name="anatomy_obliquus_externus">Obliques</string>
-    <string name="anatomy_soleus">SolÃ©aire</string>
+    <string name="anatomy_soleus">Soléaire</string>
 
     <!-- Difficulty -->
-    <string name="difficulty_beginner">DÃ©butant</string>
-    <string name="difficulty_intermediate">IntermÃ©diaire</string>
-    <string name="difficulty_advanced">AvancÃ©</string>
+    <string name="difficulty_beginner">Débutant</string>
+    <string name="difficulty_intermediate">Intermédiaire</string>
+    <string name="difficulty_advanced">Avancé</string>
 
     <!-- Timer -->
 
     <!-- Floating rest timer (shown during an active workout, between sets) -->
     <string name="rest_timer_eyebrow">Repos</string>
-    <string name="rest_timer_ready">PrÃªt</string>
+    <string name="rest_timer_ready">Prêt</string>
     <string name="rest_timer_resting">Repos en cours</string>
     <string name="rest_timer_paused">En pause</string>
-    <string name="rest_timer_complete">Repos terminÃ©</string>
-    <string name="rest_timer_minus15">âˆ’15</string>
+    <string name="rest_timer_complete">Repos terminé</string>
+    <string name="rest_timer_minus15">−15</string>
     <string name="rest_timer_plus15">+15</string>
-    <string name="rest_timer_restart_cd">RedÃ©marrer le minuteur de repos</string>
+    <string name="rest_timer_restart_cd">Redémarrer le minuteur de repos</string>
     <string name="rest_timer_skip_cd">Passer le repos</string>
     <string name="rest_timer_subtract_cd">Retirer 15 secondes</string>
     <string name="rest_timer_add_cd">Ajouter 15 secondes</string>
     <string name="rest_timer_pause_cd">Mettre en pause le minuteur de repos</string>
     <string name="rest_timer_resume_cd">Reprendre le minuteur de repos</string>
+    <string name="rest_timer_go">Go</string>
+    <string name="rest_timer_of_total">sur %1$s</string>
+    <string name="rest_timer_next">Ensuite : %1$s · série %2$d sur %3$d</string>
+    <string name="rest_timer_all_done">Toutes les séries sont faites. Terminez quand vous voulez.</string>
+    <string name="rest_timer_expand_cd">Afficher les commandes du minuteur</string>
+    <string name="rest_timer_collapse_cd">Masquer les commandes du minuteur</string>
+    <string name="rest_timer_dismiss_cd">Fermer le minuteur de repos</string>
+    <string name="rest_channel_running">Minuteur de repos</string>
+    <string name="rest_channel_done">Fin du repos</string>
+    <string name="rest_notif_running_title">Repos · %1$s</string>
+    <string name="rest_notif_done_title">Repos terminé</string>
+    <string name="session_elapsed_cd">Durée de la séance %1$s</string>
+    <string name="session_leave_title">Quitter la séance ?</string>
+    <string name="session_leave_body">Tout ce que vous avez noté est enregistré. Reprenez quand vous voulez depuis l\'Accueil.</string>
+    <string name="session_leave_confirm">Quitter</string>
+    <string name="session_discard">Abandonner la séance</string>
+    <string name="session_discard_title">Abandonner cette séance ?</string>
+    <string name="session_discard_body">Les séries notées seront supprimées. C\'est définitif.</string>
+    <string name="session_discard_confirm">Abandonner</string>
+    <string name="session_conflict_title">Séance non terminée</string>
+    <string name="session_conflict_body">Vous avez une séance %1$s non terminée. La reprendre, ou l\'abandonner et commencer celle-ci ?</string>
+    <string name="session_conflict_resume">La reprendre</string>
+    <string name="session_conflict_discard">Abandonner et commencer</string>
+    <string name="session_best_weighted">Record : %1$s %2$s × %3$d</string>
+    <string name="session_best_bodyweight">Record : %1$d rép.</string>
+    <string name="session_rest_chip">Repos %1$s</string>
+    <string name="session_rest_chip_cd">Repos entre séries %1$s. Touchez pour changer.</string>
+    <string name="session_rest_row_resting">Repos · %1$s</string>
+    <string name="session_rest_row_done">Repos terminé — go</string>
+    <string name="session_exercise_progress">%1$d/%2$d séries</string>
+    <string name="session_set_done_cd">Série %1$d faite. Touchez pour annuler.</string>
+    <string name="session_set_open_cd">Marquer la série %1$d comme faite</string>
+    <string name="session_set_remove">Supprimer la série %1$d</string>
+    <string name="session_complete_summary">%1$s · %2$d séries · %3$s %4$s soulevés</string>
+    <string name="session_complete_prs">Nouveaux records : %1$s</string>
+    <string name="session_complete_unlocked">Débloqué : %1$s</string>
+    <string name="session_complete_logged">Enregistré dans Progression.</string>
+    <plurals name="duration_minutes">
+        <item quantity="one">%d min</item>
+        <item quantity="many">%d min</item>
+        <item quantity="other">%d min</item>
+    </plurals>
+    <string name="ach_first_workout_desc">Terminez une séance avec au moins une série.</string>
+    <string name="ach_ten_workouts_desc">Terminez 10 séances.</string>
+    <string name="ach_fifty_workouts_title">Engagé</string>
+    <string name="ach_fifty_workouts_desc">Terminez 50 séances.</string>
+    <string name="ach_streak7_desc">Entraînez-vous 7 jours prévus d\'affilée.</string>
+    <string name="ach_weeks4_title">Quatre semaines</string>
+    <string name="ach_weeks4_desc">Entraînez-vous au moins une fois par semaine, 4 semaines d\'affilée.</string>
+    <string name="ach_first_pr_desc">Battez l\'un de vos records précédents.</string>
+    <string name="ach_volume10t_title">10 tonnes</string>
+    <string name="ach_volume10t_desc">Soulevez 10 000 kg au total, toutes séries confondues.</string>
+    <string name="ach_reps1000_title">Mille répétitions</string>
+    <string name="ach_reps1000_desc">Effectuez 1 000 répétitions au total.</string>
+    <string name="ach_unlocked_on">Débloqué le %1$s</string>
+    <string name="ach_progress">%1$s / %2$s</string>
+    <plurals name="streak_days">
+        <item quantity="one">Série de %d jour</item>
+        <item quantity="many">Série de %d jours</item>
+        <item quantity="other">Série de %d jours</item>
+    </plurals>
+    <plurals name="streak_weeks">
+        <item quantity="one">Série de %d semaine</item>
+        <item quantity="many">Série de %d semaines</item>
+        <item quantity="other">Série de %d semaines</item>
+    </plurals>
+    <string name="streak_nudge_days">Entraînez-vous au prochain jour prévu pour la prolonger.</string>
+    <string name="streak_nudge_weeks">Une séance cette semaine suffit pour la prolonger.</string>
 
     <!-- Nutrition -->
     <string name="nutrition_eyebrow">Carburant</string>
     <string name="nutrition_title">Nutrition</string>
     <string name="nutrition_add_meal">Ajouter un repas</string>
-    <string name="nutrition_add_food">Ajouter un ingrÃ©dient</string>
-    <string name="nutrition_food_name">IngrÃ©dient</string>
+    <string name="nutrition_add_food">Ajouter un ingrédient</string>
+    <string name="nutrition_food_name">Ingrédient</string>
     <string name="nutrition_grams">Grammes</string>
-    <string name="nutrition_protein">ProtÃ©ines</string>
+    <string name="nutrition_protein">Protéines</string>
     <string name="nutrition_carbs">Glucides</string>
     <string name="nutrition_fat">Lipides</string>
     <string name="nutrition_kcal">kcal</string>
-    <string name="nutrition_empty">Aucun repas enregistrÃ© aujourd\'hui.</string>
+    <string name="nutrition_empty">Aucun repas enregistré aujourd\'hui.</string>
     <string name="nutrition_water">Eau</string>
     <string name="nutrition_water_glasses">%1$d/%2$d verres</string>
     <string name="nutrition_of">sur %1$s</string>
     <string name="nutrition_save_meal">Enregistrer le repas</string>
-    <string name="nutrition_meal_name_hint">Nom du repas (ex. DÃ®ner)</string>
+    <string name="nutrition_meal_name_hint">Nom du repas (ex. Dîner)</string>
     <string name="nutrition_water_add_cd">Ajouter un verre d\'eau</string>
     <string name="nutrition_water_remove_cd">Retirer un verre d\'eau</string>
-    <string name="nutrition_ingredient_required">Ajoute un nom et une quantitÃ© en grammes.</string>
+    <string name="nutrition_ingredient_required">Ajoute un nom et une quantité en grammes.</string>
+    <string name="nutrition_per_100g">Pour 100 g (d\'après l\'étiquette)</string>
+    <string name="nutrition_protein_g">Protéines (g)</string>
+    <string name="nutrition_carbs_g">Glucides (g)</string>
+    <string name="nutrition_fat_g">Lipides (g)</string>
+    <string name="nutrition_macros_required">Saisissez les calories, protéines, glucides et lipides pour 100 g. Mettez 0 si l\'étiquette indique 0.</string>
+    <string name="nutrition_macros_over_100">Protéines, glucides et lipides ne peuvent pas dépasser 100 g pour 100 g.</string>
+    <string name="nutrition_macros_kcal_mismatch">Les calories ne correspondent pas aux macros saisies. Vérifiez l\'étiquette.</string>
+    <string name="nutrition_item_summary">%1$s · %2$d g · %3$d kcal</string>
+    <string name="nutrition_grams_value">%1$d g</string>
+    <string name="nutrition_macro_progress">%1$d/%2$d g</string>
+    <string name="nutrition_targets_generic">Ce sont des objectifs génériques. Ajoutez taille, date de naissance, sexe, niveau d\'activité et une pesée dans Profil pour les personnaliser.</string>
 
     <!-- Meal action menu -->
     <string name="nutrition_meal_options_cd">Options pour %1$s</string>
@@ -298,19 +465,24 @@
     <string name="assistant_menu_cd">Plus d\'options</string>
     <string name="assistant_history">Historique des conversations</string>
     <string name="assistant_new_chat">Nouvelle conversation</string>
-    <string name="assistant_welcome_body">Comment puis-je t\'aider cÃ´tÃ© nutrition aujourd\'hui ?</string>
+    <string name="assistant_welcome_body">Comment puis-je t\'aider côté nutrition aujourd\'hui ?</string>
     <string name="assistant_suggestion_meal">Analyser mon repas</string>
     <string name="assistant_suggestion_calories">Calculer les calories</string>
-    <string name="assistant_suggestion_protein">VÃ©rifier mes protÃ©ines</string>
+    <string name="assistant_suggestion_protein">Vérifier mes protéines</string>
     <string name="assistant_suggestion_eat">Que devrais-je manger ?</string>
-    <string name="assistant_composer_hint">Ã‰cris Ã  l\'assistant nutritionâ€¦</string>
+    <string name="assistant_composer_hint">Écris à l\'assistant nutrition…</string>
     <string name="assistant_send_cd">Envoyer le message</string>
-    <string name="assistant_typing_cd">L\'assistant Ã©crit</string>
+    <string name="assistant_typing_cd">L\'assistant écrit</string>
     <string name="assistant_history_eyebrow">Assistant</string>
     <string name="assistant_history_title">Historique</string>
     <string name="assistant_history_empty">Aucune conversation pour le moment.</string>
 <string name="assistant_error_network">Vous semblez hors ligne. Vérifiez votre connexion et réessayez.</string>
 <string name="assistant_error_generic">Une erreur est survenue. Veuillez réessayer.</string>
+<string name="assistant_error_timeout">L\'assistant a mis trop de temps à répondre. Réessayez dans un instant.</string>
+<string name="assistant_error_rate_limited">Trop de questions d\'un coup. Patientez quelques secondes puis réessayez.</string>
+<string name="assistant_error_unavailable">L\'assistant est momentanément indisponible. Réessayez bientôt.</string>
+<string name="assistant_error_not_configured">L\'assistant n\'est pas encore disponible dans cette version de l\'application.</string>
+<string name="assistant_error_too_long">Ce message est trop long. Raccourcissez-le à moins de 4 000 caractères.</string>
 <string name="assistant_delete_cd">Supprimer la conversation</string>
 <string name="assistant_delete_title">Supprimer la conversation ?</string>
 <string name="assistant_delete_body">Cette conversation sera retirée de votre historique.</string>
@@ -331,42 +503,85 @@
     <string name="profile_title">Profil</string>
     <string name="profile_height">Taille</string>
     <string name="profile_weight">Poids</string>
-    <string name="profile_age">Ã‚ge</string>
+    <string name="profile_age">Âge</string>
     <string name="profile_sex">Sexe</string>
     <string name="profile_sex_male">Homme</string>
     <string name="profile_sex_female">Femme</string>
     <string name="profile_goal">Objectif</string>
     <string name="profile_goal_bulk">Prise de masse</string>
-    <string name="profile_goal_cut">SÃ¨che</string>
+    <string name="profile_goal_cut">Sèche</string>
     <string name="profile_goal_maintain">Maintien</string>
     <string name="profile_language">Langue</string>
-    <string name="profile_units">UnitÃ©s</string>
-    <string name="profile_units_metric">MÃ©trique (kg, cm)</string>
-    <string name="profile_units_imperial">ImpÃ©rial (lb, po)</string>
-    <string name="profile_settings">ParamÃ¨tres du compte</string>
-    <string name="profile_credits_title">CrÃ©dits et licences</string>
-    <string name="profile_credits_muscle_map">SchÃ©ma musculaire adaptÃ© de Â« Muscles front and back Â» par %1$s, via Wikimedia Commons, sous licence CC BY-SA 4.0 (creativecommons.org/licenses/by-sa/4.0). ModifiÃ© pour une utilisation dans Reps.</string>
-    <string name="profile_sign_out">Se dÃ©connecter</string>
+    <string name="profile_units">Unités</string>
+    <string name="profile_units_metric">Métrique (kg, cm)</string>
+    <string name="profile_units_imperial">Impérial (lb, po)</string>
+    <string name="profile_settings">Paramètres du compte</string>
+    <string name="profile_credits_title">Crédits et licences</string>
+    <string name="profile_credits_muscle_map">Schéma musculaire adapté de « Muscles front and back » par %1$s, via Wikimedia Commons, sous licence CC BY-SA 4.0 (creativecommons.org/licenses/by-sa/4.0). Modifié pour une utilisation dans Reps.</string>
+    <string name="profile_sign_out">Se déconnecter</string>
     <string name="profile_save">Enregistrer</string>
     <string name="profile_notifications">Notifications</string>
-    <string name="profile_notifications_sub">Rappels de sÃ©ance</string>
-    <string name="profile_theme">ThÃ¨me</string>
+    <string name="profile_notifications_sub">Rappels de séance</string>
+    <string name="profile_theme">Thème</string>
     <string name="profile_theme_dark">Sombre</string>
     <string name="profile_theme_light">Clair</string>
-    <string name="profile_theme_system">SystÃ¨me</string>
-    <string name="profile_account_settings_body">Le mot de passe, l\'e-mail et les mÃ©thodes de connexion associÃ©es seront disponibles ici une fois les comptes gÃ©rÃ©s par Firebase.</string>
-    <string name="profile_sign_out_confirm_title">Se dÃ©connecter ?</string>
-    <string name="profile_sign_out_confirm_body">Tu peux te reconnecter Ã  tout moment â€” tes donnÃ©es restent sur cet appareil.</string>
-    <string name="profile_preferences">PrÃ©fÃ©rences</string>
+    <string name="profile_theme_system">Système</string>
+    <string name="profile_account_settings_body">Le mot de passe, l\'e-mail et les méthodes de connexion associées seront disponibles ici une fois les comptes gérés par Firebase.</string>
+    <string name="profile_account_email">E-mail</string>
+    <string name="profile_account_local">Ce compte et toutes vos données sont stockés uniquement sur cet appareil. Il n\'y a pas encore de synchronisation : désinstaller l\'application ou effacer ses données les supprime.</string>
+    <string name="profile_birth_date">Date de naissance</string>
+    <string name="profile_age_value">%1$d ans</string>
+    <string name="profile_age_legacy">%1$d ans · ajoutez votre date de naissance</string>
+    <string name="profile_activity">Niveau d\'activité</string>
+    <string name="activity_sedentary">Sédentaire — travail assis, peu de marche</string>
+    <string name="activity_light">Léger — entraînement 1 à 3 jours par semaine</string>
+    <string name="activity_moderate">Modéré — entraînement 3 à 5 jours par semaine</string>
+    <string name="activity_active">Actif — entraînement intense 6 à 7 jours par semaine</string>
+    <string name="activity_very_active">Très actif — métier physique et entraînement</string>
+    <string name="profile_height_with_unit">Taille (%1$s)</string>
+    <string name="profile_unit_cm">cm</string>
+    <string name="profile_unit_in">po</string>
+    <string name="profile_height_invalid">Saisissez une taille entre 100 et 250 cm.</string>
+    <string name="weight_invalid">Saisissez un poids entre 20 et 400 kg.</string>
+    <string name="metrics_kcal_per_day">kcal/jour</string>
+    <string name="metrics_bmr_caption">Au repos complet</string>
+    <string name="metrics_tdee">Dépense quotidienne estimée (TDEE)</string>
+    <string name="metrics_tdee_caption">BMR × votre niveau d\'activité</string>
+    <string name="metrics_tdee_needs_activity">Indiquez votre niveau d\'activité pour le voir</string>
+    <string name="metrics_how_calculated">Comment c\'est calculé</string>
+    <string name="metrics_disclaimer_short">Estimations, pas un diagnostic médical</string>
+    <string name="metrics_info_title">Mesures corporelles</string>
+    <string name="metrics_info_bmi">IMC = poids (kg) ÷ taille (m)². Il utilise votre dernière pesée et ne distingue pas muscle et graisse : les personnes musclées ont souvent un IMC élevé.</string>
+    <string name="metrics_info_bmi_ranges">Repères OMS : moins de 18,5 insuffisance pondérale · 18,5–24,9 normal · 25–29,9 surpoids · 30 et plus obésité.</string>
+    <string name="metrics_info_bmr">Le BMR est l\'énergie dépensée au repos complet, selon l\'équation de Mifflin-St Jeor : 10 × poids + 6,25 × taille − 5 × âge, puis +5 pour les hommes ou −161 pour les femmes.</string>
+    <string name="metrics_info_tdee">La dépense quotidienne (TDEE) est le BMR multiplié par votre niveau d\'activité, de 1,2 (sédentaire) à 1,9 (très actif). Les objectifs nutritionnels partent de ce chiffre.</string>
+    <string name="metrics_disclaimer">Ce sont des estimations statistiques, à titre indicatif. Ce n\'est pas un diagnostic médical : parlez-en à un professionnel de santé.</string>
+    <string name="profile_sign_out_confirm_title">Se déconnecter ?</string>
+    <string name="profile_sign_out_confirm_body">Tu peux te reconnecter à tout moment — tes données restent sur cet appareil.</string>
+    <string name="profile_preferences">Préférences</string>
     <string name="profile_your_details">Tes informations</string>
 
     <!-- Notifications -->
-    <string name="notifications_eyebrow">ActivitÃ©</string>
+    <string name="notifications_eyebrow">Activité</string>
     <string name="notifications_title">Notifications</string>
     <string name="notifications_empty">Rien de nouveau.</string>
     <string name="notification_workout_today">%1$s aujourd\'hui</string>
-    <string name="notification_workout_today_body">Ta sÃ©ance est prÃ©vue. Garde ta sÃ©rie.</string>
+    <string name="notification_workout_today_body">Ta séance est prévue. Garde ta série.</string>
 
     <!-- Content descriptions -->
-    <string name="cd_back">Revenir en arriÃ¨re</string>
+    <string name="cd_back">Revenir en arrière</string>
+    <string name="cd_close">Fermer</string>
+    <!-- Daily motivation, rotated by date. Same order in every language. -->
+    <string-array name="motivation_quotes">
+        <item>Chaque rep compte.\nChaque série aussi.</item>
+        <item>Encore une rep.</item>
+        <item>Le progrès gagne.</item>
+        <item>Plus fort à chaque séance.</item>
+        <item>Mérite-le.</item>
+        <item>La régularité fait les champions.</item>
+        <item>Présente-toi.\nDeviens plus fort.</item>
+        <item>La discipline bat\nla motivation.</item>
+        <item>Petites victoires.\nGrands résultats.</item>
+        <item>Fais confiance au processus.\nCompte les reps.</item>
+    </string-array>
 </resources>

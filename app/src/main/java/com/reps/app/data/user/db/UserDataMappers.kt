@@ -1,5 +1,6 @@
 package com.reps.app.data.user.db
 
+import com.reps.app.domain.model.ActivityLevel
 import com.reps.app.domain.model.AppLanguage
 import com.reps.app.domain.model.AssistantConversation
 import com.reps.app.domain.model.AssistantMessage
@@ -38,6 +39,8 @@ fun UserProfileEntity.toDomain(): User = User(
     sex = sexName?.let { runCatching { Sex.valueOf(it) }.getOrNull() },
     heightCm = heightCm,
     age = age,
+    birthDate = birthDateIso?.toLocalDateOrNull(),
+    activityLevel = activityLevelName?.let { runCatching { ActivityLevel.valueOf(it) }.getOrNull() },
     goal = runCatching { Goal.valueOf(goalName) }.getOrDefault(Goal.MAINTAIN),
     units = runCatching { UnitSystem.valueOf(unitsName) }.getOrDefault(UnitSystem.METRIC),
     language = AppLanguage.fromTag(languageTag),
@@ -57,6 +60,8 @@ fun User.toProfileEntity(): UserProfileEntity = UserProfileEntity(
     languageTag = language.tag,
     streakCount = streakCount,
     lastWorkoutDateIso = lastWorkoutDate.toIso(),
+    birthDateIso = birthDate.toIso(),
+    activityLevelName = activityLevel?.name,
 )
 
 // --- workouts: read ---
@@ -85,6 +90,7 @@ fun TemplateWithExercises.toDomain(): Workout {
             WorkoutExercise(
                 exerciseId = withSets.exercise.exerciseId,
                 position = withSets.exercise.position,
+                restSeconds = withSets.exercise.restSeconds,
                 sets = sets.mapIndexed { index, s ->
                     ExerciseSet(
                         id = s.rowKey(index),
@@ -112,6 +118,8 @@ fun SessionWithExercises.toDomain(): WorkoutSession {
         date = session.dateIso.toLocalDateOrNull() ?: LocalDate.now(),
         durationMin = session.durationMin,
         prsHit = session.prsHitCsv.split(',').filter { it.isNotBlank() },
+        startedAtMs = session.startedAtMs,
+        endedAtMs = session.endedAtMs,
         exercises = ordered.map { withSets ->
             val sets = withSets.sets.sortedBy { it.position }
             WorkoutExercise(

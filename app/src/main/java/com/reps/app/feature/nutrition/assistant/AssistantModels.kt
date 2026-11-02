@@ -48,14 +48,31 @@ val AssistantSuggestions = listOf(
     Suggestion(R.string.assistant_suggestion_eat),
 )
 
+/**
+ * Where the current turn stands. Only [SENDING] blocks the composer; a turn
+ * always leaves it - to [IDLE] on a reply, [FAILED] on an error - including
+ * when the request throws, times out or is cancelled.
+ */
+enum class ReplyPhase { IDLE, SENDING, FAILED }
+
+/**
+ * Text handed back to the composer after a failed turn, so the user can retry
+ * without retyping. [id] makes two identical failures distinct events.
+ */
+@Immutable
+data class RestoredDraft(val id: Long, val text: String)
+
 @Immutable
 data class AssistantUiState(
     val messages: List<ChatMessage> = emptyList(),
-    /** True while a reply is pending, which is what shows the typing dots. */
-    val responding: Boolean = false,
+    val phase: ReplyPhase = ReplyPhase.IDLE,
     /** Saved chats, newest first, straight from the history repository. */
     val conversations: List<AssistantConversation> = emptyList(),
+    val restoredDraft: RestoredDraft? = null,
 ) {
+    /** True while a reply is pending, which is what shows the typing dots and holds Send. */
+    val responding: Boolean get() = phase == ReplyPhase.SENDING
+
     /**
      * The welcome state holds until the first message lands. It is deliberately
      * tied to the transcript being empty rather than to a separate flag, so

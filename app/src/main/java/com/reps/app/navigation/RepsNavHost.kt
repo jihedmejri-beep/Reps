@@ -31,15 +31,19 @@ import androidx.compose.ui.unit.Dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.reps.app.core.components.backdropSource
 import com.reps.app.core.components.rememberBackdropState
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.feature.auth.login.LoginScreen
 import com.reps.app.feature.auth.signup.SignUpScreen
+import com.reps.app.feature.bodymap.BodyMapScreen
+import com.reps.app.feature.history.HistoryScreen
 import com.reps.app.feature.home.HomeScreen
 import com.reps.app.feature.notifications.NotificationsScreen
 import com.reps.app.feature.nutrition.NutritionScreen
@@ -51,7 +55,6 @@ import com.reps.app.feature.profile.ProfileScreen
 import com.reps.app.feature.progress.ProgressScreen
 import com.reps.app.feature.splash.SplashDestination
 import com.reps.app.feature.splash.SplashScreen
-import com.reps.app.feature.bodymap.BodyMapScreen
 import com.reps.app.feature.workouts.ExerciseDetailScreen
 import com.reps.app.feature.workouts.WorkoutsScreen
 import com.reps.app.feature.workouts.builder.WorkoutBuilderScreen
@@ -205,12 +208,14 @@ private fun TabPager(
                 onOpenProfile = { onSelectTab(TopLevelTab.PROFILE) },
             )
 
-            TopLevelTab.PROGRESS -> ProgressScreen()
+            TopLevelTab.PROGRESS -> ProgressScreen(
+                onOpenHistory = { navController.navigate(Routes.HISTORY) },
+            )
 
             TopLevelTab.WORKOUTS -> WorkoutsScreen(
                 onOpenExercise = { navController.navigate(Routes.exerciseDetail(it)) },
                 onStartWorkout = { navController.navigate(Routes.workoutSession(it)) },
-                onOpenBuilder = { navController.navigate(Routes.WORKOUT_BUILDER) },
+                onOpenBuilder = { navController.navigate(Routes.workoutBuilder(it)) },
                 onOpenBodyMap = { navController.navigate(Routes.BODY_MAP) },
             )
 
@@ -310,7 +315,16 @@ private fun NavGraphBuilder.repsGraph(
             onOpenExercise = { navController.navigate(Routes.exerciseDetail(it)) },
         )
     }
-    composable(Routes.WORKOUT_BUILDER) {
+    composable(
+        route = Routes.WORKOUT_BUILDER,
+        arguments = listOf(
+            navArgument(NavArgs.WORKOUT_ID) {
+                type = NavType.StringType
+                nullable = true
+                defaultValue = null
+            },
+        ),
+    ) {
         WorkoutBuilderScreen(
             onBack = { navController.popBackStack() },
             onSaved = { navController.popBackStack() },
@@ -324,5 +338,8 @@ private fun NavGraphBuilder.repsGraph(
     }
     composable(Routes.NOTIFICATIONS) {
         NotificationsScreen(onBack = { navController.popBackStack() })
+    }
+    composable(Routes.HISTORY) {
+        HistoryScreen(onBack = { navController.popBackStack() })
     }
 }

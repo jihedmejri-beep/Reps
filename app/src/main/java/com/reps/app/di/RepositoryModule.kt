@@ -1,8 +1,10 @@
 package com.reps.app.di
 
+import com.reps.app.data.ai.RepsAiNutritionAssistantRepository
 import com.reps.app.data.exercise.CatalogExerciseRepository
 import com.reps.app.data.exercise.CatalogMuscleSvgRepository
-import com.reps.app.data.ai.RepsAiNutritionAssistantRepository
+import com.reps.app.data.notifications.SessionAlerts
+import com.reps.app.data.notifications.SystemSessionAlerts
 import com.reps.app.data.user.LocalAuthRepository
 import com.reps.app.data.user.LocalMealRepository
 import com.reps.app.data.user.LocalUserRepository
@@ -86,4 +88,8 @@ abstract class RepositoryModule {
     abstract fun bindAssistantConversationRepository(
         impl: RoomAssistantConversationRepository,
     ): AssistantConversationRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSessionAlerts(impl: SystemSessionAlerts): SessionAlerts
 }

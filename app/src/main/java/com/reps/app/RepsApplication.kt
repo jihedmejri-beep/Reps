@@ -1,6 +1,7 @@
 package com.reps.app
 
 import android.app.Application
+import android.content.Context
 import android.os.Build
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
@@ -13,8 +14,17 @@ import coil3.gif.GifDecoder
 import coil3.memory.MemoryCache
 import coil3.request.crossfade
 import coil3.svg.SvgDecoder
+import com.reps.app.core.locale.AppLocale
+import com.reps.app.data.datastore.UserPreferencesDataStore
+import com.reps.app.data.notifications.HydrationReminderScheduler
 import com.reps.app.data.notifications.NotificationHelper
+import com.reps.app.data.notifications.WorkoutReminderScheduler
 import dagger.hilt.android.HiltAndroidApp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import okio.Path.Companion.toOkioPath
 import javax.inject.Inject
 
@@ -32,9 +42,34 @@ class RepsApplication : Application(), SingletonImageLoader.Factory, Configurati
     @Inject
     lateinit var notificationHelper: NotificationHelper
 
+    @Inject
+    lateinit var preferences: UserPreferencesDataStore
+
+    @Inject
+    lateinit var workoutReminders: WorkoutReminderScheduler
+
+    @Inject
+    lateinit var hydrationReminders: HydrationReminderScheduler
+
+    private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
+    /** Notifications and workers read strings from this context; keep it in the app's language. */
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(AppLocale.wrap(base))
+    }
+
     override fun onCreate() {
         super.onCreate()
         notificationHelper.ensureChannels()
+        // Reminders default to on, but used to be scheduled only when the toggle
+        // was flipped, so a fresh install never received one. KEEP leaves an
+        // already-running schedule alone.
+        appScope.launch {
+            if (preferences.notificationsEnabled.first()) {
+                workoutReminders.ensureScheduled()
+                hydrationReminders.ensureScheduled()
+            }
+        }
     }
 
     /**

@@ -18,7 +18,10 @@ class HydrationReminderScheduler @Inject constructor(
     @ApplicationContext private val context: Context,
 ) {
 
-    fun setEnabled(enabled: Boolean) {
+    /** Arms the reminder at app start without resetting a schedule that is already running. */
+    fun ensureScheduled() = setEnabled(enabled = true, policy = ExistingPeriodicWorkPolicy.KEEP)
+
+    fun setEnabled(enabled: Boolean, policy: ExistingPeriodicWorkPolicy = ExistingPeriodicWorkPolicy.UPDATE) {
         val manager = WorkManager.getInstance(context)
         if (!enabled) {
             manager.cancelUniqueWork(HydrationReminderWorker.UNIQUE_WORK_NAME)
@@ -28,7 +31,7 @@ class HydrationReminderScheduler @Inject constructor(
             .build()
         manager.enqueueUniquePeriodicWork(
             HydrationReminderWorker.UNIQUE_WORK_NAME,
-            ExistingPeriodicWorkPolicy.UPDATE,
+            policy,
             request,
         )
     }

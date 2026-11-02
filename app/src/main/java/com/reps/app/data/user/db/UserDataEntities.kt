@@ -1,5 +1,6 @@
 package com.reps.app.data.user.db
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -52,6 +53,10 @@ data class UserProfileEntity(
     val streakCount: Int,
     /** ISO local date of the most recent logged session, or null. */
     val lastWorkoutDateIso: String?,
+    /** v2. ISO local date; replaces [age], which went stale the day after it was typed. */
+    val birthDateIso: String? = null,
+    /** v2. ActivityLevel.name, or null when the user has not said. */
+    val activityLevelName: String? = null,
 )
 
 @Entity(
@@ -89,6 +94,9 @@ data class WorkoutTemplateExerciseEntity(
     val exerciseId: String,
     /** Zero-based playback order inside the template. */
     val position: Int,
+    /** v2. Rest between sets for this exercise, in seconds. */
+    @ColumnInfo(defaultValue = "90")
+    val restSeconds: Int = 90,
 )
 
 @Entity(
@@ -125,6 +133,14 @@ data class WorkoutSessionEntity(
     val durationMin: Int,
     /** Comma-joined catalogue ids that produced a PR this session. */
     val prsHitCsv: String,
+    /**
+     * v2. Wall-clock bounds of the session. 0 for sessions saved before v2, whose
+     * [durationMin] was an estimate rather than a measurement.
+     */
+    @ColumnInfo(defaultValue = "0")
+    val startedAtMs: Long = 0,
+    @ColumnInfo(defaultValue = "0")
+    val endedAtMs: Long = 0,
 )
 
 @Entity(
@@ -244,4 +260,33 @@ data class AssistantMessageEntity(
     val text: String,
     /** Order of the line inside its conversation. */
     val sortIndex: Long,
+)
+
+/**
+ * v2. The workout in progress, one per account, rewritten as sets are logged so
+ * a session survives Back, process death and a swiped-away task. [payloadJson]
+ * is the in-memory session as JSON: it is only ever read back whole, so there is
+ * nothing to gain from normalising it.
+ */
+@Entity(tableName = "active_session_drafts")
+data class ActiveSessionDraftEntity(
+    @PrimaryKey val uid: String,
+    val templateId: String,
+    val startedAtMs: Long,
+    val updatedAtMs: Long,
+    val payloadJson: String,
+)
+
+/** v2. An achievement the account has earned. Never deleted, so an unlock cannot silently re-lock. */
+@Entity(
+    tableName = "achievement_unlocks",
+    primaryKeys = ["uid", "achievementId"],
+)
+data class AchievementUnlockEntity(
+    val uid: String,
+    /** AchievementId.name. */
+    val achievementId: String,
+    val unlockedAtMs: Long,
+    /** The session that earned it, when one did. */
+    val sessionId: String?,
 )

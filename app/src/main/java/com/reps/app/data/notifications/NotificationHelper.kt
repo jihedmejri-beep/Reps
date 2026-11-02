@@ -3,7 +3,9 @@ package com.reps.app.data.notifications
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.VibrationEffect
@@ -51,6 +53,71 @@ class NotificationHelper @Inject constructor(
                 NotificationManager.IMPORTANCE_HIGH,
             ),
         )
+        manager.createNotificationChannel(
+            NotificationChannel(
+                CHANNEL_REST_RUNNING,
+                context.getString(R.string.rest_channel_running),
+                NotificationManager.IMPORTANCE_LOW,
+            ).apply { setShowBadge(false) },
+        )
+        manager.createNotificationChannel(
+            NotificationChannel(
+                CHANNEL_REST_DONE,
+                context.getString(R.string.rest_channel_done),
+                NotificationManager.IMPORTANCE_HIGH,
+            ),
+        )
+    }
+
+    /**
+     * The rest countdown while the app is in the background. The system draws the
+     * chronometer itself, counting down to [endsAtMs], so it stays exact without
+     * the app running; it removes itself when the rest is over.
+     */
+    fun showRestRunning(title: String, body: String, endsAtMs: Long) {
+        if (!hasPermission()) return
+        val remaining = (endsAtMs - System.currentTimeMillis()).coerceAtLeast(0)
+        val notification = NotificationCompat.Builder(context, CHANNEL_REST_RUNNING)
+            .setSmallIcon(R.drawable.ic_stat_reps)
+            .setContentTitle(title)
+            .setContentText(body)
+            .setWhen(endsAtMs)
+            .setShowWhen(true)
+            .setUsesChronometer(true)
+            .setChronometerCountDown(true)
+            .setTimeoutAfter(remaining)
+            .setOnlyAlertOnce(true)
+            .setOngoing(true)
+            .setSilent(true)
+            .setCategory(NotificationCompat.CATEGORY_STOPWATCH)
+            .setContentIntent(openAppIntent())
+            .build()
+        NotificationManagerCompat.from(context).notify(NOTIF_ID_REST, notification)
+    }
+
+    /** "Rest over" - posted by [RestDoneReceiver] when the alarm fires. */
+    fun postRestDone(title: String, body: String) {
+        if (!hasPermission()) return
+        val notification = NotificationCompat.Builder(context, CHANNEL_REST_DONE)
+            .setSmallIcon(R.drawable.ic_stat_reps)
+            .setContentTitle(title)
+            .setContentText(body)
+            .setAutoCancel(true)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(openAppIntent())
+            .build()
+        NotificationManagerCompat.from(context).notify(NOTIF_ID_REST, notification)
+    }
+
+    fun cancelRest() {
+        NotificationManagerCompat.from(context).cancel(NOTIF_ID_REST)
+    }
+
+    private fun openAppIntent(): PendingIntent? {
+        val launch = context.packageManager.getLaunchIntentForPackage(context.packageName) ?: return null
+        launch.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        return PendingIntent.getActivity(context, 0, launch, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     fun postWorkoutReminder(title: String, body: String) {
@@ -115,10 +182,13 @@ class NotificationHelper @Inject constructor(
         const val CHANNEL_WORKOUT = "workout_reminders"
         const val CHANNEL_HYDRATION = "hydration_reminders"
         const val CHANNEL_PR = "pr_celebrations"
+        const val CHANNEL_REST_RUNNING = "rest_timer_running"
+        const val CHANNEL_REST_DONE = "rest_timer_done"
 
         private const val NOTIF_ID_WORKOUT = 4001
         private const val NOTIF_ID_HYDRATION = 4002
         private const val NOTIF_ID_PR = 4003
+        private const val NOTIF_ID_REST = 4004
 
         /** Short buzz-pause-buzz pattern for PR celebrations. */
         private val PR_VIBRATION_PATTERN = longArrayOf(0, 200, 100, 200, 100, 400)

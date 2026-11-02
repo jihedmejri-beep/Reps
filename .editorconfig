@@ -1,0 +1,16 @@
+root = true
+
+# String resources were corrupted twice by tools re-saving UTF-8 as ANSI
+# (docs/REPS_AUDIT.md §G.1). StringResourceEncodingTest fails the build if it
+# happens again.
+[*]
+charset = utf-8
+insert_final_newline = true
+
+[*.{kt,kts}]
+indent_style = space
+indent_size = 4
+
+[*.xml]
+indent_style = space
+indent_size = 4

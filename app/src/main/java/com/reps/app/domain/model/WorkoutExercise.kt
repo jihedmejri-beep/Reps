@@ -9,4 +9,11 @@ data class WorkoutExercise(
     val exerciseId: String = "",
     val position: Int = 0,
     val sets: List<ExerciseSet> = emptyList(),
-)
+    /** Rest between sets, in seconds; what the session's timer starts with. */
+    val restSeconds: Int = DEFAULT_REST_SECONDS,
+) {
+    companion object {
+        const val DEFAULT_REST_SECONDS = 90
+        val REST_RANGE_SECONDS = 15..600
+    }
+}

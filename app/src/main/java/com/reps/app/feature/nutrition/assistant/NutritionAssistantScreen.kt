@@ -17,11 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.reps.app.core.theme.RepsTheme
 
@@ -52,6 +52,15 @@ fun NutritionAssistantScreen(
     LaunchedEffect(state.messages.size, state.responding) {
         val lastIndex = state.messages.size - if (state.responding) 0 else 1
         if (lastIndex >= 0) listState.animateScrollToItem(lastIndex)
+    }
+
+    // A failed question comes back to the composer for a one-tap retry, unless
+    // the user has already started typing something else.
+    val restored = state.restoredDraft
+    LaunchedEffect(restored?.id) {
+        if (restored == null) return@LaunchedEffect
+        if (input.isBlank()) input = restored.text
+        viewModel.consumeRestoredDraft(restored.id)
     }
 
     Column(
@@ -107,10 +116,7 @@ fun NutritionAssistantScreen(
         AssistantComposer(
             value = input,
             onValueChange = { input = it },
-            onSend = {
-                viewModel.send(input)
-                input = ""
-            },
+            onSend = { if (viewModel.send(input)) input = "" },
             canSend = input.isNotBlank() && !state.responding,
         )
     }

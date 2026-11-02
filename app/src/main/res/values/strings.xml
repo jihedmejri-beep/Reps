@@ -10,12 +10,12 @@
     <string name="nav_profile">Profile</string>
 
     <!-- Splash -->
-    <string name="splash_tagline">PUSH Â· TRACK Â· REPEAT</string>
+    <string name="splash_tagline">PUSH · TRACK · REPEAT</string>
     <string name="splash_tap_to_continue">TAP TO CONTINUE</string>
 
     <!-- Onboarding -->
     <string name="onboarding_headline">Train like you mean it.</string>
-    <string name="onboarding_subtext">Your training, nutrition and progress â€” engineered into one disciplined system.</string>
+    <string name="onboarding_subtext">Your training, nutrition and progress — engineered into one disciplined system.</string>
     <string name="onboarding_get_started">Get Started</string>
     <string name="onboarding_have_account">I already have an account</string>
 
@@ -80,14 +80,33 @@
     <string name="home_greeting_evening">Good evening</string>
     <string name="home_notifications">Notifications</string>
     <string name="home_streak_count">%1$d day streak</string>
-    <string name="home_streak_nudge">Keep it alive â€” train today to hit %1$d.</string>
-    <string name="home_today_workout">Today Â· Workout</string>
+    <string name="home_streak_nudge">Keep it alive — train today to hit %1$d.</string>
+    <string name="home_resume_eyebrow">Workout in progress</string>
+    <string name="home_resume_body">%1$d of %2$d sets done · started %3$s</string>
+    <string name="home_resume_cta">Resume</string>
+    <string name="remark_first_workout">Every rep counts. Log your first workout and it starts here.</string>
+    <string name="remark_new_best">New best on %1$s today. Progress wins.</string>
+    <string name="remark_logged_today">%1$s is logged. Stronger every session.</string>
+    <string name="remark_planned_today">%1$s is on the plan today. Earn it.</string>
+    <plurals name="remark_welcome_back">
+        <item quantity="one">It\'s been %d day. One session gets you back in rhythm.</item>
+        <item quantity="other">It\'s been %d days. One session gets you back in rhythm.</item>
+    </plurals>
+    <plurals name="remark_ahead_of_last_week">
+        <item quantity="one">%1$d session this week, up from %2$d last week.</item>
+        <item quantity="other">%1$d sessions this week, up from %2$d last week.</item>
+    </plurals>
+    <plurals name="remark_week_streak">
+        <item quantity="one">%d week in a row. Consistency builds champions.</item>
+        <item quantity="other">%d weeks in a row. Consistency builds champions.</item>
+    </plurals>
+    <string name="home_today_workout">Today · Workout</string>
     <string name="home_start_workout">Start Workout</string>
     <string name="home_exercise_count">%1$d exercises</string>
     <string name="home_duration_min">%1$d min</string>
     <string name="home_set_count">%1$d sets</string>
     <string name="home_exercises_label">Exercises</string>
-    <string name="home_set_scheme">%1$d Ã— %2$d</string>
+    <string name="home_set_scheme">%1$d × %2$d</string>
     <string name="home_more_exercises">+%1$d more</string>
     <string name="home_rest_day">Rest day</string>
     <string name="home_rest_day_subtext">Nothing scheduled. Recovery is part of the plan.</string>
@@ -126,16 +145,55 @@
     <string name="progress_frequency">Workout Frequency</string>
     <string name="progress_frequency_caption">Last 8 weeks</string>
     <string name="progress_muscle_distribution">Muscle Group Distribution</string>
-    <string name="progress_muscle_distribution_caption">By training volume</string>
+    <string name="progress_muscle_distribution_caption">By completed sets</string>
     <string name="progress_personal_records">Personal Records</string>
     <string name="progress_achievements">Achievements</string>
     <string name="progress_pr_beat">Beat your previous best by %1$s kg</string>
     <string name="progress_pr_first">First recorded set</string>
     <string name="progress_hero_rest_day_sub">Nothing scheduled. Recovery is part of the plan.</string>
     <string name="progress_hero_planned">%1$s planned</string>
-    <string name="progress_hero_planned_sub">Not started yet â€” Home has the start button.</string>
+    <string name="progress_hero_planned_sub">Not started yet — Home has the start button.</string>
     <string name="progress_hero_logged">%1$s logged</string>
-    <string name="progress_hero_logged_sub">%1$d min Â· %2$s kg lifted</string>
+    <string name="progress_hero_logged_sub">%1$d min · %2$s kg lifted</string>
+    <string name="progress_hero_logged_detail">%1$s · %2$s %3$s lifted</string>
+    <string name="progress_duration_not_measured">Duration not measured</string>
+    <string name="progress_hours_unit">h</string>
+    <plurals name="progress_unmeasured_sessions">
+        <item quantity="one">%d session not timed</item>
+        <item quantity="other">%d sessions not timed</item>
+    </plurals>
+    <plurals name="progress_sessions_this_week">
+        <item quantity="one">%d session this week</item>
+        <item quantity="other">%d sessions this week</item>
+    </plurals>
+    <string name="progress_lifetime">All time</string>
+    <string name="progress_sets_reps">Sets / reps</string>
+    <string name="progress_add_weight_short">+ Weight</string>
+    <string name="progress_range_days">%1$dD</string>
+    <string name="progress_weight_range_empty">No weigh-ins in this range.</string>
+    <string name="progress_strength_by_weight">Heaviest set per session</string>
+    <string name="progress_strength_by_reps">Most reps per session (bodyweight)</string>
+    <string name="progress_strength_empty">Log this exercise in two sessions to see a trend.</string>
+    <string name="progress_frequency_bar_cd">Week of %1$s: %2$d sessions</string>
+    <string name="progress_percent">%1$d%%</string>
+    <string name="progress_first_best">First best</string>
+    <string name="progress_record_weighted">%1$s %2$s × %3$d</string>
+    <string name="progress_record_bodyweight">%1$d reps · bodyweight</string>
+    <string name="progress_pr_beat_weight">+%1$s %2$s over your previous best</string>
+    <string name="progress_pr_beat_reps">+%1$d reps at the same weight</string>
+    <string name="progress_pr_beat_generic">Beat your previous best</string>
+    <string name="progress_achievements_count">%1$d/%2$d unlocked</string>
+    <string name="history_title">Workout history</string>
+    <plurals name="history_count">
+        <item quantity="one">%d session</item>
+        <item quantity="other">%d sessions</item>
+    </plurals>
+    <string name="history_empty_title">No workouts yet</string>
+    <string name="history_empty_body">Finish a workout and it shows up here, set by set.</string>
+    <string name="history_session_meta">%1$s · %2$d sets · %3$s %4$s</string>
+    <string name="history_pr_badge">PR</string>
+    <string name="history_not_done">Not done</string>
+    <string name="history_bodyweight_set">%1$d reps</string>
     <string name="ach_first_workout_title">First Rep</string>
     <string name="ach_streak7_title">On a Roll</string>
     <string name="ach_ten_workouts_title">Regular</string>
@@ -186,14 +244,37 @@
     <string name="workouts_builder_selected">%1$d selected</string>
     <string name="workouts_builder_remove_cd">Remove exercise</string>
     <string name="workouts_builder_empty">No exercises added yet.</string>
-    <string name="workouts_session_finish_with_count">Finish workout Â· %1$d/%2$d sets</string>
+    <string name="workouts_builder_edit_title">Edit Workout</string>
+    <string name="workouts_builder_schedule">Schedule</string>
+    <string name="workouts_builder_schedule_hint">Pick the days you plan to train this. Reminders and your streak follow them.</string>
+    <string name="workouts_builder_sets">Sets</string>
+    <string name="workouts_builder_fewer_sets_cd">One set fewer</string>
+    <string name="workouts_builder_more_sets_cd">One set more</string>
+    <string name="workouts_builder_move_up_cd">Move %1$s up</string>
+    <string name="workouts_builder_move_down_cd">Move %1$s down</string>
+    <string name="workouts_estimated_min">≈ %1$d min</string>
+    <string name="workouts_not_scheduled">Not scheduled</string>
+    <string name="workouts_my_workouts_empty">No saved workouts yet. Tap + to build one.</string>
+    <string name="workouts_template_options_cd">Options for %1$s</string>
+    <string name="workouts_template_start">Start</string>
+    <string name="workouts_template_edit">Edit</string>
+    <string name="workouts_template_duplicate">Duplicate</string>
+    <string name="workouts_template_delete">Delete</string>
+    <string name="workouts_template_delete_title">Delete %1$s?</string>
+    <string name="workouts_template_delete_body">The workout plan is removed. Sessions you already logged stay in your history.</string>
+    <string name="workouts_template_copy_suffix">(copy)</string>
+    <plurals name="exercise_count">
+        <item quantity="one">%d exercise</item>
+        <item quantity="other">%d exercises</item>
+    </plurals>
+    <string name="workouts_session_finish_with_count">Finish workout · %1$d/%2$d sets</string>
     <string name="workouts_session_volume_so_far">Volume so far</string>
     <string name="workouts_session_no_sets_title">No sets logged yet</string>
     <string name="workouts_session_no_sets_body">Check off at least one set before finishing, or cancel to keep training.</string>
     <string name="workouts_session_keep_training">Keep training</string>
     <string name="workouts_session_finish_anyway">Finish anyway</string>
     <string name="workouts_session_complete_title">Workout complete</string>
-    <string name="workouts_session_complete_body">%1$s kg lifted across %2$d sets. Nice work â€” thatâ€™s logged in Progress.</string>
+    <string name="workouts_session_complete_body">%1$s kg lifted across %2$d sets. Nice work — that’s logged in Progress.</string>
     <string name="workouts_session_done">Done</string>
 
     <!-- Muscle groups -->
@@ -245,7 +326,7 @@
     <string name="rest_timer_resting">Resting</string>
     <string name="rest_timer_paused">Paused</string>
     <string name="rest_timer_complete">Rest complete</string>
-    <string name="rest_timer_minus15">âˆ’15</string>
+    <string name="rest_timer_minus15">−15</string>
     <string name="rest_timer_plus15">+15</string>
     <string name="rest_timer_restart_cd">Restart rest timer</string>
     <string name="rest_timer_skip_cd">Skip rest</string>
@@ -253,6 +334,71 @@
     <string name="rest_timer_add_cd">Add 15 seconds</string>
     <string name="rest_timer_pause_cd">Pause rest timer</string>
     <string name="rest_timer_resume_cd">Resume rest timer</string>
+    <string name="rest_timer_go">Go</string>
+    <string name="rest_timer_of_total">of %1$s</string>
+    <string name="rest_timer_next">Next: %1$s · set %2$d of %3$d</string>
+    <string name="rest_timer_all_done">Every set is done. Finish when you\'re ready.</string>
+    <string name="rest_timer_expand_cd">Show rest timer controls</string>
+    <string name="rest_timer_collapse_cd">Hide rest timer controls</string>
+    <string name="rest_timer_dismiss_cd">Dismiss rest timer</string>
+    <string name="rest_channel_running">Rest timer</string>
+    <string name="rest_channel_done">Rest finished</string>
+    <string name="rest_notif_running_title">Resting · %1$s</string>
+    <string name="rest_notif_done_title">Rest over</string>
+    <string name="session_elapsed_cd">Workout time %1$s</string>
+    <string name="session_leave_title">Leave this workout?</string>
+    <string name="session_leave_body">Everything you\'ve logged is saved. Resume it any time from Home.</string>
+    <string name="session_leave_confirm">Leave</string>
+    <string name="session_discard">Discard workout</string>
+    <string name="session_discard_title">Discard this workout?</string>
+    <string name="session_discard_body">The sets you logged will be deleted. This can\'t be undone.</string>
+    <string name="session_discard_confirm">Discard</string>
+    <string name="session_conflict_title">Unfinished workout</string>
+    <string name="session_conflict_body">You have an unfinished %1$s session. Resume it, or discard it and start this workout?</string>
+    <string name="session_conflict_resume">Resume it</string>
+    <string name="session_conflict_discard">Discard and start</string>
+    <string name="session_best_weighted">Best: %1$s %2$s × %3$d</string>
+    <string name="session_best_bodyweight">Best: %1$d reps</string>
+    <string name="session_rest_chip">Rest %1$s</string>
+    <string name="session_rest_chip_cd">Rest between sets %1$s. Tap to change.</string>
+    <string name="session_rest_row_resting">Resting · %1$s</string>
+    <string name="session_rest_row_done">Rest done — go</string>
+    <string name="session_exercise_progress">%1$d/%2$d sets</string>
+    <string name="session_set_done_cd">Set %1$d done. Tap to undo.</string>
+    <string name="session_set_open_cd">Mark set %1$d done</string>
+    <string name="session_set_remove">Remove set %1$d</string>
+    <string name="session_complete_summary">%1$s · %2$d sets · %3$s %4$s lifted</string>
+    <string name="session_complete_prs">New records: %1$s</string>
+    <string name="session_complete_unlocked">Unlocked: %1$s</string>
+    <string name="session_complete_logged">Logged in Progress.</string>
+    <plurals name="duration_minutes">
+        <item quantity="one">%d min</item>
+        <item quantity="other">%d min</item>
+    </plurals>
+    <string name="ach_first_workout_desc">Complete a workout with at least one set.</string>
+    <string name="ach_ten_workouts_desc">Complete 10 workouts.</string>
+    <string name="ach_fifty_workouts_title">Committed</string>
+    <string name="ach_fifty_workouts_desc">Complete 50 workouts.</string>
+    <string name="ach_streak7_desc">Train on 7 planned days in a row.</string>
+    <string name="ach_weeks4_title">Four-Week Run</string>
+    <string name="ach_weeks4_desc">Train at least once a week, 4 weeks in a row.</string>
+    <string name="ach_first_pr_desc">Beat one of your earlier bests.</string>
+    <string name="ach_volume10t_title">10 Tonnes</string>
+    <string name="ach_volume10t_desc">Lift 10,000 kg in total across all sets.</string>
+    <string name="ach_reps1000_title">Thousand Reps</string>
+    <string name="ach_reps1000_desc">Complete 1,000 reps in total.</string>
+    <string name="ach_unlocked_on">Unlocked %1$s</string>
+    <string name="ach_progress">%1$s / %2$s</string>
+    <plurals name="streak_days">
+        <item quantity="one">%d-day streak</item>
+        <item quantity="other">%d-day streak</item>
+    </plurals>
+    <plurals name="streak_weeks">
+        <item quantity="one">%d-week streak</item>
+        <item quantity="other">%d-week streak</item>
+    </plurals>
+    <string name="streak_nudge_days">Train on your next planned day to keep it going.</string>
+    <string name="streak_nudge_weeks">One session this week keeps it going.</string>
 
     <!-- Nutrition -->
     <string name="nutrition_eyebrow">Fuel</string>
@@ -274,6 +420,17 @@
     <string name="nutrition_water_add_cd">Add a glass of water</string>
     <string name="nutrition_water_remove_cd">Remove a glass of water</string>
     <string name="nutrition_ingredient_required">Add a name and gram amount.</string>
+    <string name="nutrition_per_100g">Per 100 g (from the label)</string>
+    <string name="nutrition_protein_g">Protein (g)</string>
+    <string name="nutrition_carbs_g">Carbs (g)</string>
+    <string name="nutrition_fat_g">Fat (g)</string>
+    <string name="nutrition_macros_required">Enter calories, protein, carbs and fat per 100 g. Use 0 where the label says 0.</string>
+    <string name="nutrition_macros_over_100">Protein, carbs and fat can\'t add up to more than 100 g per 100 g.</string>
+    <string name="nutrition_macros_kcal_mismatch">Calories don\'t match the macros entered. Check the label and try again.</string>
+    <string name="nutrition_item_summary">%1$s · %2$d g · %3$d kcal</string>
+    <string name="nutrition_grams_value">%1$d g</string>
+    <string name="nutrition_macro_progress">%1$d/%2$d g</string>
+    <string name="nutrition_targets_generic">These are general targets. Add your height, date of birth, sex, activity level and a weigh-in in Profile to personalise them.</string>
 
     <!-- Meal action menu -->
     <string name="nutrition_meal_options_cd">Options for %1$s</string>
@@ -303,7 +460,7 @@
     <string name="assistant_suggestion_calories">Calculate calories</string>
     <string name="assistant_suggestion_protein">Check my protein intake</string>
     <string name="assistant_suggestion_eat">What should I eat?</string>
-    <string name="assistant_composer_hint">Message Nutrition Assistantâ€¦</string>
+    <string name="assistant_composer_hint">Message Nutrition Assistant…</string>
     <string name="assistant_send_cd">Send message</string>
     <string name="assistant_typing_cd">Assistant is typing</string>
     <string name="assistant_history_eyebrow">Assistant</string>
@@ -311,6 +468,11 @@
     <string name="assistant_history_empty">No conversations yet.</string>
 <string name="assistant_error_network">You seem offline. Check your connection and try again.</string>
 <string name="assistant_error_generic">Something went wrong. Please try again.</string>
+<string name="assistant_error_timeout">The assistant took too long to answer. Try again in a moment.</string>
+<string name="assistant_error_rate_limited">Too many questions at once. Wait a few seconds and try again.</string>
+<string name="assistant_error_unavailable">The assistant is temporarily unavailable. Try again shortly.</string>
+<string name="assistant_error_not_configured">The assistant isn\'t available in this version of the app yet.</string>
+<string name="assistant_error_too_long">That message is too long. Shorten it to under 4,000 characters.</string>
 <string name="assistant_delete_cd">Delete conversation</string>
 <string name="assistant_delete_title">Delete conversation?</string>
 <string name="assistant_delete_body">This conversation will be removed from your history.</string>
@@ -345,7 +507,7 @@
     <string name="profile_units_imperial">Imperial (lb, in)</string>
     <string name="profile_settings">Account settings</string>
     <string name="profile_credits_title">Credits &amp; Licenses</string>
-    <string name="profile_credits_muscle_map">Muscle diagram adapted from â€œMuscles front and backâ€ by %1$s, via Wikimedia Commons, licensed under CC BY-SA 4.0 (creativecommons.org/licenses/by-sa/4.0). Modified for use in Reps.</string>
+    <string name="profile_credits_muscle_map">Muscle diagram adapted from “Muscles front and back” by %1$s, via Wikimedia Commons, licensed under CC BY-SA 4.0 (creativecommons.org/licenses/by-sa/4.0). Modified for use in Reps.</string>
     <string name="profile_sign_out">Sign out</string>
     <string name="profile_save">Save changes</string>
     <string name="profile_notifications">Notifications</string>
@@ -355,13 +517,42 @@
     <string name="profile_theme_light">Light</string>
     <string name="profile_theme_system">System</string>
     <string name="profile_account_settings_body">Password, email and connected sign-in methods will live here once accounts are backed by Firebase.</string>
+    <string name="profile_account_email">Email</string>
+    <string name="profile_account_local">This account and everything you log are stored on this device only. There is no cloud sync yet, so uninstalling the app or clearing its data removes them.</string>
+    <string name="profile_birth_date">Date of birth</string>
+    <string name="profile_age_value">%1$d years</string>
+    <string name="profile_age_legacy">%1$d years · add your birth date</string>
+    <string name="profile_activity">Activity level</string>
+    <string name="activity_sedentary">Sedentary — desk job, little walking</string>
+    <string name="activity_light">Light — training 1–3 days a week</string>
+    <string name="activity_moderate">Moderate — training 3–5 days a week</string>
+    <string name="activity_active">Active — hard training 6–7 days a week</string>
+    <string name="activity_very_active">Very active — physical job plus training</string>
+    <string name="profile_height_with_unit">Height (%1$s)</string>
+    <string name="profile_unit_cm">cm</string>
+    <string name="profile_unit_in">in</string>
+    <string name="profile_height_invalid">Enter a height between 100 and 250 cm (39–98 in).</string>
+    <string name="weight_invalid">Enter a weight between 20 and 400 kg (44–880 lb).</string>
+    <string name="metrics_kcal_per_day">kcal/day</string>
+    <string name="metrics_bmr_caption">At complete rest</string>
+    <string name="metrics_tdee">Estimated daily burn (TDEE)</string>
+    <string name="metrics_tdee_caption">BMR × your activity level</string>
+    <string name="metrics_tdee_needs_activity">Set your activity level to see this</string>
+    <string name="metrics_how_calculated">How these are calculated</string>
+    <string name="metrics_disclaimer_short">Estimates, not a medical diagnosis</string>
+    <string name="metrics_info_title">Body metrics</string>
+    <string name="metrics_info_bmi">BMI = weight (kg) ÷ height (m)². It uses your latest weigh-in and doesn\'t tell muscle from fat, so muscular people often read high.</string>
+    <string name="metrics_info_bmi_ranges">WHO ranges: under 18.5 underweight · 18.5–24.9 healthy · 25–29.9 overweight · 30 and above obese.</string>
+    <string name="metrics_info_bmr">BMR is the energy your body uses at complete rest, from the Mifflin-St Jeor equation: 10 × weight + 6.25 × height − 5 × age, then +5 for men or −161 for women.</string>
+    <string name="metrics_info_tdee">Daily burn (TDEE) is BMR multiplied by your activity level, from 1.2 (sedentary) to 1.9 (very active). Nutrition targets start from this number.</string>
+    <string name="metrics_disclaimer">These are population-based estimates for guidance only. They are not a medical diagnosis — talk to a health professional about your health.</string>
     <string name="profile_sign_out_confirm_title">Sign out?</string>
-    <string name="profile_sign_out_confirm_body">You can sign back in any time â€” your data stays on this device.</string>
+    <string name="profile_sign_out_confirm_body">You can sign back in any time — your data stays on this device.</string>
     <string name="profile_preferences">Preferences</string>
     <string name="profile_your_details">Your details</string>
     <string name="language_english">English</string>
-    <string name="language_arabic">Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©</string>
-    <string name="language_french">FranÃ§ais</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_french">Français</string>
 
     <!-- Notifications -->
     <string name="notifications_eyebrow">Activity</string>
@@ -373,4 +564,17 @@
     <!-- Content descriptions -->
     <string name="cd_back">Navigate back</string>
     <string name="cd_close">Close</string>
+    <!-- Daily motivation, rotated by date. Same order in every language. -->
+    <string-array name="motivation_quotes">
+        <item>Every rep counts.\nEvery set matters.</item>
+        <item>One more rep.</item>
+        <item>Progress wins.</item>
+        <item>Stronger every session.</item>
+        <item>Earn it.</item>
+        <item>Consistency builds champions.</item>
+        <item>Show up.\nGet stronger.</item>
+        <item>Discipline beats\nmotivation.</item>
+        <item>Small wins.\nBig results.</item>
+        <item>Trust the process.\nCount the reps.</item>
+    </string-array>
 </resources>

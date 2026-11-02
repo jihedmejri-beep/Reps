@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 data class WorkoutsUiState(
@@ -27,7 +29,7 @@ data class WorkoutsUiState(
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class WorkoutsViewModel @Inject constructor(
-    workoutRepository: WorkoutRepository,
+    private val workoutRepository: WorkoutRepository,
     exerciseRepository: ExerciseRepository,
 ) : ViewModel() {
 
@@ -70,5 +72,16 @@ class WorkoutsViewModel @Inject constructor(
 
     fun onFilterChange(group: MuscleGroup?) {
         filter.value = group
+    }
+
+    /** Sessions keep their own copy of what was done, so deleting a template never touches history. */
+    fun delete(workoutId: String) {
+        viewModelScope.launch { workoutRepository.deleteTemplate(workoutId) }
+    }
+
+    fun duplicate(workout: Workout, copySuffix: String) {
+        viewModelScope.launch {
+            workoutRepository.saveTemplate(workout.copy(id = UUID.randomUUID().toString(), name = "${workout.name} $copySuffix"))
+        }
     }
 }

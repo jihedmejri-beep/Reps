@@ -25,7 +25,13 @@ class WorkoutReminderScheduler @Inject constructor(
     @ApplicationContext private val context: Context,
 ) {
 
-    suspend fun setEnabled(enabled: Boolean) = withContext(Dispatchers.Default) {
+    /** Arms the reminder at app start without resetting a schedule that is already running. */
+    suspend fun ensureScheduled() = setEnabled(enabled = true, policy = ExistingPeriodicWorkPolicy.KEEP)
+
+    suspend fun setEnabled(
+        enabled: Boolean,
+        policy: ExistingPeriodicWorkPolicy = ExistingPeriodicWorkPolicy.UPDATE,
+    ) = withContext(Dispatchers.Default) {
         val manager = WorkManager.getInstance(context)
         if (!enabled) {
             manager.cancelUniqueWork(WorkoutReminderWorker.UNIQUE_WORK_NAME)
@@ -36,7 +42,7 @@ class WorkoutReminderScheduler @Inject constructor(
             .build()
         manager.enqueueUniquePeriodicWork(
             WorkoutReminderWorker.UNIQUE_WORK_NAME,
-            ExistingPeriodicWorkPolicy.UPDATE,
+            policy,
             request,
         )
     }

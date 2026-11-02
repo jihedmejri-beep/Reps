@@ -18,9 +18,11 @@ import com.reps.app.domain.repository.UserRepository
 import com.reps.app.domain.repository.WeightRepository
 import kotlinx.coroutines.flow.firstOrNull
 import java.io.IOException
+import java.io.InterruptedIOException
 import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.cancellation.CancellationException
 
 @Singleton
 class RepsAiNutritionAssistantRepository @Inject constructor(
@@ -37,23 +39,13 @@ class RepsAiNutritionAssistantRepository @Inject constructor(
         val todaysMeals = mealRepository.observeMeals(today).firstOrNull() ?: emptyList()
         val totals = todaysMeals.fold(Macros()) { acc, meal -> acc + meal.macros }
 
-        val targets = if (user.sex != null && latestWeight != null && user.heightCm != null && user.age != null) {
-            NutritionTargetsCalculator.daily(
-                sex = user.sex,
-                weightKg = latestWeight,
-                heightCm = user.heightCm,
-                age = user.age,
-                goal = user.goal,
-            )
-        } else {
-            null
-        }
+        val targets = NutritionTargetsCalculator.forUser(user, latestWeight, today)
 
         return RepsAiApiService.UserContext(
             goal = user.goal.toRepsAiGoal(),
             weightKg = latestWeight,
             heightCm = user.heightCm,
-            ageYears = user.age,
+            ageYears = user.ageOn(today),
             calorieTarget = targets?.calories,
             proteinTarget = targets?.protein,
             carbsTarget = targets?.carbs,
@@ -63,30 +55,21 @@ class RepsAiNutritionAssistantRepository @Inject constructor(
         )
     }
 
+    /**
+     * The backend returns a plain answer, never a meal draft, so the draft is
+     * always empty here and the ViewModel never moves on to [analyseAndCoach].
+     */
     override suspend fun understand(
         history: List<AssistantExchange>,
         message: String,
         conversationId: String?,
-    ): AssistantResult<UnderstandingResponse> {
-        return try {
-            val userContext = mapUserContext()
-
-            val apiResponse = apiService.sendMessageWithContext(
-                message = message,
-                conversationId = conversationId,
-                userContext = userContext,
-            )
-
-            val understanding = UnderstandingResponse(
-                message = apiResponse.message,
-                draft = MealDraft(),
-                conversationId = apiResponse.conversationId,
-                responseType = apiResponse.type,
-            )
-            AssistantResult.Success(understanding)
-        } catch (e: Exception) {
-            AssistantResult.Failure(mapExceptionToError(e))
-        }
+    ): AssistantResult<UnderstandingResponse> = chat(message, conversationId) { response ->
+        UnderstandingResponse(
+            message = response.message,
+            draft = MealDraft(),
+            conversationId = response.conversationId,
+            responseType = response.type,
+        )
     }
 
     override suspend fun analyseAndCoach(
@@ -101,29 +84,54 @@ class RepsAiNutritionAssistantRepository @Inject constructor(
         question: String,
         goal: Goal,
         conversationId: String?,
-    ): AssistantResult<String> {
-        return try {
-            val userContext = mapUserContext()
+    ): AssistantResult<String> = chat(question, conversationId) { it.message }
 
-            val apiResponse = apiService.sendMessageWithContext(
-                message = question,
+    /**
+     * One request to the backend, with every outcome mapped to a result.
+     * Cancellation is rethrown, not reported: a reply the user abandoned (New
+     * Chat, leaving the screen) must stop quietly instead of posting an error
+     * bubble into whatever is on screen next.
+     */
+    private suspend fun <T> chat(
+        message: String,
+        conversationId: String?,
+        transform: (RepsAiApiService.ChatResponse) -> T,
+    ): AssistantResult<T> {
+        if (!apiService.isConfigured) return AssistantResult.Failure(AssistantError.NotConfigured)
+        if (message.length > RepsAiApiService.MAX_MESSAGE_LENGTH) {
+            return AssistantResult.Failure(AssistantError.MessageTooLong)
+        }
+        return try {
+            val response = apiService.sendMessageWithContext(
+                message = message,
                 conversationId = conversationId,
-                userContext = userContext,
+                userContext = mapUserContext(),
             )
-            AssistantResult.Success(apiResponse.message)
+            AssistantResult.Success(transform(response))
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             AssistantResult.Failure(mapExceptionToError(e))
         }
     }
 
+    /**
+     * The whole cause chain is searched: the client wraps OkHttp's exception, and
+     * coroutine stack-trace recovery can wrap it once more, so the interesting
+     * type is rarely the outermost one.
+     */
     private fun mapExceptionToError(e: Exception): AssistantError {
-        return when (e) {
-            is RepsAiApiException -> when (e.statusCode) {
+        val chain = generateSequence<Throwable>(e) { it.cause }.take(8).toList()
+        val apiError = chain.firstNotNullOfOrNull { it as? RepsAiApiException }
+        return when {
+            apiError != null -> when (apiError.statusCode) {
+                413, 422 -> AssistantError.MessageTooLong
                 429 -> AssistantError.RateLimited
                 502, 503 -> AssistantError.ModelUnavailable
-                else -> AssistantError.Network
+                else -> AssistantError.Unknown
             }
-            is IOException -> AssistantError.Network
+            chain.any { it is InterruptedIOException } -> AssistantError.Timeout
+            chain.any { it is IOException } -> AssistantError.Network
             else -> AssistantError.Unknown
         }
     }

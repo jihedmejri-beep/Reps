@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -23,13 +23,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.reps.app.R
 import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsTheme
-import com.reps.app.domain.model.Difficulty
 import com.reps.app.feature.home.TodayExercise
 
 /** How many exercises the breakdown shows before collapsing the rest into "+N more". */
@@ -38,6 +38,10 @@ private const val MaxVisibleExercises = 5
 /**
  * The headline card on Home: what is scheduled today, a breakdown of the work it
  * contains, and a way straight into it.
+ *
+ * The duration is the plan's estimate and reads "≈". There is no difficulty pill:
+ * templates have no real difficulty, and showing "Intermediate" on every one was
+ * a label nobody chose.
  */
 @Composable
 fun TodayWorkoutCard(
@@ -46,7 +50,6 @@ fun TodayWorkoutCard(
     exerciseCount: Int,
     setCount: Int,
     durationMin: Int,
-    difficulty: Difficulty,
     exercises: List<TodayExercise>,
     onStart: () -> Unit,
     modifier: Modifier = Modifier,
@@ -107,15 +110,11 @@ fun TodayWorkoutCard(
             ) {
                 MetaChip(
                     painter = painterResource(R.drawable.ic_workouts),
-                    text = stringResource(R.string.home_exercise_count, exerciseCount),
+                    text = pluralStringResource(R.plurals.exercise_count, exerciseCount, exerciseCount),
                 )
                 MetaChip(
                     imageVector = Icons.Outlined.Schedule,
-                    text = stringResource(R.string.home_duration_min, durationMin),
-                )
-                MetaChip(
-                    painter = painterResource(R.drawable.ic_progress),
-                    text = stringResource(difficulty.labelRes),
+                    text = stringResource(R.string.workouts_estimated_min, durationMin),
                 )
             }
 

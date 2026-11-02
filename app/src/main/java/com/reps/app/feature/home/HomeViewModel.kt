@@ -2,8 +2,11 @@ package com.reps.app.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.reps.app.core.content.MotivationQuotes
+import com.reps.app.core.content.DailyRemark
+import com.reps.app.core.content.Remark
+import com.reps.app.core.util.DateTicker
 import com.reps.app.domain.model.MuscleGroup
+import com.reps.app.domain.model.SessionDraft
 import com.reps.app.domain.model.Streak
 import com.reps.app.domain.model.UnitSystem
 import com.reps.app.domain.model.WeightEntry
@@ -32,7 +35,17 @@ data class TodayExercise(
     val reps: Int,
 )
 
+/** An unfinished session, offered for resuming above everything else on Home. */
+data class ResumableSession(
+    val templateId: String,
+    val name: String,
+    val completedSets: Int,
+    val totalSets: Int,
+    val startedAtMs: Long,
+)
+
 data class HomeUiState(
+    val today: LocalDate = LocalDate.now(),
     val userName: String = "",
     val streak: Streak = Streak(),
     val todayWorkout: Workout? = null,
@@ -42,10 +55,11 @@ data class HomeUiState(
     val todayExercises: List<TodayExercise> = emptyList(),
     /** Sets across the whole workout, shown as a headline count. */
     val todaySetCount: Int = 0,
+    val resumable: ResumableSession? = null,
     val currentWeightKg: Double? = null,
     val weeklyDeltaKg: Double? = null,
     val units: UnitSystem = UnitSystem.METRIC,
-    val quote: String = "",
+    val remark: Remark? = null,
     val loading: Boolean = true,
 )
 
@@ -58,7 +72,8 @@ class HomeViewModel @Inject constructor(
     private val exerciseRepository: ExerciseRepository,
 ) : ViewModel() {
 
-    private val today = LocalDate.now()
+    /** Follows the calendar, so Home moves to the new day at midnight without a restart. */
+    private val today = DateTicker.today()
 
     /** Everything the Today card needs, resolved once the exercises are loaded. */
     private data class TodayWorkout(
@@ -69,7 +84,7 @@ class HomeViewModel @Inject constructor(
     )
 
     private val todayWorkoutFlow: Flow<TodayWorkout> =
-        workoutRepository.observeWorkoutFor(today).flatMapLatest { workout ->
+        today.flatMapLatest { date -> workoutRepository.observeWorkoutFor(date) }.flatMapLatest { workout ->
             if (workout == null) {
                 flowOf(TodayWorkout())
             } else {
@@ -101,25 +116,45 @@ class HomeViewModel @Inject constructor(
             }
         }
 
+    private val streak = today.flatMapLatest { workoutRepository.observeStreak(it) }
+
+    /** The remark needs exercise names only for records set today; looked up on demand. */
+    private val remark: Flow<Remark?> = combine(
+        today,
+        workoutRepository.observeSessions(),
+        workoutRepository.observeTemplates(),
+        ::Triple,
+    ).flatMapLatest { (date, sessions, templates) ->
+        flow {
+            val prIds = sessions.filter { it.date == date }.flatMap { it.prsHit }.distinct()
+            val names = if (prIds.isEmpty()) emptyMap() else exerciseRepository.getByIds(prIds).associate { it.id to it.name }
+            emit(DailyRemark.pick(sessions, templates, date) { names[it] })
+        }
+    }
+
+    private val body = combine(userRepository.observeUser(), weightRepository.observeEntries(), ::Pair)
+
     val uiState = combine(
-        userRepository.observeUser(),
-        weightRepository.observeEntries(),
+        combine(today, body, ::Pair),
         todayWorkoutFlow,
-    ) { user, weights, todayData ->
+        streak,
+        workoutRepository.observeDraft(),
+        remark,
+    ) { (date, userAndWeights), todayData, currentStreak, draft, currentRemark ->
+        val (user, weights) = userAndWeights
         HomeUiState(
+            today = date,
             userName = user?.name.orEmpty(),
-            streak = Streak(
-                count = user?.streakCount ?: 0,
-                lastWorkoutDate = user?.lastWorkoutDate,
-            ),
+            streak = currentStreak,
             todayWorkout = todayData.workout,
             todayMuscleGroups = todayData.muscles,
             todayExercises = todayData.exercises,
             todaySetCount = todayData.setCount,
+            resumable = draft?.toResumable(),
             currentWeightKg = weights.maxByOrNull { it.date }?.weightKg,
             weeklyDeltaKg = weeklyDelta(weights),
             units = user?.units ?: UnitSystem.METRIC,
-            quote = MotivationQuotes.forToday(today),
+            remark = currentRemark,
             loading = false,
         )
     }.stateIn(
@@ -127,6 +162,11 @@ class HomeViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = HomeUiState(),
     )
+
+    private fun SessionDraft.toResumable(): ResumableSession {
+        val sets = exercises.flatMap { it.sets }
+        return ResumableSession(templateId, name, sets.count { it.completed }, sets.size, startedAtMs)
+    }
 
     /**
      * Change against the reading closest to seven days ago. Falling back to the

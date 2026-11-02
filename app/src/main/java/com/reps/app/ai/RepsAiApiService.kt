@@ -15,31 +15,43 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import java.io.IOException
 import java.util.concurrent.TimeUnit
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
-import javax.net.ssl.X509TrustManager
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 /**
  * HTTP Client connecting the REPS Android Application to the RepsAI FastAPI Backend.
  *
+ * The backend answers `/api/v1/chat` with one JSON body - there is no streaming -
+ * so a call is finished exactly when this suspends back with a [ChatResponse] or
+ * throws.
+ *
  * Base URL Resolution:
- * - Default on Android Emulator: "http://10.0.2.2:8000" (routes to Windows host 127.0.0.1:8000)
- * - Can be overridden via system property `reps.ai.base_url` or at runtime via [baseUrl].
+ * - The app passes `BuildConfig.REPS_AI_BASE_URL` (Gradle property `reps.ai.baseUrl`).
+ *   Debug builds default to the emulator host "http://10.0.2.2:8000"; release builds
+ *   default to blank, which reports [isConfigured] = false rather than calling a
+ *   development address from a user's phone.
+ * - Tests may pass a URL directly or set the system property `reps.ai.base_url`.
  */
 class RepsAiApiService(
     initialBaseUrl: String? = null,
+    connectTimeoutMs: Long = CONNECT_TIMEOUT_SECONDS * 1_000,
+    readTimeoutMs: Long = READ_TIMEOUT_SECONDS * 1_000,
+    callTimeoutMs: Long = CALL_TIMEOUT_SECONDS * 1_000,
 ) {
     companion object {
         const val EMULATOR_BASE_URL = "http://10.0.2.2:8000"
         const val LOCALHOST_BASE_URL = "http://127.0.0.1:8000"
-        const val DEFAULT_BASE_URL = EMULATOR_BASE_URL
 
         const val HEALTH_ENDPOINT = "/health"
         const val CHAT_ENDPOINT = "/api/v1/chat"
         const val CONNECT_TIMEOUT_SECONDS = 10L
         const val READ_TIMEOUT_SECONDS = 30L
+
+        /** Upper bound on one whole exchange, so a stalled server can never hang a turn. */
+        const val CALL_TIMEOUT_SECONDS = 45L
+
+        /** The backend's `ChatRequest.message` limit (`max_length=4000`). */
+        const val MAX_MESSAGE_LENGTH = 4_000
 
         private fun logDebug(tag: String, message: String) {
             try {
@@ -62,35 +74,22 @@ class RepsAiApiService(
     @Volatile
     var baseUrl: String = initialBaseUrl
         ?: System.getProperty("reps.ai.base_url")
-        ?: DEFAULT_BASE_URL
+        ?: ""
 
-    private val client: OkHttpClient
+    /** False when no endpoint is set for this build; callers should not attempt a request. */
+    val isConfigured: Boolean get() = baseUrl.isNotBlank()
+
+    // Platform TLS validation only. An earlier version installed a trust-all
+    // manager, which silently accepted any certificate for every HTTPS call.
+    private val client: OkHttpClient = OkHttpClient.Builder()
+        .connectTimeout(connectTimeoutMs, TimeUnit.MILLISECONDS)
+        .readTimeout(readTimeoutMs, TimeUnit.MILLISECONDS)
+        .callTimeout(callTimeoutMs, TimeUnit.MILLISECONDS)
+        .build()
 
     private val gson: Gson = GsonBuilder()
         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
         .create()
-
-    init {
-        val trustAllManager = object : X509TrustManager {
-            override fun checkClientTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {}
-            override fun checkServerTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {}
-            override fun getAcceptedIssuers(): Array<java.security.cert.X509Certificate> = emptyArray()
-        }
-
-        val sslContext = try {
-            SSLContext.getInstance("TLS").also {
-                it.init(null, arrayOf<TrustManager>(trustAllManager), null)
-            }
-        } catch (e: Exception) {
-            throw RuntimeException("Failed to initialize SSL context", e)
-        }
-
-        client = OkHttpClient.Builder()
-            .sslSocketFactory(sslContext.socketFactory, trustAllManager)
-            .connectTimeout(CONNECT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            .readTimeout(READ_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            .build()
-    }
 
     enum class HealthStatus {
         CONNECTED,
@@ -184,6 +183,14 @@ class RepsAiApiService(
                         }
                         try {
                             val chatResponse = gson.fromJson(responseBody, ChatResponse::class.java)
+                            // Gson fills Kotlin non-null fields with null when the key is
+                            // missing; catch that here instead of as an NPE in the UI.
+                            if ((chatResponse.message as String?).isNullOrBlank() ||
+                                (chatResponse.conversationId as String?).isNullOrBlank()
+                            ) {
+                                cont.resumeWithException(IOException("AI response missing message or conversation_id"))
+                                return
+                            }
                             logDebug(
                                 "RepsAi",
                                 "AI RESPONSE SUCCESS: type=${chatResponse.type} sources=${chatResponse.sources.size} conv=${chatResponse.conversationId}"

@@ -1,13 +1,16 @@
 package com.reps.app.core.util
 
+import com.reps.app.domain.model.ActivityLevel
 import com.reps.app.domain.model.Goal
 import com.reps.app.domain.model.Macros
 import com.reps.app.domain.model.Sex
+import com.reps.app.domain.model.User
+import java.time.LocalDate
 
 /**
- * Daily macro targets from the profile's own numbers: Harris-Benedict BMR
- * (the brief's formula, see [BmrCalculator]) scaled by a moderate activity
- * factor, then shaped by the goal.
+ * Daily macro targets from the profile's own numbers: Mifflin-St Jeor BMR
+ * (see [BmrCalculator]) scaled by the user's own activity level into TDEE, then
+ * shaped by the goal.
  *
  *   - Calories: cut -18%, bulk +12%, maintain as-is.
  *   - Protein: grams per kg bodyweight by goal (cutting protects the most).
@@ -15,9 +18,6 @@ import com.reps.app.domain.model.Sex
  *   - Carbs: whatever remains, floored at zero.
  */
 object NutritionTargetsCalculator {
-
-    /** 3-5 sessions a week; there is no per-user activity input yet. */
-    private const val ACTIVITY_FACTOR = 1.45
 
     private const val CALORIE_CUT_FACTOR = 0.82
     private const val CALORIE_BULK_FACTOR = 1.12
@@ -28,12 +28,24 @@ object NutritionTargetsCalculator {
 
     private const val FAT_CALORIE_SHARE = 0.25
 
-    /** Shown until the profile has sex, height, age and a weigh-in to work from. */
+    /**
+     * Shown until the profile has sex, height, age, activity level and a weigh-in
+     * to work from. The UI labels these as general targets, never as the user's own.
+     */
     fun fallback(): Macros = Macros(calories = 2400.0, protein = 180.0, carbs = 260.0, fat = 70.0)
 
-    fun daily(sex: Sex, weightKg: Double, heightCm: Double, age: Int, goal: Goal): Macros {
+    /** Personal targets, or null when [user] lacks something the estimate needs. */
+    fun forUser(user: User?, weightKg: Double?, today: LocalDate = LocalDate.now()): Macros? {
+        val sex = user?.sex ?: return null
+        val heightCm = user.heightCm ?: return null
+        val age = user.ageOn(today) ?: return null
+        val activity = user.activityLevel ?: return null
+        return daily(sex, weightKg ?: return null, heightCm, age, user.goal, activity)
+    }
+
+    fun daily(sex: Sex, weightKg: Double, heightCm: Double, age: Int, goal: Goal, activity: ActivityLevel): Macros {
         val bmr = BmrCalculator.calculate(sex, weightKg, heightCm, age)
-        val tdee = bmr * ACTIVITY_FACTOR
+        val tdee = BmrCalculator.tdee(bmr, activity)
         val calories = when (goal) {
             Goal.CUT -> tdee * CALORIE_CUT_FACTOR
             Goal.BULK -> tdee * CALORIE_BULK_FACTOR

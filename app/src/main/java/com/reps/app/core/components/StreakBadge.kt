@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -28,6 +29,7 @@ import com.reps.app.R
 import com.reps.app.core.theme.RepsAchievement
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.domain.model.Streak
+import com.reps.app.domain.model.StreakUnit
 
 private const val METER_BARS = 7
 
@@ -42,8 +44,16 @@ fun StreakBadge(
     streak: Streak,
     modifier: Modifier = Modifier,
 ) {
-    val countText = stringResource(R.string.home_streak_count, streak.count)
-    val nudge = stringResource(R.string.home_streak_nudge, streak.nextMilestone)
+    val countText = when (streak.unit) {
+        StreakUnit.SCHEDULED_DAYS -> pluralStringResource(R.plurals.streak_days, streak.count, streak.count)
+        StreakUnit.WEEKS -> pluralStringResource(R.plurals.streak_weeks, streak.count, streak.count)
+    }
+    val nudge = stringResource(
+        when (streak.unit) {
+            StreakUnit.SCHEDULED_DAYS -> R.string.streak_nudge_days
+            StreakUnit.WEEKS -> R.string.streak_nudge_weeks
+        },
+    )
 
     Row(
         modifier = modifier

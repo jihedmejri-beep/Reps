@@ -34,13 +34,17 @@ object Routes {
     const val NUTRITION_ASSISTANT_HISTORY = "nutrition/assistant/history"
 
     const val EXERCISE_DETAIL = "exercise/{exerciseId}"
-    const val WORKOUT_BUILDER = "workout/builder"
+    /** New workout without an argument; editing an existing one passes its id. */
+    const val WORKOUT_BUILDER = "workout/builder?workoutId={workoutId}"
     const val BODY_MAP = "workouts/bodymap"
     const val WORKOUT_SESSION = "workout/session/{workoutId}"
     const val NOTIFICATIONS = "notifications"
+    const val HISTORY = "history"
 
     fun exerciseDetail(exerciseId: String) = "exercise/$exerciseId"
     fun workoutSession(workoutId: String) = "workout/session/$workoutId"
+    fun workoutBuilder(workoutId: String? = null) =
+        if (workoutId == null) "workout/builder" else "workout/builder?workoutId=$workoutId"
 }
 
 /**

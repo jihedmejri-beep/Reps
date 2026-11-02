@@ -1,11 +1,14 @@
 package com.reps.app.core.components
 
-import androidx.compose.animation.Crossfade
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,6 +17,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,276 +25,225 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Replay
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.withFrameNanos
+import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.reps.app.R
+import com.reps.app.core.theme.RepsError
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsOffWhite
 import com.reps.app.core.theme.RepsOnGreen
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.core.util.DateUtils
-import kotlinx.coroutines.isActive
+import com.reps.app.domain.model.RestState
 
 private const val AdjustStepSeconds = 15
 
-/**
- * Hoisted, ticking countdown. Frame-driven rather than second-stepped, so the
- * arc in [RestTimer] can sweep smoothly instead of jumping once a second.
- *
- * Not itself a [Composable] - [rememberRestTimerState] is the entry point, and
- * only [RestTimer] drives the actual ticking, so a state that is not currently
- * on screen does not advance in the background.
- */
-@Stable
-class RestTimerState internal constructor(
-    initialSeconds: Int,
-    private val onComplete: () -> Unit,
-) {
-    var totalSeconds by mutableIntStateOf(initialSeconds.coerceAtLeast(1))
-        private set
-    var remainingSeconds by mutableFloatStateOf(totalSeconds.toFloat())
-        private set
-    var running by mutableStateOf(false)
-        private set
-    var completed by mutableStateOf(false)
-        private set
-
-    val remainingWholeSeconds: Int get() = kotlin.math.ceil(remainingSeconds).toInt()
-
-    /** 1 at the start of the rest, 0 once it is spent. */
-    val progress: Float get() = (remainingSeconds / totalSeconds).coerceIn(0f, 1f)
-
-    /** Starts counting down, restarting from [totalSeconds] if it had already finished. */
-    fun start() {
-        if (remainingSeconds <= 0f) remainingSeconds = totalSeconds.toFloat()
-        completed = false
-        running = true
-    }
-
-    fun pause() {
-        running = false
-    }
-
-    fun resume() {
-        if (!completed) running = true
-    }
-
-    fun restart() {
-        remainingSeconds = totalSeconds.toFloat()
-        completed = false
-        running = true
-    }
-
-    /** Ends the rest early, e.g. the user is ready for the next set right away. */
-    fun skip() {
-        if (!completed) finish()
-    }
-
-    /** Adds or removes time on the fly; a negative delta can trigger completion. */
-    fun adjust(deltaSeconds: Int) {
-        if (completed) return
-        remainingSeconds = (remainingSeconds + deltaSeconds).coerceAtLeast(0f)
-        if (remainingSeconds <= 0f) finish()
-    }
-
-    internal fun tick(deltaSeconds: Float) {
-        if (!running) return
-        remainingSeconds = (remainingSeconds - deltaSeconds).coerceAtLeast(0f)
-        if (remainingSeconds <= 0f) finish()
-    }
-
-    private fun finish() {
-        running = false
-        completed = true
-        remainingSeconds = 0f
-        onComplete()
-    }
-}
-
-/**
- * @param initialSeconds rest duration. Changing it starts a fresh state - callers
- *   that want a new rest for every set should key their call site accordingly
- *   (e.g. wrap in `key(setId) { rememberRestTimerState(...) }`).
- * @param autoStart begins counting down as soon as this enters composition,
- *   which is how a workout session starts rest automatically after a set.
- */
-@Composable
-fun rememberRestTimerState(
-    initialSeconds: Int = 90,
-    autoStart: Boolean = false,
-    onComplete: () -> Unit = {},
-): RestTimerState {
-    val latestOnComplete by rememberUpdatedState(onComplete)
-    val state = remember(initialSeconds) {
-        RestTimerState(initialSeconds) { latestOnComplete() }
-    }
-    LaunchedEffect(state) { if (autoStart) state.start() }
-    return state
-}
-
-private val ArcDiameter = 224.dp
-private val ArcStrokeWidth = 14.dp
-private val PrimaryButtonSize = 64.dp
+private val ArcDiameter = 200.dp
+private val ArcStrokeWidth = 12.dp
+private val PrimaryButtonSize = 56.dp
 private val ChipButtonSize = 44.dp
 
 /**
- * The floating rest timer shown during an active workout: a half-circle dial
- * that sweeps green while resting, settles to a neutral outline once the rest
- * is spent, with pause/resume/restart/skip and +-15s controls underneath.
+ * The current time, advancing every frame while [running] and frozen otherwise.
+ * Display only: the remaining time itself always comes from the [RestState]
+ * timestamps, so a dropped frame or a trip to the background cannot skew it.
+ */
+@Composable
+private fun rememberNow(running: Boolean): Long {
+    var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    LaunchedEffect(running) {
+        now = System.currentTimeMillis()
+        while (running) {
+            withFrameMillis { }
+            now = System.currentTimeMillis()
+        }
+    }
+    return now
+}
+
+/**
+ * The rest between sets. RED while resting, GREEN once it is time for the next
+ * set, and it stays green until the user dismisses it or ticks another set, so a
+ * finished rest is never missed.
  *
- * A self-contained card - the caller positions it (e.g. `Modifier.align(...)`
- * in a `Box` over the session content), same as [com.reps.app.navigation.RepsFloatingNavBar].
+ * Collapsed it is a slim bar docked above the session controls (countdown,
+ * what is next, pause/+15/skip) so the set list stays usable; tapping it expands
+ * the full arc with every control.
+ *
+ * Stateless: [state] comes from the session ViewModel, which owns the timer.
  */
 @Composable
 fun RestTimer(
-    state: RestTimerState,
+    state: RestState,
+    exerciseName: String,
+    nextLabel: String,
+    expanded: Boolean,
+    onToggleExpanded: () -> Unit,
+    onPause: () -> Unit,
+    onResume: () -> Unit,
+    onAdjust: (seconds: Int) -> Unit,
+    onSkip: () -> Unit,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val haptic = LocalHapticFeedback.current
+    val ticking = !state.isPaused && state.endsAtMs != null && !state.isFinished(System.currentTimeMillis())
+    val now = rememberNow(ticking)
+    val finished = state.isFinished(now)
 
-    // Frame-driven so the arc sweeps continuously; restarts whenever `running`
-    // flips, and stops itself the moment the state does.
-    LaunchedEffect(state.running) {
-        if (!state.running) return@LaunchedEffect
-        var lastFrame = withFrameNanos { it }
-        while (isActive && state.running) {
-            val frame = withFrameNanos { it }
-            state.tick((frame - lastFrame) / 1_000_000_000f)
-            lastFrame = frame
-        }
+    LaunchedEffect(finished) {
+        if (finished) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
     }
 
-    LaunchedEffect(state.completed) {
-        if (state.completed) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-    }
-
-    val arcColor by animateColorAsState(
-        targetValue = if (state.completed) RepsTheme.colors.outline else RepsGreen,
+    val accent by animateColorAsState(
+        targetValue = if (finished) RepsGreen else RepsError,
         animationSpec = tween(220, easing = FastOutSlowInEasing),
-        label = "restTimerArcColor",
+        label = "restAccent",
     )
-
     val pulse = remember { Animatable(1f) }
-    LaunchedEffect(state.completed) {
-        if (state.completed) {
-            pulse.animateTo(1.06f, tween(140, easing = FastOutSlowInEasing))
+    LaunchedEffect(finished) {
+        if (finished) {
+            pulse.animateTo(1.04f, tween(140, easing = FastOutSlowInEasing))
             pulse.animateTo(1f, spring(dampingRatio = 0.5f, stiffness = 300f))
         }
     }
 
+    val timeLabel = DateUtils.formatClock(((state.remainingMs(now) + 999) / 1000).toInt())
+    val status = stringResource(
+        when {
+            finished -> R.string.rest_timer_complete
+            state.isPaused -> R.string.rest_timer_paused
+            else -> R.string.rest_timer_resting
+        },
+    )
+
     Column(
         modifier = modifier
             .scale(pulse.value)
-            .shadow(
-                elevation = 24.dp,
-                shape = MaterialTheme.shapes.large,
-                ambientColor = RepsGreen,
-                spotColor = RepsGreen,
-            )
+            .fillMaxWidth()
             .background(RepsTheme.colors.surfaceElevated, MaterialTheme.shapes.large)
-            .border(1.dp, RepsOffWhite.copy(alpha = 0.07f), MaterialTheme.shapes.large)
-            .padding(horizontal = RepsTheme.dimens.cardPadding, vertical = 18.dp)
-            .width(ArcDiameter + ArcStrokeWidth + 32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+            .border(1.dp, accent.copy(alpha = 0.55f), MaterialTheme.shapes.large)
+            .semantics { liveRegion = LiveRegionMode.Polite },
     ) {
-        Text(
-            text = stringResource(R.string.rest_timer_eyebrow).uppercase(),
-            style = RepsTheme.textStyles.eyebrow,
-            color = RepsGreen,
-            modifier = Modifier.fillMaxWidth(),
-        )
-
-        RestTimerArc(
-            progress = state.progress,
-            timeLabel = DateUtils.formatClock(state.remainingWholeSeconds),
-            statusLabel = statusLabel(state),
-            arcColor = arcColor,
-            modifier = Modifier.padding(top = 14.dp),
-        )
-
-        Crossfade(
-            targetState = state.completed,
-            animationSpec = tween(220),
-            label = "restTimerControls",
-            modifier = Modifier.padding(top = 18.dp),
-        ) { isCompleted ->
-            if (isCompleted) {
-                RestTimerIconChip(
-                    icon = Icons.Filled.Replay,
-                    contentDescription = stringResource(R.string.rest_timer_restart_cd),
-                    onClick = state::restart,
-                    size = PrimaryButtonSize,
-                    primary = true,
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClickLabel = stringResource(if (expanded) R.string.rest_timer_collapse_cd else R.string.rest_timer_expand_cd), onClick = onToggleExpanded)
+                .padding(horizontal = 14.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            MiniRing(progress = state.progress(now), color = accent, finished = finished)
+            Column(Modifier.weight(1f)) {
+                Text(
+                    text = if (finished) stringResource(R.string.rest_timer_go).uppercase() else timeLabel,
+                    style = RepsTheme.textStyles.statValue,
+                    color = if (finished) RepsGreen else RepsTheme.colors.textPrimary,
                 )
-            } else {
+                Text(
+                    text = nextLabel,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = RepsTheme.colors.textSecondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+            if (finished) {
+                TimerChip(Icons.Filled.Check, stringResource(R.string.rest_timer_dismiss_cd), onDismiss, ChipButtonSize, fill = RepsGreen)
+            } else if (!expanded) {
+                TimerChip(
+                    icon = if (state.isPaused) Icons.Filled.PlayArrow else Icons.Filled.Pause,
+                    contentDescription = stringResource(if (state.isPaused) R.string.rest_timer_resume_cd else R.string.rest_timer_pause_cd),
+                    onClick = if (state.isPaused) onResume else onPause,
+                    size = ChipButtonSize,
+                )
+                TimerTextChip(stringResource(R.string.rest_timer_plus15), stringResource(R.string.rest_timer_add_cd), { onAdjust(AdjustStepSeconds) }, ChipButtonSize)
+                TimerChip(Icons.Filled.SkipNext, stringResource(R.string.rest_timer_skip_cd), onSkip, ChipButtonSize)
+            }
+            Icon(
+                imageVector = if (expanded) Icons.Filled.KeyboardArrowDown else Icons.Filled.KeyboardArrowUp,
+                contentDescription = null,
+                tint = RepsTheme.colors.textTertiary,
+            )
+        }
+
+        AnimatedContent(
+            targetState = expanded && !finished,
+            transitionSpec = { fadeIn(tween(200)) togetherWith fadeOut(tween(150)) },
+            label = "restExpanded",
+        ) { showFull ->
+            if (!showFull) {
+                Spacer(Modifier.height(0.dp))
+                return@AnimatedContent
+            }
+            Column(
+                Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 18.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = "${stringResource(R.string.rest_timer_eyebrow).uppercase()} · $exerciseName",
+                    style = RepsTheme.textStyles.eyebrow,
+                    color = accent,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                RestTimerArc(
+                    progress = state.progress(now),
+                    timeLabel = timeLabel,
+                    statusLabel = status,
+                    arcColor = accent,
+                    durationLabel = stringResource(R.string.rest_timer_of_total, DateUtils.formatClock((state.durationMs / 1000).toInt())),
+                    modifier = Modifier.padding(top = 12.dp),
+                )
                 Row(
+                    Modifier.padding(top = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(14.dp, Alignment.CenterHorizontally),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    RestTimerIconChip(
-                        icon = Icons.Filled.Replay,
-                        contentDescription = stringResource(R.string.rest_timer_restart_cd),
-                        onClick = state::restart,
-                        size = ChipButtonSize,
-                    )
-                    RestTimerTextChip(
-                        text = stringResource(R.string.rest_timer_minus15),
-                        contentDescription = stringResource(R.string.rest_timer_subtract_cd),
-                        onClick = { state.adjust(-AdjustStepSeconds) },
-                        size = ChipButtonSize,
-                    )
-                    RestTimerIconChip(
-                        icon = if (state.running) Icons.Filled.Pause else Icons.Filled.PlayArrow,
-                        contentDescription = stringResource(
-                            if (state.running) R.string.rest_timer_pause_cd else R.string.rest_timer_resume_cd,
-                        ),
-                        onClick = { if (state.running) state.pause() else state.resume() },
+                    TimerTextChip(stringResource(R.string.rest_timer_minus15), stringResource(R.string.rest_timer_subtract_cd), { onAdjust(-AdjustStepSeconds) }, ChipButtonSize)
+                    TimerChip(
+                        icon = if (state.isPaused) Icons.Filled.PlayArrow else Icons.Filled.Pause,
+                        contentDescription = stringResource(if (state.isPaused) R.string.rest_timer_resume_cd else R.string.rest_timer_pause_cd),
+                        onClick = if (state.isPaused) onResume else onPause,
                         size = PrimaryButtonSize,
-                        primary = true,
+                        fill = accent,
                     )
-                    RestTimerTextChip(
-                        text = stringResource(R.string.rest_timer_plus15),
-                        contentDescription = stringResource(R.string.rest_timer_add_cd),
-                        onClick = { state.adjust(AdjustStepSeconds) },
-                        size = ChipButtonSize,
-                    )
-                    RestTimerIconChip(
-                        icon = Icons.Filled.SkipNext,
-                        contentDescription = stringResource(R.string.rest_timer_skip_cd),
-                        onClick = state::skip,
-                        size = ChipButtonSize,
-                    )
+                    TimerTextChip(stringResource(R.string.rest_timer_plus15), stringResource(R.string.rest_timer_add_cd), { onAdjust(AdjustStepSeconds) }, ChipButtonSize)
+                    TimerChip(Icons.Filled.SkipNext, stringResource(R.string.rest_timer_skip_cd), onSkip, ChipButtonSize)
                 }
             }
         }
@@ -298,14 +251,19 @@ fun RestTimer(
 }
 
 @Composable
-private fun statusLabel(state: RestTimerState): String = stringResource(
-    when {
-        state.completed -> R.string.rest_timer_complete
-        state.running -> R.string.rest_timer_resting
-        state.remainingSeconds < state.totalSeconds -> R.string.rest_timer_paused
-        else -> R.string.rest_timer_ready
-    },
-)
+private fun MiniRing(progress: Float, color: Color, finished: Boolean) {
+    val track = RepsTheme.colors.outline
+    Box(Modifier.size(36.dp), contentAlignment = Alignment.Center) {
+        Canvas(Modifier.size(36.dp)) {
+            val stroke = 4.dp.toPx()
+            val arc = Size(size.width - stroke, size.height - stroke)
+            val topLeft = Offset(stroke / 2, stroke / 2)
+            drawArc(track, -90f, 360f, false, topLeft, arc, style = Stroke(stroke))
+            drawArc(color, -90f, 360f * (if (finished) 1f else progress), false, topLeft, arc, style = Stroke(stroke, cap = StrokeCap.Round))
+        }
+        if (finished) Icon(Icons.Filled.Check, contentDescription = null, tint = RepsGreen, modifier = Modifier.size(16.dp))
+    }
+}
 
 @Composable
 private fun RestTimerArc(
@@ -313,68 +271,47 @@ private fun RestTimerArc(
     timeLabel: String,
     statusLabel: String,
     arcColor: Color,
+    durationLabel: String,
     modifier: Modifier = Modifier,
 ) {
-    val strokeWidthPx = with(androidx.compose.ui.platform.LocalDensity.current) { ArcStrokeWidth.toPx() }
+    val strokeWidthPx = with(LocalDensity.current) { ArcStrokeWidth.toPx() }
     // The draw scope below is not composable, so the track colour is read here.
     val trackColor = RepsTheme.colors.outline
-    Box(modifier.size(ArcDiameter + ArcStrokeWidth, ArcDiameter / 2 + ArcStrokeWidth)) {
+    Box(modifier.size(ArcDiameter + ArcStrokeWidth, ArcDiameter / 2 + ArcStrokeWidth + 18.dp)) {
         Canvas(Modifier.fillMaxWidth().height(ArcDiameter / 2 + ArcStrokeWidth)) {
             val diameter = size.width - strokeWidthPx
             val arcSize = Size(diameter, diameter)
-            val topLeft = androidx.compose.ui.geometry.Offset(strokeWidthPx / 2f, strokeWidthPx / 2f)
-            drawArc(
-                color = trackColor,
-                startAngle = 180f,
-                sweepAngle = 180f,
-                useCenter = false,
-                topLeft = topLeft,
-                size = arcSize,
-                style = Stroke(width = strokeWidthPx, cap = StrokeCap.Round),
-            )
-            drawArc(
-                color = arcColor,
-                startAngle = 180f,
-                sweepAngle = 180f * progress,
-                useCenter = false,
-                topLeft = topLeft,
-                size = arcSize,
-                style = Stroke(width = strokeWidthPx, cap = StrokeCap.Round),
-            )
+            val topLeft = Offset(strokeWidthPx / 2f, strokeWidthPx / 2f)
+            drawArc(trackColor, 180f, 180f, false, topLeft, arcSize, style = Stroke(strokeWidthPx, cap = StrokeCap.Round))
+            drawArc(arcColor, 180f, 180f * progress, false, topLeft, arcSize, style = Stroke(strokeWidthPx, cap = StrokeCap.Round))
         }
         Column(
-            modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 6.dp),
+            modifier = Modifier.align(Alignment.BottomCenter),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(text = timeLabel, style = RepsTheme.textStyles.statValue, color = RepsTheme.colors.textPrimary)
-            Text(
-                text = statusLabel,
-                style = RepsTheme.textStyles.eyebrow,
-                color = RepsTheme.colors.textSecondary,
-                modifier = Modifier.padding(top = 2.dp),
-            )
+            Text(text = statusLabel, style = RepsTheme.textStyles.eyebrow, color = RepsTheme.colors.textSecondary, modifier = Modifier.padding(top = 2.dp))
+            Text(text = durationLabel, style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textTertiary)
         }
     }
 }
 
 @Composable
-private fun RestTimerIconChip(
+private fun TimerChip(
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     contentDescription: String,
     onClick: () -> Unit,
     size: Dp,
-    primary: Boolean = false,
+    fill: Color? = null,
 ) {
     Box(
         modifier = Modifier
             .size(size)
             .then(
-                if (primary) {
-                    Modifier.shadow(12.dp, CircleShape, ambientColor = RepsGreen, spotColor = RepsGreen)
-                        .background(RepsGreen, CircleShape)
+                if (fill != null) {
+                    Modifier.background(fill, CircleShape)
                 } else {
-                    Modifier.background(RepsTheme.colors.surfaceElevated, CircleShape)
-                        .border(1.dp, RepsTheme.colors.outline, CircleShape)
+                    Modifier.background(RepsTheme.colors.surface, CircleShape).border(1.dp, RepsTheme.colors.outline, CircleShape)
                 },
             )
             .clickable(role = Role.Button, onClickLabel = contentDescription, onClick = onClick),
@@ -383,23 +320,18 @@ private fun RestTimerIconChip(
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
-            tint = if (primary) RepsOnGreen else RepsTheme.colors.textPrimary,
-            modifier = Modifier.size(if (primary) 28.dp else 18.dp),
+            tint = if (fill != null) RepsOnGreen else RepsTheme.colors.textPrimary,
+            modifier = Modifier.size(if (size >= PrimaryButtonSize) 26.dp else 18.dp),
         )
     }
 }
 
 @Composable
-private fun RestTimerTextChip(
-    text: String,
-    contentDescription: String,
-    onClick: () -> Unit,
-    size: Dp,
-) {
+private fun TimerTextChip(text: String, contentDescription: String, onClick: () -> Unit, size: Dp) {
     Box(
         modifier = Modifier
             .size(size)
-            .background(RepsTheme.colors.surfaceElevated, CircleShape)
+            .background(RepsTheme.colors.surface, CircleShape)
             .border(1.dp, RepsTheme.colors.outline, CircleShape)
             .clickable(role = Role.Button, onClickLabel = contentDescription, onClick = onClick),
         contentAlignment = Alignment.Center,
@@ -412,31 +344,32 @@ private fun RestTimerTextChip(
 @Composable
 private fun RestTimerRunningPreview() {
     RepsTheme {
-        val state = rememberRestTimerState(initialSeconds = 90, autoStart = true)
-        Box(Modifier.padding(24.dp)) { RestTimer(state) }
-    }
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFF0B0B0A)
-@Composable
-private fun RestTimerPausedPreview() {
-    RepsTheme {
-        val state = rememberRestTimerState(initialSeconds = 90)
-        LaunchedEffect(state) {
-            state.start()
-            state.adjust(-30)
-            state.pause()
+        val now = System.currentTimeMillis()
+        Box(Modifier.padding(16.dp).width(360.dp)) {
+            RestTimer(
+                state = RestState("bench", 0, 90_000, endsAtMs = now + 62_000),
+                exerciseName = "Bench Press",
+                nextLabel = "Next: Bench Press · set 2 of 4",
+                expanded = true,
+                onToggleExpanded = {}, onPause = {}, onResume = {}, onAdjust = {}, onSkip = {}, onDismiss = {},
+            )
         }
-        Box(Modifier.padding(24.dp)) { RestTimer(state) }
     }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFF0B0B0A)
 @Composable
-private fun RestTimerCompletedPreview() {
+private fun RestTimerFinishedPreview() {
     RepsTheme {
-        val state = rememberRestTimerState(initialSeconds = 90)
-        LaunchedEffect(state) { state.skip() }
-        Box(Modifier.padding(24.dp)) { RestTimer(state) }
+        val now = System.currentTimeMillis()
+        Box(Modifier.padding(16.dp).width(360.dp)) {
+            RestTimer(
+                state = RestState("bench", 0, 90_000, endsAtMs = now - 1),
+                exerciseName = "Bench Press",
+                nextLabel = "Next: Bench Press · set 2 of 4",
+                expanded = false,
+                onToggleExpanded = {}, onPause = {}, onResume = {}, onAdjust = {}, onSkip = {}, onDismiss = {},
+            )
+        }
     }
 }

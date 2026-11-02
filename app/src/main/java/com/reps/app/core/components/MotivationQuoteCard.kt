@@ -30,6 +30,8 @@ import com.reps.app.core.theme.RepsTheme
 fun MotivationQuoteCard(
     quote: String,
     modifier: Modifier = Modifier,
+    /** A line about the user's own training, under the quote; omitted when there is none. */
+    remark: String? = null,
 ) {
     Box(
         modifier
@@ -61,6 +63,14 @@ fun MotivationQuoteCard(
                 color = RepsOnGreen,
                 modifier = Modifier.padding(top = 8.dp),
             )
+            if (remark != null) {
+                Text(
+                    text = remark,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = RepsOnGreen.copy(alpha = 0.85f),
+                    modifier = Modifier.padding(top = 10.dp),
+                )
+            }
         }
     }
 }

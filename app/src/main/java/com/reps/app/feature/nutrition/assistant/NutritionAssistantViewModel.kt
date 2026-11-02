@@ -14,7 +14,11 @@ import com.reps.app.domain.repository.AssistantResult
 import com.reps.app.domain.repository.NutritionAssistantRepository
 import com.reps.app.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -42,16 +46,36 @@ private const val MaxTitleLength = 48
  * content. Swapping either implementation touches only `RepositoryModule`.
  */
 @HiltViewModel
-class NutritionAssistantViewModel @Inject constructor(
+class NutritionAssistantViewModel(
     private val assistant: NutritionAssistantRepository,
     private val history: AssistantConversationRepository,
     private val userRepository: UserRepository,
-) : ViewModel() {
+    /** Becomes `viewModelScope`; tests pass an unconfined one to drive turns deterministically. */
+    scope: CoroutineScope,
+) : ViewModel(scope) {
+
+    /** The same scope `viewModelScope` would create by default; cancelled when the ViewModel is cleared. */
+    @Inject constructor(
+        assistant: NutritionAssistantRepository,
+        history: AssistantConversationRepository,
+        userRepository: UserRepository,
+    ) : this(assistant, history, userRepository, CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate))
 
     /** The conversation currently on screen. Empty means the welcome state. */
     private val transcript = MutableStateFlow<List<ChatMessage>>(emptyList())
 
-    private val responding = MutableStateFlow(false)
+    private val phase = MutableStateFlow(ReplyPhase.IDLE)
+
+    private val restoredDraft = MutableStateFlow<RestoredDraft?>(null)
+
+    /**
+     * Which turn currently owns [phase]. A turn only writes its outcome back while
+     * it is still the active one, so an abandoned reply (New Chat, opening a saved
+     * chat) can never flip a newer turn's state. A counter rather than a Job
+     * comparison because `viewModelScope` dispatches immediately: a reply that
+     * completes without suspending finishes before `launch` even returns.
+     */
+    private var activeTurn = 0L
 
     /**
      * The stored conversation turns are being appended to, or null when the
@@ -68,13 +92,15 @@ class NutritionAssistantViewModel @Inject constructor(
 
     val uiState: StateFlow<AssistantUiState> = combine(
         transcript,
-        responding,
+        phase,
         history.observeConversations(),
-    ) { messages, busy, conversations ->
+        restoredDraft,
+    ) { messages, currentPhase, conversations, draft ->
         AssistantUiState(
             messages = messages,
-            responding = busy,
+            phase = currentPhase,
             conversations = conversations,
+            restoredDraft = draft,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -82,13 +108,23 @@ class NutritionAssistantViewModel @Inject constructor(
         initialValue = AssistantUiState(),
     )
 
-    /** Sends what the user typed. Blank input is ignored rather than echoed. */
-    fun send(text: String) {
+    /**
+     * Sends what the user typed. Returns whether it was accepted, so the composer
+     * only clears text that actually went out: blank input, or a tap while a
+     * reply is still pending, leaves the field as it was.
+     */
+    fun send(text: String): Boolean {
         val trimmed = text.trim()
-        if (trimmed.isEmpty() || responding.value) return
+        if (trimmed.isEmpty() || phase.value == ReplyPhase.SENDING) return false
         val prompt = ChatMessage(id = ++nextId, author = ChatAuthor.USER, literal = trimmed)
         transcript.update { it + prompt }
         startReply(prompt)
+        return true
+    }
+
+    /** The composer has taken the restored text; stop offering it. */
+    fun consumeRestoredDraft(id: Long) {
+        restoredDraft.update { if (it?.id == id) null else it }
     }
 
     /**
@@ -96,19 +132,17 @@ class NutritionAssistantViewModel @Inject constructor(
      * a new chat replaces what is on screen, not what has been stored.
      */
     fun newChat() {
-        replyJob?.cancel()
-        responding.value = false
+        abandonTurn()
         conversationId = null
         transcript.value = emptyList()
     }
 
     /** Opens a saved conversation in the chat, replacing whatever is on screen. */
     fun openConversation(id: String) {
-        replyJob?.cancel()
+        abandonTurn()
         viewModelScope.launch {
             val conversation = history.observeConversations().first()
                 .firstOrNull { it.id == id } ?: return@launch
-            responding.value = false
             conversationId = id
             nextId = maxOf(nextId, conversation.messages.maxOfOrNull { it.id } ?: 0L)
             transcript.value = conversation.messages.map { stored ->
@@ -125,41 +159,75 @@ class NutritionAssistantViewModel @Inject constructor(
     fun deleteConversation(id: String) {
         viewModelScope.launch { history.delete(id) }
         if (conversationId == id) {
+            abandonTurn()
             conversationId = null
             transcript.value = emptyList()
         }
     }
 
+    /** Drops any pending reply and hands the composer back immediately. */
+    private fun abandonTurn() {
+        activeTurn++
+        replyJob?.cancel()
+        replyJob = null
+        phase.value = ReplyPhase.IDLE
+        restoredDraft.value = null
+    }
+
+    /**
+     * Runs one turn. The phase is released in `finally`, so every way out - a
+     * reply, an error result, an exception, a cancellation - hands the composer
+     * back. (Previously a successful reply returned early past the reset, which
+     * left Send disabled for good after the first answer.)
+     */
     private fun startReply(prompt: ChatMessage) {
-        responding.value = true
+        val promptText = prompt.literal.orEmpty()
         val exchanges = transcript.value
             .dropLast(1) // the prompt itself is passed separately
             .map { AssistantExchange(fromUser = it.author == ChatAuthor.USER, text = it.literal.orEmpty()) }
             .filter { it.text.isNotEmpty() }
 
         replyJob?.cancel()
+        val turn = ++activeTurn
+        phase.value = ReplyPhase.SENDING
+        restoredDraft.value = null
         replyJob = viewModelScope.launch {
-            when (val result = assistant.understand(exchanges, prompt.literal.orEmpty(), conversationId)) {
-                is AssistantResult.Failure -> failWith(result.error)
+            var failed = false
+            var answered = false
+            try {
+                when (val result = assistant.understand(exchanges, promptText, conversationId)) {
+                    is AssistantResult.Failure -> {
+                        failed = true
+                        failWith(result.error, promptText)
+                    }
 
-                is AssistantResult.Success -> {
-                    result.value.conversationId?.let { conversationId = it }
-                    finishTurn(prompt.literal.orEmpty(), result.value.message)
+                    is AssistantResult.Success -> {
+                        answered = true
+                        result.value.conversationId?.let { conversationId = it }
+                        finishTurn(promptText, result.value.message)
 
-                    // Draft ready means the understanding agent got everything
-                    // it needs - hand the verified figures over to the coach.
-                    val draft = result.value.draft
-                    if (!draft.readyForAnalysis) return@launch
-
-                    when (val coached = assistant.analyseAndCoach(draft, currentGoal())) {
-                        is AssistantResult.Failure -> failWith(coached.error)
-
-                        is AssistantResult.Success ->
-                            finishTurn(null, coached.value.coaching)
+                        // Draft ready means the understanding agent got everything
+                        // it needs - hand the verified figures over to the coach.
+                        val draft = result.value.draft
+                        if (draft.readyForAnalysis) {
+                            when (val coached = assistant.analyseAndCoach(draft, currentGoal())) {
+                                is AssistantResult.Failure -> failWith(coached.error, retryText = null)
+                                is AssistantResult.Success -> finishTurn(null, coached.value.coaching)
+                            }
+                        }
                     }
                 }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                failed = true
+                if (turn == activeTurn) failWith(AssistantError.Unknown, retryText = promptText.takeUnless { answered })
+            } finally {
+                if (turn == activeTurn) {
+                    phase.value = if (failed) ReplyPhase.FAILED else ReplyPhase.IDLE
+                    replyJob = null
+                }
             }
-            responding.value = false
         }
     }
 
@@ -192,16 +260,29 @@ class NutritionAssistantViewModel @Inject constructor(
         )
     }
 
-    /** Errors are transient UI, shown as a bubble and never written to history. */
-    private fun failWith(error: AssistantError) {
+    /**
+     * Errors are transient UI, shown as a bubble and never written to history.
+     * When the turn's own question failed, its text goes back to the composer so
+     * one tap retries it ([retryText] null for a follow-up stage that failed after
+     * the question was already answered).
+     */
+    private fun failWith(error: AssistantError, retryText: String?) {
         transcript.update {
             it + ChatMessage(id = ++nextId, author = ChatAuthor.ASSISTANT, textRes = error.labelRes())
+        }
+        if (retryText != null && error.isRetryable) {
+            restoredDraft.value = RestoredDraft(id = ++nextId, text = retryText)
         }
     }
 
     @StringRes
     private fun AssistantError.labelRes(): Int = when (this) {
         AssistantError.Network -> R.string.assistant_error_network
+        AssistantError.Timeout -> R.string.assistant_error_timeout
+        AssistantError.RateLimited -> R.string.assistant_error_rate_limited
+        AssistantError.ModelUnavailable -> R.string.assistant_error_unavailable
+        AssistantError.NotConfigured -> R.string.assistant_error_not_configured
+        AssistantError.MessageTooLong -> R.string.assistant_error_too_long
         else -> R.string.assistant_error_generic
     }
 

@@ -1,17 +1,31 @@
 package com.reps.app.core.util
 
+import com.reps.app.domain.model.ActivityLevel
 import com.reps.app.domain.model.Sex
 
 /**
- * Revised Harris-Benedict, using the coefficients fixed by the brief.
+ * Mifflin-St Jeor (1990), the equation the product brief specifies and the one
+ * generally found most accurate for adults today. Inputs are metric:
  *
- *   Men:   66.5  + (13.75 x kg) + (5.003 x cm) - (6.755 x age)
- *   Women: 655.1 + (9.563 x kg) + (1.850 x cm) - (4.676 x age)
+ *   Men:   10 x kg + 6.25 x cm - 5 x age + 5
+ *   Women: 10 x kg + 6.25 x cm - 5 x age - 161
+ *
+ * BMR is energy at complete rest. It is an estimate, not a measurement, and is
+ * never a medical figure; the UI says so next to it. Total daily expenditure is
+ * a separate number, [tdee].
+ *
+ * Earlier builds used the revised Harris-Benedict equation here.
  */
 object BmrCalculator {
 
-    fun calculate(sex: Sex, weightKg: Double, heightCm: Double, age: Int): Double = when (sex) {
-        Sex.MALE -> 66.5 + (13.75 * weightKg) + (5.003 * heightCm) - (6.755 * age)
-        Sex.FEMALE -> 655.1 + (9.563 * weightKg) + (1.850 * heightCm) - (4.676 * age)
+    fun calculate(sex: Sex, weightKg: Double, heightCm: Double, age: Int): Double {
+        val base = 10.0 * weightKg + 6.25 * heightCm - 5.0 * age
+        return when (sex) {
+            Sex.MALE -> base + 5.0
+            Sex.FEMALE -> base - 161.0
+        }
     }
+
+    /** Estimated total daily energy expenditure: BMR scaled by everyday activity. */
+    fun tdee(bmr: Double, activity: ActivityLevel): Double = bmr * activity.factor
 }

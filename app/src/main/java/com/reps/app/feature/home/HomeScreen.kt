@@ -1,6 +1,7 @@
 package com.reps.app.feature.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,11 +25,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,6 +43,8 @@ import com.reps.app.core.components.MotivationQuoteCard
 import com.reps.app.core.components.StreakBadge
 import com.reps.app.core.components.TodayWorkoutCard
 import com.reps.app.core.components.WeightWidget
+import com.reps.app.core.content.MotivationQuotes
+import com.reps.app.core.content.Remark
 import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsOnGreen
 import com.reps.app.core.theme.RepsTheme
@@ -118,6 +124,10 @@ private fun HomeContent(
             )
         }
 
+        state.resumable?.let { session ->
+            item { ResumeCard(session, onResume = { onStartWorkout(session.templateId) }) }
+        }
+
         // Only shown once a streak actually exists, per the brief.
         if (state.streak.isActive) {
             item { StreakBadge(state.streak) }
@@ -142,7 +152,6 @@ private fun HomeContent(
                     exerciseCount = workout.exercises.size,
                     setCount = state.todaySetCount,
                     durationMin = workout.estimatedMinutes,
-                    difficulty = workout.difficulty,
                     exercises = state.todayExercises,
                     onStart = { onStartWorkout(workout.id) },
                 )
@@ -163,7 +172,11 @@ private fun HomeContent(
 
         item {
             Spacer(Modifier.height(2.dp))
-            MotivationQuoteCard(state.quote)
+            val quotes = stringArrayResource(R.array.motivation_quotes)
+            MotivationQuoteCard(
+                quote = quotes[MotivationQuotes.indexFor(state.today, quotes.size)],
+                remark = state.remark?.let { remarkText(it) },
+            )
         }
     }
 }
@@ -213,6 +226,57 @@ private fun HomeHeader(
             )
         }
     }
+}
+
+/** An unfinished session; resuming opens it exactly where it was left. */
+@Composable
+private fun ResumeCard(session: ResumableSession, onResume: () -> Unit) {
+    val started = remember(session.startedAtMs) {
+        java.time.Instant.ofEpochMilli(session.startedAtMs).atZone(java.time.ZoneId.systemDefault()).toLocalTime()
+            .format(java.time.format.DateTimeFormatter.ofPattern("HH:mm"))
+    }
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .background(RepsTheme.colors.surface, MaterialTheme.shapes.large)
+            .border(1.dp, RepsGreen.copy(alpha = 0.45f), MaterialTheme.shapes.large)
+            .clickable(onClick = onResume)
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(Modifier.weight(1f)) {
+            Text(
+                text = stringResource(R.string.home_resume_eyebrow).uppercase(),
+                style = RepsTheme.textStyles.eyebrow,
+                color = RepsGreen,
+            )
+            Text(session.name, style = MaterialTheme.typography.titleMedium, color = RepsTheme.colors.textPrimary)
+            Text(
+                text = stringResource(R.string.home_resume_body, session.completedSets, session.totalSets, started),
+                style = MaterialTheme.typography.bodySmall,
+                color = RepsTheme.colors.textSecondary,
+            )
+        }
+        Text(
+            text = stringResource(R.string.home_resume_cta),
+            style = MaterialTheme.typography.labelLarge,
+            color = RepsOnGreen,
+            modifier = Modifier
+                .background(RepsGreen, CircleShape)
+                .padding(horizontal = 16.dp, vertical = 10.dp),
+        )
+    }
+}
+
+@Composable
+private fun remarkText(remark: Remark): String = when (remark) {
+    Remark.FirstWorkout -> stringResource(R.string.remark_first_workout)
+    is Remark.NewBest -> stringResource(R.string.remark_new_best, remark.exerciseName)
+    is Remark.LoggedToday -> stringResource(R.string.remark_logged_today, remark.workoutName)
+    is Remark.PlannedToday -> stringResource(R.string.remark_planned_today, remark.workoutName)
+    is Remark.WelcomeBack -> pluralStringResource(R.plurals.remark_welcome_back, remark.daysSince, remark.daysSince)
+    is Remark.AheadOfLastWeek -> pluralStringResource(R.plurals.remark_ahead_of_last_week, remark.thisWeek, remark.thisWeek, remark.lastWeek)
+    is Remark.WeekStreak -> pluralStringResource(R.plurals.remark_week_streak, remark.weeks, remark.weeks)
 }
 
 @Composable
@@ -275,7 +339,7 @@ private fun HomePreview() {
                 currentWeightKg = 78.4,
                 weeklyDeltaKg = -0.6,
                 units = UnitSystem.METRIC,
-                quote = "Every rep counts.\nEvery set matters.",
+                remark = com.reps.app.core.content.Remark.WeekStreak(3),
                 loading = false,
             ),
             onStartWorkout = {},

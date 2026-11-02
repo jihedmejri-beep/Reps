@@ -1,0 +1,11 @@
+* text=auto
+
+*.db binary
+*.ttf binary
+*.png binary
+*.jpg binary
+*.webp binary
+*.gif binary
+*.mp4 binary
+*.jar binary
+*.zip binary

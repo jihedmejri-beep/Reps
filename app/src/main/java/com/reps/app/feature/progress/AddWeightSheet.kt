@@ -15,6 +15,8 @@ import com.reps.app.R
 import com.reps.app.core.components.RepsBottomSheet
 import com.reps.app.core.components.RepsButton
 import com.reps.app.core.components.RepsTextField
+import com.reps.app.core.util.InputLimits
+import com.reps.app.core.util.NumberInput
 import com.reps.app.core.util.UnitConverter
 import com.reps.app.domain.model.UnitSystem
 
@@ -28,6 +30,10 @@ internal fun AddWeightSheet(
 ) {
     var text by remember { mutableStateOf("") }
     val unitLabel = stringResource(if (units == UnitSystem.METRIC) R.string.workouts_kg else R.string.workouts_lb)
+    // Accepts "72,5" and Arabic-Indic digits; anything outside a human range is a typo.
+    val kg = NumberInput.parseDecimal(text)
+        ?.let { UnitConverter.weightToKg(it, units) }
+        ?.takeIf { it in InputLimits.BODY_WEIGHT_KG }
 
     RepsBottomSheet(onDismissRequest = onDismiss, title = stringResource(R.string.progress_add_weight)) {
         RepsTextField(
@@ -36,14 +42,12 @@ internal fun AddWeightSheet(
             placeholder = currentWeightKg?.let { UnitConverter.formatWeight(it, units) } ?: "0.0",
             label = "${stringResource(R.string.weight_label)} ($unitLabel)",
             keyboardType = KeyboardType.Decimal,
+            error = stringResource(R.string.weight_invalid).takeIf { text.isNotBlank() && kg == null },
         )
         RepsButton(
             text = stringResource(R.string.progress_save),
-            onClick = {
-                val typed = text.toDoubleOrNull() ?: return@RepsButton
-                onSave(UnitConverter.weightToKg(typed, units))
-            },
-            enabled = text.toDoubleOrNull() != null && (text.toDoubleOrNull() ?: 0.0) > 0.0,
+            onClick = { kg?.let(onSave) },
+            enabled = kg != null,
             modifier = Modifier.padding(top = 18.dp),
         )
     }

@@ -7,12 +7,16 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
+import org.junit.Assume.assumeTrue
 import org.junit.Before
 import org.junit.Test
 
 /**
  * End-to-end integration tests validating that REPS communicates directly
  * with the live RepsAI FastAPI server running locally on http://127.0.0.1:8000.
+ *
+ * Opt-in: they need that server, so they are skipped unless the environment sets
+ * REPS_AI_INTEGRATION=1. Offline behaviour is covered by RepsAiApiServiceHttpTest.
  */
 class RepsAiIntegrationTest {
 
@@ -20,6 +24,7 @@ class RepsAiIntegrationTest {
 
     @Before
     fun setUp() {
+        assumeTrue("Set REPS_AI_INTEGRATION=1 with RepsAI running", System.getenv("REPS_AI_INTEGRATION") == "1")
         apiService = RepsAiApiService(RepsAiApiService.LOCALHOST_BASE_URL)
     }
 

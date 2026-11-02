@@ -23,8 +23,19 @@ android {
         resourceConfigurations += setOf("en", "ar", "fr")
     }
 
+    // The RepsAI backend address. There is no production deployment yet, so a
+    // release build ships blank (the assistant reports "not configured") unless
+    // the property is set, e.g. `-Preps.ai.baseUrl=https://api.example.com` or in
+    // gradle.properties / ~/.gradle/gradle.properties. Never put API keys here:
+    // anything in BuildConfig is readable from the APK.
+    val aiBaseUrlOverride = providers.gradleProperty("reps.ai.baseUrl").orNull
+
     buildTypes {
+        debug {
+            buildConfigField("String", "REPS_AI_BASE_URL", "\"${aiBaseUrlOverride ?: "http://10.0.2.2:8000"}\"")
+        }
         release {
+            buildConfigField("String", "REPS_AI_BASE_URL", "\"${aiBaseUrlOverride.orEmpty()}\"")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -47,6 +58,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     packaging {

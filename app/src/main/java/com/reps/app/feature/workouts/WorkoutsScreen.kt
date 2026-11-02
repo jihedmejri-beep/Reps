@@ -12,20 +12,25 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Accessibility
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SearchOff
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -43,6 +48,7 @@ import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsOnGreen
 import com.reps.app.core.theme.RepsTheme
 import com.reps.app.domain.model.MuscleGroup
+import com.reps.app.domain.model.Workout
 import com.reps.app.navigation.OnTabReselected
 import com.reps.app.navigation.Routes
 import com.reps.app.navigation.navBarClearance
@@ -51,12 +57,15 @@ import com.reps.app.navigation.navBarClearance
 fun WorkoutsScreen(
     onOpenExercise: (String) -> Unit,
     onStartWorkout: (String) -> Unit,
-    onOpenBuilder: () -> Unit,
+    /** Null opens a new workout; an id edits that one. */
+    onOpenBuilder: (String?) -> Unit,
     onOpenBodyMap: () -> Unit,
     viewModel: WorkoutsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
+    var pendingDelete by remember { mutableStateOf<Workout?>(null) }
+    val copySuffix = stringResource(R.string.workouts_template_copy_suffix)
 
     OnTabReselected(Routes.WORKOUTS) { listState.animateScrollToItem(0) }
 
@@ -94,11 +103,20 @@ fun WorkoutsScreen(
                     Modifier
                         .size(32.dp)
                         .background(RepsGreen, MaterialTheme.shapes.small)
-                        .clickable(role = Role.Button, onClick = onOpenBuilder),
+                        .clickable(role = Role.Button, onClick = { onOpenBuilder(null) }),
                     contentAlignment = Alignment.Center,
                 ) {
                     Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.workouts_builder_title), tint = RepsOnGreen, modifier = Modifier.size(18.dp))
                 }
+            }
+        }
+        if (state.myWorkouts.isEmpty() && !state.loading) {
+            item {
+                Text(
+                    text = stringResource(R.string.workouts_my_workouts_empty),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = RepsTheme.colors.textTertiary,
+                )
             }
         }
         item {
@@ -107,7 +125,13 @@ fun WorkoutsScreen(
                 contentPadding = PaddingValues(vertical = 2.dp),
             ) {
                 items(state.myWorkouts, key = { it.id }) { workout ->
-                    MiniWorkoutCard(workout = workout, onClick = { onStartWorkout(workout.id) })
+                    MiniWorkoutCard(
+                        workout = workout,
+                        onClick = { onStartWorkout(workout.id) },
+                        onEdit = { onOpenBuilder(workout.id) },
+                        onDuplicate = { viewModel.duplicate(workout, copySuffix) },
+                        onDelete = { pendingDelete = workout },
+                    )
                 }
             }
         }
@@ -171,6 +195,25 @@ fun WorkoutsScreen(
                 ExerciseRow(exercise = exercise, onClick = { onOpenExercise(exercise.id) })
             }
         }
+    }
+
+    pendingDelete?.let { workout ->
+        AlertDialog(
+            onDismissRequest = { pendingDelete = null },
+            containerColor = RepsTheme.colors.surfaceElevated,
+            title = { Text(stringResource(R.string.workouts_template_delete_title, workout.name), color = RepsTheme.colors.textPrimary) },
+            text = { Text(stringResource(R.string.workouts_template_delete_body), color = RepsTheme.colors.textSecondary) },
+            confirmButton = {
+                TextButton(onClick = { viewModel.delete(workout.id); pendingDelete = null }) {
+                    Text(stringResource(R.string.workouts_template_delete), color = com.reps.app.core.theme.RepsError)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { pendingDelete = null }) {
+                    Text(stringResource(R.string.nutrition_delete_meal_cancel), color = RepsTheme.colors.textSecondary)
+                }
+            },
+        )
     }
 }
 

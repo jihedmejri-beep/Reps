@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.reps.app.data.datastore.UserPreferencesDataStore
 import com.reps.app.data.notifications.HydrationReminderScheduler
 import com.reps.app.data.notifications.WorkoutReminderScheduler
+import com.reps.app.domain.model.ActivityLevel
 import com.reps.app.domain.model.AppLanguage
 import com.reps.app.domain.model.Goal
 import com.reps.app.domain.model.Sex
@@ -63,7 +64,9 @@ class ProfileViewModel @Inject constructor(
     )
 
     fun updateHeightCm(cm: Double) = updateUser { it.copy(heightCm = cm) }
-    fun updateAge(age: Int) = updateUser { it.copy(age = age) }
+    /** A birth date supersedes the legacy typed age, which is cleared so it can't disagree. */
+    fun updateBirthDate(date: LocalDate) = updateUser { it.copy(birthDate = date, age = null) }
+    fun updateActivity(level: ActivityLevel) = updateUser { it.copy(activityLevel = level) }
     fun updateSex(sex: Sex) = updateUser { it.copy(sex = sex) }
     fun updateGoal(goal: Goal) = updateUser { it.copy(goal = goal) }
     fun updateUnits(units: UnitSystem) = updateUser { it.copy(units = units) }

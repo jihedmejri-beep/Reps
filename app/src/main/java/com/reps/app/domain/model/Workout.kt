@@ -29,4 +29,20 @@ data class WorkoutSession(
     val durationMin: Int = 0,
     /** Exercise ids that produced a personal record in this session. */
     val prsHit: List<String> = emptyList(),
-)
+    /** Wall-clock bounds; 0 for sessions logged before durations were measured. */
+    val startedAtMs: Long = 0,
+    val endedAtMs: Long = 0,
+) {
+    /**
+     * True when [durationMin] was measured from [startedAtMs] to [endedAtMs].
+     * Older sessions carry an estimate, which statistics must leave out rather
+     * than present as time actually trained.
+     */
+    val durationMeasured: Boolean get() = startedAtMs > 0 && endedAtMs > startedAtMs
+
+    /** Sets the user actually ticked off. */
+    val completedSets: List<ExerciseSet> get() = exercises.flatMap { it.sets }.filter { it.completed }
+
+    /** A session saved with nothing completed is not a workout for any statistic. */
+    val hasWork: Boolean get() = completedSets.isNotEmpty()
+}

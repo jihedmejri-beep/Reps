@@ -9,8 +9,10 @@ import androidx.room.RoomDatabase
  * profiles, workout templates and sessions, weigh-ins, meals, assistant chat
  * history.
  *
- * Version 1. Migrations go here from version 2 on; until then there is nothing
- * to migrate.
+ * Version 2 adds measured session times, per-exercise rest, birth date and
+ * activity level, the in-progress session draft and achievement unlocks; see
+ * [UserDataMigrations]. Every version bump ships a real migration - this data is
+ * the user's, there is no destructive fallback.
  */
 @Database(
     entities = [
@@ -27,8 +29,10 @@ import androidx.room.RoomDatabase
         MealItemEntity::class,
         AssistantConversationEntity::class,
         AssistantMessageEntity::class,
+        ActiveSessionDraftEntity::class,
+        AchievementUnlockEntity::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = true,
 )
 abstract class UserDataDatabase : RoomDatabase() {
@@ -39,6 +43,8 @@ abstract class UserDataDatabase : RoomDatabase() {
     abstract fun weightEntryDao(): WeightEntryDao
     abstract fun mealDao(): MealDao
     abstract fun assistantConversationDao(): AssistantConversationDao
+    abstract fun activeSessionDraftDao(): ActiveSessionDraftDao
+    abstract fun achievementUnlockDao(): AchievementUnlockDao
 
     companion object {
         const val DB_NAME = "reps_user.db"

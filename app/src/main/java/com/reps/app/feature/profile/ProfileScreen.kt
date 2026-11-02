@@ -9,8 +9,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,9 +23,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.DirectionsRun
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Flag
 import androidx.compose.material.icons.outlined.Height
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.LocalFireDepartment
 import androidx.compose.material.icons.outlined.MonitorWeight
@@ -49,14 +51,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.core.content.ContextCompat
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.reps.app.R
 import com.reps.app.core.components.RepsListRow
 import com.reps.app.core.components.SectionHeader
 import com.reps.app.core.components.StatCard
+import com.reps.app.core.locale.AppLocale
 import com.reps.app.core.theme.RepsError
 import com.reps.app.core.theme.RepsGreen
 import com.reps.app.core.theme.RepsOnGreen
@@ -73,9 +76,10 @@ import com.reps.app.feature.progress.AddWeightSheet
 import com.reps.app.navigation.OnTabReselected
 import com.reps.app.navigation.Routes
 import com.reps.app.navigation.navBarClearance
+import java.util.Locale
 import kotlin.math.roundToInt
 
-internal enum class ProfileField { HEIGHT, AGE, SEX, GOAL, LANGUAGE }
+internal enum class ProfileField { HEIGHT, BIRTH_DATE, ACTIVITY, SEX, GOAL, LANGUAGE }
 
 @Composable
 fun ProfileScreen(
@@ -91,6 +95,7 @@ fun ProfileScreen(
     var showAccountInfo by remember { mutableStateOf(false) }
     var showSignOutConfirm by remember { mutableStateOf(false) }
     var showThemePicker by remember { mutableStateOf(false) }
+    var showMetricsInfo by remember { mutableStateOf(false) }
 
     // Android 13+ gates notifications behind a runtime permission. The toggle
     // still flips either way - the reminder worker stays quiet if it was denied.
@@ -136,7 +141,8 @@ fun ProfileScreen(
                     currentWeightKg = state.currentWeightKg,
                     onEditHeight = { editingField = ProfileField.HEIGHT },
                     onEditWeight = { showAddWeight = true },
-                    onEditAge = { editingField = ProfileField.AGE },
+                    onEditBirthDate = { editingField = ProfileField.BIRTH_DATE },
+                    onEditActivity = { editingField = ProfileField.ACTIVITY },
                     onEditSex = { editingField = ProfileField.SEX },
                     onEditGoal = { editingField = ProfileField.GOAL },
                 )
@@ -144,7 +150,7 @@ fun ProfileScreen(
             item {
                 val weightKg = state.currentWeightKg
                 if (user.hasBodyMetrics && weightKg != null) {
-                    BodyMetricsCard(user, weightKg)
+                    BodyMetricsCard(user, weightKg, onInfo = { showMetricsInfo = true })
                 } else {
                     Text(
                         text = stringResource(R.string.progress_bmi_needs_profile),
@@ -190,11 +196,20 @@ fun ProfileScreen(
     if (user != null) {
         when (editingField) {
             ProfileField.HEIGHT -> HeightEditSheet(user, onDismiss = { editingField = null }, onSave = { viewModel.updateHeightCm(it); editingField = null })
-            ProfileField.AGE -> AgeEditSheet(user, onDismiss = { editingField = null }, onSave = { viewModel.updateAge(it); editingField = null })
+            ProfileField.BIRTH_DATE -> BirthDateSheet(user, onDismiss = { editingField = null }, onSave = { viewModel.updateBirthDate(it); editingField = null })
+            ProfileField.ACTIVITY -> ActivityPickerSheet(user, onDismiss = { editingField = null }, onPick = { viewModel.updateActivity(it); editingField = null })
             ProfileField.SEX -> SexPickerSheet(user, onDismiss = { editingField = null }, onPick = { viewModel.updateSex(it); editingField = null })
             ProfileField.GOAL -> GoalPickerSheet(user, onDismiss = { editingField = null }, onPick = { viewModel.updateGoal(it); editingField = null })
-            ProfileField.LANGUAGE -> LanguagePickerSheet(user, onDismiss = { editingField = null }, onPick = { viewModel.updateLanguage(it); editingField = null })
+            ProfileField.LANGUAGE -> LanguagePickerSheet(user, onDismiss = { editingField = null }, onPick = {
+                editingField = null
+                viewModel.updateLanguage(it)
+                AppLocale.apply(context, it)
+            })
             null -> Unit
+        }
+
+        if (showAccountInfo) {
+            AccountSettingsSheet(user, onDismiss = { showAccountInfo = false })
         }
 
         if (showAddWeight) {
@@ -215,8 +230,8 @@ fun ProfileScreen(
         )
     }
 
-    if (showAccountInfo) {
-        AccountSettingsSheet(onDismiss = { showAccountInfo = false })
+    if (showMetricsInfo) {
+        BodyMetricsInfoSheet(onDismiss = { showMetricsInfo = false })
     }
 
     if (showSignOutConfirm) {
@@ -265,7 +280,8 @@ private fun DetailsCard(
     currentWeightKg: Double?,
     onEditHeight: () -> Unit,
     onEditWeight: () -> Unit,
-    onEditAge: () -> Unit,
+    onEditBirthDate: () -> Unit,
+    onEditActivity: () -> Unit,
     onEditSex: () -> Unit,
     onEditGoal: () -> Unit,
 ) {
@@ -292,10 +308,21 @@ private fun DetailsCard(
             showDivider = true,
         )
         RepsListRow(
-            label = stringResource(R.string.profile_age),
+            label = stringResource(R.string.profile_birth_date),
             icon = Icons.Outlined.CalendarMonth,
-            value = user.age?.toString() ?: "—",
-            onClick = onEditAge,
+            value = when {
+                user.birthDate != null -> stringResource(R.string.profile_age_value, user.ageOn() ?: 0)
+                user.age != null -> stringResource(R.string.profile_age_legacy, user.age)
+                else -> "—"
+            },
+            onClick = onEditBirthDate,
+            showDivider = true,
+        )
+        RepsListRow(
+            label = stringResource(R.string.profile_activity),
+            icon = Icons.AutoMirrored.Outlined.DirectionsRun,
+            value = user.activityLevel?.let { stringResource(activityLabelRes(it)) } ?: "—",
+            onClick = onEditActivity,
             showDivider = true,
         )
         RepsListRow(
@@ -316,9 +343,12 @@ private fun DetailsCard(
 }
 
 @Composable
-private fun BodyMetricsCard(user: User, currentWeightKg: Double) {
+private fun BodyMetricsCard(user: User, currentWeightKg: Double, onInfo: () -> Unit) {
     val bmi = BmiCalculator.calculate(currentWeightKg, user.heightCm!!)
-    val bmr = BmrCalculator.calculate(user.sex!!, currentWeightKg, user.heightCm, user.age!!)
+    val bmr = BmrCalculator.calculate(user.sex!!, currentWeightKg, user.heightCm, user.ageOn()!!)
+    val tdee = user.activityLevel?.let { BmrCalculator.tdee(bmr, it) }
+    val kcalPerDay = stringResource(R.string.metrics_kcal_per_day)
+    Column {
     // IntrinsicSize.Min lets the shorter card stretch to the taller one: BMI
     // carries a category line ("Healthy") that BMR has no equivalent for, so
     // without this the two tiles are the same width but not the same height.
@@ -329,7 +359,7 @@ private fun BodyMetricsCard(user: User, currentWeightKg: Double) {
         StatCard(
             icon = Icons.Outlined.Straighten,
             label = stringResource(R.string.progress_bmi),
-            value = "%.1f".format(bmi),
+            value = String.format(Locale.US, "%.1f", bmi),
             deltaText = stringResource(BmiCalculator.categorise(bmi).labelRes),
             modifier = Modifier.weight(1f).fillMaxHeight(),
         )
@@ -337,9 +367,25 @@ private fun BodyMetricsCard(user: User, currentWeightKg: Double) {
             icon = Icons.Outlined.LocalFireDepartment,
             label = stringResource(R.string.progress_bmr),
             value = bmr.roundToInt().toString(),
-            unit = "kcal/day",
+            unit = kcalPerDay,
+            deltaText = stringResource(R.string.metrics_bmr_caption),
             modifier = Modifier.weight(1f).fillMaxHeight(),
         )
+    }
+    StatCard(
+        icon = Icons.AutoMirrored.Outlined.DirectionsRun,
+        label = stringResource(R.string.metrics_tdee),
+        value = tdee?.roundToInt()?.toString() ?: "—",
+        unit = kcalPerDay.takeIf { tdee != null },
+        deltaText = stringResource(if (tdee != null) R.string.metrics_tdee_caption else R.string.metrics_tdee_needs_activity),
+        modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+    )
+    RepsListRow(
+        label = stringResource(R.string.metrics_how_calculated),
+        sub = stringResource(R.string.metrics_disclaimer_short),
+        icon = Icons.Outlined.Info,
+        onClick = onInfo,
+    )
     }
 }
 
@@ -397,10 +443,9 @@ private fun PreferencesCard(
     }
 }
 
-// TODO: fill in the real author name from the Wikimedia Commons file page for
-// "Muscles front and back" before shipping - this placeholder must not go out
-// as-is.
-private const val MUSCLE_MAP_AUTHOR = "[author name pending]"
+// The "Author" field of commons.wikimedia.org/wiki/File:Muscles_front_and_back.svg
+// (CC BY-SA 4.0). A proper name, so it is not translated.
+private const val MUSCLE_MAP_AUTHOR = "OpenStax, Tomáš Kebert & umimeto.org"
 
 @Composable
 private fun CreditsCard() {

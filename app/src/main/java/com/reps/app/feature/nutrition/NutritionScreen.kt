@@ -63,9 +63,11 @@ import com.reps.app.core.theme.RepsCarbs
 import com.reps.app.core.theme.RepsError
 import com.reps.app.core.theme.RepsFat
 import com.reps.app.core.theme.RepsGreen
-import com.reps.app.core.theme.RepsProtein
 import com.reps.app.core.theme.RepsOnGreen
+import com.reps.app.core.theme.RepsProtein
 import com.reps.app.core.theme.RepsTheme
+import com.reps.app.core.util.InputLimits
+import com.reps.app.core.util.NumberInput
 import com.reps.app.domain.model.FoodItem
 import com.reps.app.domain.model.Meal
 import com.reps.app.feature.nutrition.assistant.NutritionAssistantFab
@@ -308,6 +310,14 @@ private fun MacroSummaryCard(state: NutritionUiState) {
                 MacroBar(stringResource(R.string.nutrition_fat), totals.fat, state.target.fat, RepsFat)
             }
         }
+        if (!state.targetPersonalised) {
+            Text(
+                text = stringResource(R.string.nutrition_targets_generic),
+                style = MaterialTheme.typography.bodySmall,
+                color = RepsTheme.colors.textTertiary,
+                modifier = Modifier.padding(top = 12.dp),
+            )
+        }
     }
 }
 
@@ -348,7 +358,11 @@ private fun MacroBar(label: String, value: Double, target: Double, color: Color)
                 Box(Modifier.size(7.dp).background(color, CircleShape))
                 Text(label, style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textSecondary)
             }
-            Text("${value.roundToInt()}/${target.roundToInt()}g", style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textSecondary)
+            Text(
+                stringResource(R.string.nutrition_macro_progress, value.roundToInt(), target.roundToInt()),
+                style = MaterialTheme.typography.labelSmall,
+                color = RepsTheme.colors.textSecondary,
+            )
         }
         Box(
             Modifier
@@ -434,7 +448,11 @@ private fun MealCard(meal: Meal, onClick: () -> Unit, onIngredientClick: (FoodIt
                 ) {
                     Row {
                         Text(item.name, style = MaterialTheme.typography.bodyMedium, color = RepsTheme.colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                        Text(" ${item.grams.roundToInt()}g", style = MaterialTheme.typography.labelSmall, color = RepsTheme.colors.textTertiary)
+                        Text(
+                            " " + stringResource(R.string.nutrition_grams_value, item.grams.roundToInt()),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = RepsTheme.colors.textTertiary,
+                        )
                     }
                     Text(
                         "${item.calories.roundToInt()} ${stringResource(R.string.nutrition_kcal)}",
@@ -463,6 +481,7 @@ private fun AddMealSheet(
     var mealName by remember { mutableStateOf(initialMeal?.name.orEmpty()) }
     var foodName by remember { mutableStateOf("") }
     var foodGrams by remember { mutableStateOf("") }
+    var macros by remember { mutableStateOf(MacroInputText()) }
     var error by remember { mutableStateOf<String?>(null) }
     val draftItems = remember { mutableStateListOf<FoodItem>().apply { initialMeal?.foodItems?.let(::addAll) } }
     val ingredientRequiredError = stringResource(R.string.nutrition_ingredient_required)
@@ -492,33 +511,41 @@ private fun AddMealSheet(
                 modifier = Modifier.weight(1f),
             )
         }
+        MacroFields(input = macros, onChange = { macros = it }, modifier = Modifier.padding(top = 10.dp))
         error?.let {
             Text(it, style = MaterialTheme.typography.bodySmall, color = com.reps.app.core.theme.RepsError, modifier = Modifier.padding(top = 6.dp))
         }
+        val macroErrors = macroErrorMessages()
         RepsOutlinedButton(
             text = stringResource(R.string.nutrition_add_food),
             onClick = {
-                val grams = foodGrams.toDoubleOrNull()
-                if (foodName.isBlank() || grams == null || grams <= 0.0) {
+                val grams = NumberInput.parseDecimalIn(foodGrams, InputLimits.FOOD_GRAMS)
+                if (foodName.isBlank() || grams == null) {
                     error = ingredientRequiredError
                     return@RepsOutlinedButton
                 }
+                val per100g = when (val result = validateMacros(macros)) {
+                    is MacroValidation.Invalid -> {
+                        error = macroErrors.getValue(result.messageRes)
+                        return@RepsOutlinedButton
+                    }
+                    is MacroValidation.Valid -> result.value
+                }
                 error = null
-                // No nutrition database in this build; a flat per-100g estimate keeps
-                // the running total meaningful until a real ingredient lookup lands.
                 draftItems.add(
                     FoodItem(
                         id = java.util.UUID.randomUUID().toString(),
-                        name = foodName,
+                        name = foodName.trim(),
                         grams = grams,
-                        caloriesPer100g = 165.0,
-                        proteinPer100g = 12.0,
-                        carbsPer100g = 14.0,
-                        fatPer100g = 5.0,
+                        caloriesPer100g = per100g.kcal,
+                        proteinPer100g = per100g.protein,
+                        carbsPer100g = per100g.carbs,
+                        fatPer100g = per100g.fat,
                     ),
                 )
                 foodName = ""
                 foodGrams = ""
+                macros = MacroInputText()
             },
             modifier = Modifier.padding(top = 10.dp),
         )
@@ -530,7 +557,12 @@ private fun AddMealSheet(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text("${item.name} · ${item.grams.roundToInt()}g", style = MaterialTheme.typography.bodySmall, color = RepsTheme.colors.textPrimary)
+                    Text(
+                        stringResource(R.string.nutrition_item_summary, item.name, item.grams.roundToInt(), item.calories.roundToInt()),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = RepsTheme.colors.textPrimary,
+                        modifier = Modifier.weight(1f),
+                    )
                     IconButton(onClick = { draftItems.remove(item) }, modifier = Modifier.size(28.dp)) {
                         Icon(Icons.Filled.Close, contentDescription = null, tint = RepsTheme.colors.textTertiary, modifier = Modifier.size(16.dp))
                     }
@@ -549,9 +581,8 @@ private fun AddMealSheet(
 
 /**
  * Edits one ingredient in place, in the same sheet style as [AddMealSheet] but
- * scoped to a single row: name and grams only. The per-100g reference values are
- * carried over untouched, so the macros stay consistent with how the item was
- * first logged.
+ * scoped to a single row. The per-100 g values are editable too, so an item
+ * logged by an older build with placeholder macros can be corrected.
  */
 @OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
@@ -562,7 +593,11 @@ private fun EditIngredientSheet(
 ) {
     var name by remember { mutableStateOf(item.name) }
     var grams by remember { mutableStateOf(item.grams.roundToInt().toString()) }
-    val gramsValue = grams.toDoubleOrNull()
+    var macros by remember {
+        mutableStateOf(MacroInputText.of(item.caloriesPer100g, item.proteinPer100g, item.carbsPer100g, item.fatPer100g))
+    }
+    val gramsValue = NumberInput.parseDecimalIn(grams, InputLimits.FOOD_GRAMS)
+    val validation = validateMacros(macros)
 
     RepsBottomSheet(onDismissRequest = onDismiss, title = stringResource(R.string.nutrition_edit_ingredient)) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -581,11 +616,87 @@ private fun EditIngredientSheet(
             )
         }
 
+        MacroFields(input = macros, onChange = { macros = it }, modifier = Modifier.padding(top = 10.dp))
+        (validation as? MacroValidation.Invalid)?.let {
+            Text(
+                stringResource(it.messageRes),
+                style = MaterialTheme.typography.bodySmall,
+                color = com.reps.app.core.theme.RepsError,
+                modifier = Modifier.padding(top = 6.dp),
+            )
+        }
+
         RepsButton(
             text = stringResource(R.string.nutrition_save_ingredient),
-            onClick = { onSave(item.copy(name = name.trim(), grams = gramsValue ?: item.grams)) },
-            enabled = name.isNotBlank() && gramsValue != null && gramsValue > 0.0,
+            onClick = {
+                val per100g = (validation as? MacroValidation.Valid)?.value ?: return@RepsButton
+                onSave(
+                    item.copy(
+                        name = name.trim(),
+                        grams = gramsValue ?: item.grams,
+                        caloriesPer100g = per100g.kcal,
+                        proteinPer100g = per100g.protein,
+                        carbsPer100g = per100g.carbs,
+                        fatPer100g = per100g.fat,
+                    ),
+                )
+            },
+            enabled = name.isNotBlank() && gramsValue != null && validation is MacroValidation.Valid,
             modifier = Modifier.padding(top = 18.dp),
         )
     }
 }
+
+/** The four per-100 g fields, in label order: energy first, then protein, carbs, fat. */
+@Composable
+private fun MacroFields(input: MacroInputText, onChange: (MacroInputText) -> Unit, modifier: Modifier = Modifier) {
+    val decimal = androidx.compose.ui.text.input.KeyboardType.Decimal
+    Column(modifier) {
+        Text(
+            text = stringResource(R.string.nutrition_per_100g),
+            style = MaterialTheme.typography.labelSmall,
+            color = RepsTheme.colors.textSecondary,
+            modifier = Modifier.padding(bottom = 6.dp),
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            RepsTextField(
+                value = input.kcal,
+                onValueChange = { onChange(input.copy(kcal = it)) },
+                placeholder = stringResource(R.string.nutrition_kcal),
+                keyboardType = decimal,
+                modifier = Modifier.weight(1f),
+            )
+            RepsTextField(
+                value = input.protein,
+                onValueChange = { onChange(input.copy(protein = it)) },
+                placeholder = stringResource(R.string.nutrition_protein_g),
+                keyboardType = decimal,
+                modifier = Modifier.weight(1f),
+            )
+        }
+        Row(Modifier.padding(top = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            RepsTextField(
+                value = input.carbs,
+                onValueChange = { onChange(input.copy(carbs = it)) },
+                placeholder = stringResource(R.string.nutrition_carbs_g),
+                keyboardType = decimal,
+                modifier = Modifier.weight(1f),
+            )
+            RepsTextField(
+                value = input.fat,
+                onValueChange = { onChange(input.copy(fat = it)) },
+                placeholder = stringResource(R.string.nutrition_fat_g),
+                keyboardType = decimal,
+                modifier = Modifier.weight(1f),
+            )
+        }
+    }
+}
+
+/** Resolved up front because a button's onClick is not composable. */
+@Composable
+private fun macroErrorMessages(): Map<Int, String> = listOf(
+    R.string.nutrition_macros_required,
+    R.string.nutrition_macros_over_100,
+    R.string.nutrition_macros_kcal_mismatch,
+).associateWith { stringResource(it) }

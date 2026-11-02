@@ -38,7 +38,8 @@ class UserPreferencesDataStore @Inject constructor(
         val SESSION_UID = stringPreferencesKey("session_uid")
         val NOTIFICATIONS_ENABLED = booleanPreferencesKey("notifications_enabled")
 
-        fun waterFor(date: LocalDate) = intPreferencesKey("water_${date}")
+        /** Scoped to the account, so two people sharing a phone keep separate counts. */
+        fun waterFor(uid: String?, date: LocalDate) = intPreferencesKey("water_${uid.orEmpty()}_${date}")
     }
 
     val onboardingSeen: Flow<Boolean> =
@@ -61,9 +62,9 @@ class UserPreferencesDataStore @Inject constructor(
     val notificationsEnabled: Flow<Boolean> =
         context.dataStore.data.map { it[Keys.NOTIFICATIONS_ENABLED] ?: true }
 
-    /** Water glasses logged today; resets by construction because the key is the date. */
+    /** Water glasses logged on [date] by the signed-in account; a new day is a new key, so it resets by construction. */
     fun waterGlasses(date: LocalDate): Flow<Int> =
-        context.dataStore.data.map { it[Keys.waterFor(date)] ?: 0 }
+        context.dataStore.data.map { it[Keys.waterFor(it[Keys.SESSION_UID], date)] ?: 0 }
 
     suspend fun setOnboardingSeen(seen: Boolean) {
         context.dataStore.edit { it[Keys.ONBOARDING_SEEN] = seen }
@@ -88,6 +89,6 @@ class UserPreferencesDataStore @Inject constructor(
     }
 
     suspend fun setWaterGlasses(date: LocalDate, glasses: Int) {
-        context.dataStore.edit { it[Keys.waterFor(date)] = glasses.coerceAtLeast(0) }
+        context.dataStore.edit { it[Keys.waterFor(it[Keys.SESSION_UID], date)] = glasses.coerceAtLeast(0) }
     }
 }

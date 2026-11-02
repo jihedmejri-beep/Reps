@@ -1,29 +1,28 @@
 package com.reps.app.core.util
 
+import com.reps.app.domain.model.ActivityLevel
 import com.reps.app.domain.model.Sex
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**
- * The coefficients are fixed by the brief, so these lock the exact arithmetic
+ * Mifflin-St Jeor, as the brief specifies. These lock the exact arithmetic
  * rather than an approximation of it.
  */
 class BmrCalculatorTest {
 
     @Test
     fun `male BMR matches the specified formula`() {
-        // 66.5 + (13.75 x 80) + (5.003 x 180) - (6.755 x 30)
-        // 66.5 + 1100 + 900.54 - 202.65 = 1864.39
+        // 10 x 80 + 6.25 x 180 - 5 x 30 + 5 = 800 + 1125 - 150 + 5 = 1780
         val actual = BmrCalculator.calculate(Sex.MALE, weightKg = 80.0, heightCm = 180.0, age = 30)
-        assertEquals(1864.39, actual, 0.001)
+        assertEquals(1780.0, actual, 0.001)
     }
 
     @Test
     fun `female BMR matches the specified formula`() {
-        // 655.1 + (9.563 x 60) + (1.850 x 165) - (4.676 x 30)
-        // 655.1 + 573.78 + 305.25 - 140.28 = 1393.85
+        // 10 x 60 + 6.25 x 165 - 5 x 30 - 161 = 600 + 1031.25 - 150 - 161 = 1320.25
         val actual = BmrCalculator.calculate(Sex.FEMALE, weightKg = 60.0, heightCm = 165.0, age = 30)
-        assertEquals(1393.85, actual, 0.001)
+        assertEquals(1320.25, actual, 0.001)
     }
 
     @Test
@@ -31,6 +30,12 @@ class BmrCalculatorTest {
         val young = BmrCalculator.calculate(Sex.MALE, 80.0, 180.0, 20)
         val older = BmrCalculator.calculate(Sex.MALE, 80.0, 180.0, 50)
         assert(older < young) { "expected BMR to decrease with age" }
+    }
+
+    @Test
+    fun `TDEE scales BMR by the activity factor`() {
+        assertEquals(1780.0 * 1.55, BmrCalculator.tdee(1780.0, ActivityLevel.MODERATE), 0.001)
+        assertEquals(1780.0 * 1.2, BmrCalculator.tdee(1780.0, ActivityLevel.SEDENTARY), 0.001)
     }
 
     @Test

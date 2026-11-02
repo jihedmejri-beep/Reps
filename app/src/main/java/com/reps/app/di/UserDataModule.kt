@@ -3,6 +3,7 @@ package com.reps.app.di
 import android.content.Context
 import androidx.room.Room
 import com.reps.app.data.user.db.UserDataDatabase
+import com.reps.app.data.user.db.UserDataMigrations
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,6 +32,7 @@ object UserDataModule {
             UserDataDatabase::class.java,
             UserDataDatabase.DB_NAME,
         )
+        .addMigrations(*UserDataMigrations.ALL)
         .build()
 
     @Provides
